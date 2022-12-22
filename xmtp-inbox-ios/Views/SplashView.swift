@@ -18,14 +18,14 @@ struct SplashView: View {
                 .resizable()
                 .scaledToFit()
 
-            Text("Your interoperable web3 inbox")
+            Text("splash-title")
                 .kerning(0.5)
                 .font(.Display1)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 8)
                 .padding(.horizontal)
 
-            Text("You’re just a few steps away from secure, wallet-to-wallet messaging")
+            Text("splash-description")
                 .font(.Body1)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 16)
@@ -48,7 +48,7 @@ struct SplashView: View {
                 }
             } else {
                 Button(action: onNewDemo) {
-                    Text("Try demo mode")
+                    Text("try-demo-cta")
                         .kerning(0.5)
                         .padding()
                         .frame(maxWidth: .infinity, maxHeight: buttonHeight)

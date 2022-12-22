@@ -19,7 +19,7 @@ struct HomeView: View {
 
                 Text(client.address)
                     .padding()
-                    .navigationBarTitle("All Messages", displayMode: .inline)
+                    .navigationBarTitle("home-title", displayMode: .inline)
             }
         }
     }
