@@ -172,6 +172,7 @@
 				6A40153F29526795003A6659 /* Sources */,
 				6A40154029526795003A6659 /* Frameworks */,
 				6A40154129526795003A6659 /* Resources */,
+				6A50C65F2954BFBB0074DCA1 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -293,6 +294,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6A50C65F2954BFBB0074DCA1 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: swiftlint not installed, run `brew install swiftlint`\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6A40153F29526795003A6659 /* Sources */ = {
@@ -678,4 +701,3 @@
 	};
 	rootObject = 6A40153B29526795003A6659 /* Project object */;
 }
-
