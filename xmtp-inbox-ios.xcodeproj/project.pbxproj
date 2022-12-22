@@ -1,0 +1,681 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */; };
+		6A40154929526795003A6659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154829526795003A6659 /* ContentView.swift */; };
+		6A40154B29526796003A6659 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A40154A29526796003A6659 /* Assets.xcassets */; };
+		6A40154F29526796003A6659 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A40154E29526796003A6659 /* Preview Assets.xcassets */; };
+		6A40155929526796003A6659 /* xmtp_inbox_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40155829526796003A6659 /* xmtp_inbox_iosTests.swift */; };
+		6A40156329526796003A6659 /* xmtp_inbox_iosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40156229526796003A6659 /* xmtp_inbox_iosUITests.swift */; };
+		6A40156529526796003A6659 /* xmtp_inbox_iosUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40156429526796003A6659 /* xmtp_inbox_iosUITestsLaunchTests.swift */; };
+		6A401573295267D7003A6659 /* XMTP in Frameworks */ = {isa = PBXBuildFile; productRef = 6A401572295267D7003A6659 /* XMTP */; };
+		6A40157A29529F85003A6659 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157929529F85003A6659 /* HomeView.swift */; };
+		6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157C2952AEFB003A6659 /* ColorExtensions.swift */; };
+		6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157E2952B237003A6659 /* FontExtensions.swift */; };
+		6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDB41D2954A7070082EC42 /* SplashView.swift */; };
+		6AC5CFB32953FA750046325C /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 6AC5CFB22953FA750046325C /* .swiftformat */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6A40155529526796003A6659 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6A40153B29526795003A6659 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6A40154229526795003A6659;
+			remoteInfo = "xmtp-inbox-ios";
+		};
+		6A40155F29526796003A6659 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6A40153B29526795003A6659 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6A40154229526795003A6659;
+			remoteInfo = "xmtp-inbox-ios";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6A40154329526795003A6659 /* xmtp-inbox-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "xmtp-inbox-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xmtp_inbox_iosApp.swift; sourceTree = "<group>"; };
+		6A40154829526795003A6659 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6A40154A29526796003A6659 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6A40154C29526796003A6659 /* xmtp_inbox_ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xmtp_inbox_ios.entitlements; sourceTree = "<group>"; };
+		6A40154E29526796003A6659 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6A40155429526796003A6659 /* xmtp-inbox-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "xmtp-inbox-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A40155829526796003A6659 /* xmtp_inbox_iosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xmtp_inbox_iosTests.swift; sourceTree = "<group>"; };
+		6A40155E29526796003A6659 /* xmtp-inbox-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "xmtp-inbox-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A40156229526796003A6659 /* xmtp_inbox_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xmtp_inbox_iosUITests.swift; sourceTree = "<group>"; };
+		6A40156429526796003A6659 /* xmtp_inbox_iosUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xmtp_inbox_iosUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		6A40157929529F85003A6659 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		6A40157C2952AEFB003A6659 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+		6A40157E2952B237003A6659 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
+		6ABDB41D2954A7070082EC42 /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		6AC5CFB22953FA750046325C /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6A40154029526795003A6659 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A401573295267D7003A6659 /* XMTP in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A40155129526796003A6659 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A40155B29526796003A6659 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6A40153A29526795003A6659 = {
+			isa = PBXGroup;
+			children = (
+				6A40154529526795003A6659 /* xmtp-inbox-ios */,
+				6A40155729526796003A6659 /* xmtp-inbox-iosTests */,
+				6A40156129526796003A6659 /* xmtp-inbox-iosUITests */,
+				6A40154429526795003A6659 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6A40154429526795003A6659 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6A40154329526795003A6659 /* xmtp-inbox-ios.app */,
+				6A40155429526796003A6659 /* xmtp-inbox-iosTests.xctest */,
+				6A40155E29526796003A6659 /* xmtp-inbox-iosUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6A40154529526795003A6659 /* xmtp-inbox-ios */ = {
+			isa = PBXGroup;
+			children = (
+				6A40157B2952AEE4003A6659 /* Extensions */,
+				6A40157429526A3C003A6659 /* Views */,
+				6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */,
+				6A40154829526795003A6659 /* ContentView.swift */,
+				6A40154A29526796003A6659 /* Assets.xcassets */,
+				6A40154C29526796003A6659 /* xmtp_inbox_ios.entitlements */,
+				6A40154D29526796003A6659 /* Preview Content */,
+				6AC5CFB22953FA750046325C /* .swiftformat */,
+			);
+			path = "xmtp-inbox-ios";
+			sourceTree = "<group>";
+		};
+		6A40154D29526796003A6659 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6A40154E29526796003A6659 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6A40155729526796003A6659 /* xmtp-inbox-iosTests */ = {
+			isa = PBXGroup;
+			children = (
+				6A40155829526796003A6659 /* xmtp_inbox_iosTests.swift */,
+			);
+			path = "xmtp-inbox-iosTests";
+			sourceTree = "<group>";
+		};
+		6A40156129526796003A6659 /* xmtp-inbox-iosUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6A40156229526796003A6659 /* xmtp_inbox_iosUITests.swift */,
+				6A40156429526796003A6659 /* xmtp_inbox_iosUITestsLaunchTests.swift */,
+			);
+			path = "xmtp-inbox-iosUITests";
+			sourceTree = "<group>";
+		};
+		6A40157429526A3C003A6659 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6ABDB41D2954A7070082EC42 /* SplashView.swift */,
+				6A40157929529F85003A6659 /* HomeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6A40157B2952AEE4003A6659 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6A40157C2952AEFB003A6659 /* ColorExtensions.swift */,
+				6A40157E2952B237003A6659 /* FontExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6A40154229526795003A6659 /* xmtp-inbox-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A40156829526796003A6659 /* Build configuration list for PBXNativeTarget "xmtp-inbox-ios" */;
+			buildPhases = (
+				6A40153F29526795003A6659 /* Sources */,
+				6A40154029526795003A6659 /* Frameworks */,
+				6A40154129526795003A6659 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "xmtp-inbox-ios";
+			packageProductDependencies = (
+				6A401572295267D7003A6659 /* XMTP */,
+			);
+			productName = "xmtp-inbox-ios";
+			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6A40155329526796003A6659 /* xmtp-inbox-iosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A40156B29526796003A6659 /* Build configuration list for PBXNativeTarget "xmtp-inbox-iosTests" */;
+			buildPhases = (
+				6A40155029526796003A6659 /* Sources */,
+				6A40155129526796003A6659 /* Frameworks */,
+				6A40155229526796003A6659 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6A40155629526796003A6659 /* PBXTargetDependency */,
+			);
+			name = "xmtp-inbox-iosTests";
+			productName = "xmtp-inbox-iosTests";
+			productReference = 6A40155429526796003A6659 /* xmtp-inbox-iosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6A40155D29526796003A6659 /* xmtp-inbox-iosUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A40156E29526796003A6659 /* Build configuration list for PBXNativeTarget "xmtp-inbox-iosUITests" */;
+			buildPhases = (
+				6A40155A29526796003A6659 /* Sources */,
+				6A40155B29526796003A6659 /* Frameworks */,
+				6A40155C29526796003A6659 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6A40156029526796003A6659 /* PBXTargetDependency */,
+			);
+			name = "xmtp-inbox-iosUITests";
+			productName = "xmtp-inbox-iosUITests";
+			productReference = 6A40155E29526796003A6659 /* xmtp-inbox-iosUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6A40153B29526795003A6659 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					6A40154229526795003A6659 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					6A40155329526796003A6659 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 6A40154229526795003A6659;
+					};
+					6A40155D29526796003A6659 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 6A40154229526795003A6659;
+					};
+				};
+			};
+			buildConfigurationList = 6A40153E29526795003A6659 /* Build configuration list for PBXProject "xmtp-inbox-ios" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6A40153A29526795003A6659;
+			packageReferences = (
+				6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */,
+			);
+			productRefGroup = 6A40154429526795003A6659 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6A40154229526795003A6659 /* xmtp-inbox-ios */,
+				6A40155329526796003A6659 /* xmtp-inbox-iosTests */,
+				6A40155D29526796003A6659 /* xmtp-inbox-iosUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6A40154129526795003A6659 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AC5CFB32953FA750046325C /* .swiftformat in Resources */,
+				6A40154F29526796003A6659 /* Preview Assets.xcassets in Resources */,
+				6A40154B29526796003A6659 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A40155229526796003A6659 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A40155C29526796003A6659 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6A40153F29526795003A6659 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A40157A29529F85003A6659 /* HomeView.swift in Sources */,
+				6A40154929526795003A6659 /* ContentView.swift in Sources */,
+				6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */,
+				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
+				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
+				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A40155029526796003A6659 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A40155929526796003A6659 /* xmtp_inbox_iosTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A40155A29526796003A6659 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A40156529526796003A6659 /* xmtp_inbox_iosUITestsLaunchTests.swift in Sources */,
+				6A40156329526796003A6659 /* xmtp_inbox_iosUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6A40155629526796003A6659 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6A40154229526795003A6659 /* xmtp-inbox-ios */;
+			targetProxy = 6A40155529526796003A6659 /* PBXContainerItemProxy */;
+		};
+		6A40156029526796003A6659 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6A40154229526795003A6659 /* xmtp-inbox-ios */;
+			targetProxy = 6A40155F29526796003A6659 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		6A40156629526796003A6659 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6A40156729526796003A6659 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		6A40156929526796003A6659 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "xmtp-inbox-ios/xmtp_inbox_ios.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"xmtp-inbox-ios/Preview Content\"";
+				DEVELOPMENT_TEAM = YSGZF455SJ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6A40156A29526796003A6659 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "xmtp-inbox-ios/xmtp_inbox_ios.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"xmtp-inbox-ios/Preview Content\"";
+				DEVELOPMENT_TEAM = YSGZF455SJ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6A40156C29526796003A6659 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YSGZF455SJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-iosTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/xmtp-inbox-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/xmtp-inbox-ios";
+			};
+			name = Debug;
+		};
+		6A40156D29526796003A6659 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YSGZF455SJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-iosTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/xmtp-inbox-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/xmtp-inbox-ios";
+			};
+			name = Release;
+		};
+		6A40156F29526796003A6659 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YSGZF455SJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-iosUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "xmtp-inbox-ios";
+			};
+			name = Debug;
+		};
+		6A40157029526796003A6659 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YSGZF455SJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-iosUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "xmtp-inbox-ios";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6A40153E29526795003A6659 /* Build configuration list for PBXProject "xmtp-inbox-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A40156629526796003A6659 /* Debug */,
+				6A40156729526796003A6659 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A40156829526796003A6659 /* Build configuration list for PBXNativeTarget "xmtp-inbox-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A40156929526796003A6659 /* Debug */,
+				6A40156A29526796003A6659 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A40156B29526796003A6659 /* Build configuration list for PBXNativeTarget "xmtp-inbox-iosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A40156C29526796003A6659 /* Debug */,
+				6A40156D29526796003A6659 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A40156E29526796003A6659 /* Build configuration list for PBXNativeTarget "xmtp-inbox-iosUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A40156F29526796003A6659 /* Debug */,
+				6A40157029526796003A6659 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/xmtp/xmtp-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6A401572295267D7003A6659 /* XMTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */;
+			productName = XMTP;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 6A40153B29526795003A6659 /* Project object */;
+}
+
