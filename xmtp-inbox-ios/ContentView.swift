@@ -22,9 +22,9 @@ struct ContentView: View {
 
             switch status {
             case .unknown:
-                SplashView(isLoading: false, generateWallet: generateWallet)
+                SplashView(isLoading: false, onNewDemo: generateWallet)
             case .connecting:
-                SplashView(isLoading: true, generateWallet: generateWallet)
+                SplashView(isLoading: true, onNewDemo: generateWallet)
             case let .connected(client):
                 HomeView(client: client)
             case let .error(error):

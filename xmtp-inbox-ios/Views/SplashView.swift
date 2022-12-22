@@ -10,7 +10,7 @@ import SwiftUI
 struct SplashView: View {
     
     var isLoading: Bool
-    var generateWallet: () -> Void
+    var onNewDemo: () -> Void
     
     var body: some View {
         VStack {
@@ -47,7 +47,7 @@ struct SplashView: View {
                         )
                 }
             } else {
-                Button(action: generateWallet) {
+                Button(action: onNewDemo) {
                     Text("Try demo mode")
                         .kerning(0.5)
                         .padding()
@@ -64,8 +64,8 @@ struct SplashView: View {
 }
     
 struct SplashView_Previews: PreviewProvider {
-    static var fakeGenerate : () -> Void = { }
+    static var onNewDemo : () -> Void = { }
     static var previews: some View {
-        SplashView(isLoading: false, generateWallet: fakeGenerate)
+        SplashView(isLoading: false, onNewDemo: onNewDemo)
     }
 }
