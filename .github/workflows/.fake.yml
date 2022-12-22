@@ -2,8 +2,7 @@ name: Lint
 
 on:
   push:
-    branches: ["ea/add-swiftlint","main"]
-  pull_request:
+    branches: ["main"]
 
 jobs:
   swift:
@@ -15,11 +14,11 @@ jobs:
           xcode-version: latest-stable
       - uses: actions/checkout@v3
       - run: swiftlint
-  yaml:
+  swift:
     name: Run Yaml Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ibiqlik/action-yamllint@v3
         with:
-          file_or_dir: "xmtp-inbox-ios"
+          file_or_dir: "."
