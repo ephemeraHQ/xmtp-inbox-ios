@@ -28,4 +28,3 @@ custom_rules:
     #match_kinds:# SyntaxKinds to match. optional.
     #   - comment
     # - identifier
-
