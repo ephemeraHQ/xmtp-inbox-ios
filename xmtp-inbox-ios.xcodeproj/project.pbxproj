@@ -20,6 +20,7 @@
 		6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157E2952B237003A6659 /* FontExtensions.swift */; };
 		6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDB41D2954A7070082EC42 /* SplashView.swift */; };
 		6AC5CFB32953FA750046325C /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 6AC5CFB22953FA750046325C /* .swiftformat */; };
+		6AF033EE2954CF3F0043FB6A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6AF033ED2954CF3F0043FB6A /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		6A40157E2952B237003A6659 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
 		6ABDB41D2954A7070082EC42 /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		6AC5CFB22953FA750046325C /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
+		6AF033ED2954CF3F0043FB6A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				6A40154C29526796003A6659 /* xmtp_inbox_ios.entitlements */,
 				6A40154D29526796003A6659 /* Preview Content */,
 				6AC5CFB22953FA750046325C /* .swiftformat */,
+				6AF033ED2954CF3F0043FB6A /* Localizable.strings */,
 			);
 			path = "xmtp-inbox-ios";
 			sourceTree = "<group>";
@@ -172,6 +175,7 @@
 				6A40153F29526795003A6659 /* Sources */,
 				6A40154029526795003A6659 /* Frameworks */,
 				6A40154129526795003A6659 /* Resources */,
+				6A50C65F2954BFBB0074DCA1 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -272,6 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AF033EE2954CF3F0043FB6A /* Localizable.strings in Resources */,
 				6AC5CFB32953FA750046325C /* .swiftformat in Resources */,
 				6A40154F29526796003A6659 /* Preview Assets.xcassets in Resources */,
 				6A40154B29526796003A6659 /* Assets.xcassets in Resources */,
@@ -293,6 +298,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6A50C65F2954BFBB0074DCA1 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: swiftlint not installed, run `brew install swiftlint`\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6A40153F29526795003A6659 /* Sources */ = {
@@ -678,4 +705,3 @@
 	};
 	rootObject = 6A40153B29526795003A6659 /* Project object */;
 }
-

@@ -41,7 +41,7 @@ struct ContentView: View {
                 }
                 let wallet = try PrivateKey.generate()
                 let client = try await Client.create(account: wallet)
-                
+
                 await MainActor.run {
                     withAnimation {
                         self.status = .connected(client)
