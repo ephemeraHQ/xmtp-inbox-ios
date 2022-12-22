@@ -1,3 +1,5 @@
+---
+
 yaml-files:
   - '*.yaml'
   - '*.yml'
@@ -13,7 +15,8 @@ rules:
   comments-indentation:
     level: warning
   document-end: disable
-  document-start: disable
+  document-start:
+    level: warning
   empty-lines: enable
   empty-values: disable
   float-values: disable
@@ -29,3 +32,4 @@ rules:
   trailing-spaces: enable
   truthy:
     level: warning
+  
