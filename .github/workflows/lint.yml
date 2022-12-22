@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  swift:
     name: Run Swift Lint
     runs-on: macos-12
     steps:
@@ -15,7 +15,7 @@ jobs:
           xcode-version: latest-stable
       - uses: actions/checkout@v3
       - run: swiftlint
-  build:
+  yaml:
     name: Run Yaml Lint
     runs-on: ubuntu-latest
     steps:
