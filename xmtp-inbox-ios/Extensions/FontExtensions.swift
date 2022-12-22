@@ -10,4 +10,6 @@ import SwiftUI
 
 extension Font {
     static let H1 = Font.system(size: 18, weight: .bold)
+    static let Display1 = Font.system(size: 36, weight: .bold)
+    static let Body1 = Font.system(size: 16)
 }

@@ -9,14 +9,14 @@ import SwiftUI
 import XMTP
 
 struct HomeView: View {
-    
+
     var client: XMTP.Client
 
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-                
+
                 Text(client.address)
                     .padding()
                     .navigationBarTitle("All Messages", displayMode: .inline)

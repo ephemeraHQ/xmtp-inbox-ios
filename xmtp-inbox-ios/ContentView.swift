@@ -8,60 +8,23 @@
 import SwiftUI
 import XMTP
 
-
 struct ContentView: View {
-    
+
     enum AuthStatus {
         case unknown, connecting, connected(Client), error(String)
     }
-    
+
     @State private var status: AuthStatus = .unknown
 
     var body: some View {
         ZStack {
             Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 
-            let buttonHeight = 58.0
-
             switch status {
             case .unknown:
-                VStack {
-                    Image("XMTPGraphic")
-                        .resizable()
-                        .scaledToFit()
-
-                    Button(action: generateWallet) {
-                        Text("Try demo mode")
-                            .kerning(0.5)
-                            .padding()
-                            .frame(maxWidth: .infinity, maxHeight: buttonHeight)
-                            .background(Color.actionPrimary)
-                            .foregroundColor(.actionPrimaryText)
-                            .font(.H1)
-                            .clipShape(Capsule())
-                            .padding()
-                    }
-                }
+                SplashView(isLoading: false, generateWallet: generateWallet)
             case .connecting:
-                VStack {
-                    Image("XMTPGraphic")
-                        .resizable()
-                        .scaledToFit()
-                    
-                    ZStack {
-                        Text("")
-                            .padding()
-                            .frame(maxWidth: .infinity, maxHeight: buttonHeight)
-                            .background(Color.actionPrimary)
-                            .clipShape(Capsule())
-                            .padding()
-                        
-                        ProgressView()
-                            .progressViewStyle(
-                                CircularProgressViewStyle(tint: .actionPrimaryText)
-                            )
-                    }
-                }
+                SplashView(isLoading: true, generateWallet: generateWallet)
             case let .connected(client):
                 HomeView(client: client)
             case let .error(error):
