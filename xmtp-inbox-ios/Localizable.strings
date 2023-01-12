@@ -6,6 +6,9 @@
   
 */
 
+// Shared
+"loading" = "Loading...";
+
 // Splash
 "splash-title" = "Your interoperable web3 inbox";
 "splash-description" = "You’re just a few steps away from secure, wallet-to-wallet messaging";
@@ -13,3 +16,7 @@
 
 // Home
 "home-title" = "All messages";
+
+// Conversations
+"conversations-title" = "Conversations";
+"conversations-empty" = "No conversations yet";

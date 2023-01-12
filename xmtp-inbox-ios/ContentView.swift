@@ -42,6 +42,10 @@ struct ContentView: View {
                 let wallet = try PrivateKey.generate()
                 let client = try await Client.create(account: wallet)
 
+                #if DEBUG
+                UIPasteboard.general.string = client.address
+                #endif
+
                 await MainActor.run {
                     withAnimation {
                         self.status = .connected(client)
