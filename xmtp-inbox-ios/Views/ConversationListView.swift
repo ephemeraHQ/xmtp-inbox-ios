@@ -33,7 +33,7 @@ struct ConversationListView: View {
                 List {
                     ForEach(conversations, id: \.peerAddress) { conversation in
                         NavigationLink(value: conversation) {
-                            Text(conversation.peerAddress)
+                            ConversationListItemView(conversation: conversation)
                         }
                     }
                     .listRowBackground(Color.backgroundPrimary)
