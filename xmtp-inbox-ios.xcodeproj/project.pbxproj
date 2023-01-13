@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6A1C37D82970D1BD00AF6559 /* ConversationListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C37D72970D1BD00AF6559 /* ConversationListItemView.swift */; };
+		6A1C37DB297198DF00AF6559 /* LoadingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C37DA297198DF00AF6559 /* LoadingStatus.swift */; };
 		6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */; };
 		6A40154929526795003A6659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154829526795003A6659 /* ContentView.swift */; };
 		6A40154B29526796003A6659 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A40154A29526796003A6659 /* Assets.xcassets */; };
@@ -24,7 +25,7 @@
 		6AF033EE2954CF3F0043FB6A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6AF033ED2954CF3F0043FB6A /* Localizable.strings */; };
 		6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033EF2954F62A0043FB6A /* ConversationListView.swift */; };
 		6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */; };
-		6AF033F4295504B70043FB6A /* DebugPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F3295504B70043FB6A /* DebugPrint.swift */; };
+		6AF033F4295504B70043FB6A /* Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F3295504B70043FB6A /* Print.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		6A1C37D72970D1BD00AF6559 /* ConversationListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListItemView.swift; sourceTree = "<group>"; };
+		6A1C37DA297198DF00AF6559 /* LoadingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingStatus.swift; sourceTree = "<group>"; };
 		6A40154329526795003A6659 /* xmtp-inbox-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "xmtp-inbox-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xmtp_inbox_iosApp.swift; sourceTree = "<group>"; };
 		6A40154829526795003A6659 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,7 +67,7 @@
 		6AF033ED2954CF3F0043FB6A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		6AF033EF2954F62A0043FB6A /* ConversationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
 		6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewClientProvider.swift; sourceTree = "<group>"; };
-		6AF033F3295504B70043FB6A /* DebugPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPrint.swift; sourceTree = "<group>"; };
+		6AF033F3295504B70043FB6A /* Print.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Print.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A1C37D92971989F00AF6559 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				6A1C37DA297198DF00AF6559 /* LoadingStatus.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		6A40153A29526795003A6659 = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +127,7 @@
 		6A40154529526795003A6659 /* xmtp-inbox-ios */ = {
 			isa = PBXGroup;
 			children = (
+				6A1C37D92971989F00AF6559 /* Shared */,
 				6AF033F5295504CD0043FB6A /* Utilities */,
 				6A40157B2952AEE4003A6659 /* Extensions */,
 				6A40157429526A3C003A6659 /* Views */,
@@ -180,7 +191,7 @@
 		6AF033F5295504CD0043FB6A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				6AF033F3295504B70043FB6A /* DebugPrint.swift */,
+				6AF033F3295504B70043FB6A /* Print.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -355,7 +366,8 @@
 				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
-				6AF033F4295504B70043FB6A /* DebugPrint.swift in Sources */,
+				6AF033F4295504B70043FB6A /* Print.swift in Sources */,
+				6A1C37DB297198DF00AF6559 /* LoadingStatus.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

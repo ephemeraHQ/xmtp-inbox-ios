@@ -10,13 +10,9 @@ import XMTP
 
 struct ConversationListView: View {
 
-    enum Status {
-        case loading, empty, success, error(String)
-    }
-
     var client: XMTP.Client
 
-    @State private var status: Status = .loading
+    @State private var status: LoadingStatus = .loading
 
     @State private var conversations: [XMTP.Conversation] = []
 
@@ -64,7 +60,7 @@ struct ConversationListView: View {
                 self.status = conversations.isEmpty ? .empty : .success
             }
         } catch {
-            debugPrint("Error loading conversations: \(error)")
+            print("Error loading conversations: \(error)")
             self.status = .error(error.localizedDescription)
         }
     }
@@ -78,7 +74,7 @@ struct ConversationListView: View {
                 self.status = .success
             }
         } catch {
-            debugPrint("Error streaming conversations: \(error)")
+            print("Error streaming conversations: \(error)")
             if conversations.isEmpty {
                 self.status = .error(error.localizedDescription)
             } else {
