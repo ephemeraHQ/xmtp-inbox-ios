@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6A1C37D82970D1BD00AF6559 /* ConversationListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C37D72970D1BD00AF6559 /* ConversationListItemView.swift */; };
 		6A1C37DB297198DF00AF6559 /* LoadingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C37DA297198DF00AF6559 /* LoadingStatus.swift */; };
+		6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6A1C37DD2971A3C900AF6559 /* web3.swift */; };
 		6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */; };
 		6A40154929526795003A6659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154829526795003A6659 /* ContentView.swift */; };
 		6A40154B29526796003A6659 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A40154A29526796003A6659 /* Assets.xcassets */; };
@@ -75,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */,
 				6A401573295267D7003A6659 /* XMTP in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,6 +217,7 @@
 			name = "xmtp-inbox-ios";
 			packageProductDependencies = (
 				6A401572295267D7003A6659 /* XMTP */,
+				6A1C37DD2971A3C900AF6559 /* web3.swift */,
 			);
 			productName = "xmtp-inbox-ios";
 			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
@@ -290,6 +293,7 @@
 			mainGroup = 6A40153A29526795003A6659;
 			packageReferences = (
 				6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */,
+				6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
 			projectDirPath = "";
@@ -721,6 +725,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/argentlabs/web3.swift";
+			requirement = {
+				kind = exactVersion;
+				version = 1.4.1;
+			};
+		};
 		6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
@@ -732,6 +744,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6A1C37DD2971A3C900AF6559 /* web3.swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */;
+			productName = web3.swift;
+		};
 		6A401572295267D7003A6659 /* XMTP */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */;

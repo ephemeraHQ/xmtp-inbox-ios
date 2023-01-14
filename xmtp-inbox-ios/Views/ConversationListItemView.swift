@@ -7,39 +7,62 @@
 
 import SwiftUI
 import XMTP
+import web3
 
 struct ConversationListItemView: View {
 
+    enum EnsError: Error {
+        case invalidURL
+    }
+
     var conversation: XMTP.Conversation
 
-    @State private var status: LoadingStatus = .loading
+    @State private var ensClient: EthereumHttpClient?
+
+    @State private var displayName: String?
 
     var body: some View {
         ZStack {
-            switch status {
-            case .loading, .empty:
-                Text(conversation.peerAddress)
-            case let .error(error):
-                Text(conversation.peerAddress).task {
-                    print(error)
-                }
-            case .success:
-                Text(conversation.peerAddress)
+            Text(displayName ?? conversation.peerAddress)
+        }
+        .task {
+            await loadEnsName()
+        }
+    }
+
+    func setupEnsClient() throws -> EthereumHttpClient {
+        guard let ensClient = self.ensClient else {
+            guard let clientUrl = URL(string: ProcessInfo.processInfo.environment["INFURA_MAINNET_URL"] ?? "") else {
+                throw EnsError.invalidURL
             }
+            let newEnsClient = EthereumHttpClient(url: clientUrl, network: .mainnet)
+            self.ensClient = newEnsClient
+            return newEnsClient
         }
-        .task {
-            await loadDisplayName()
-        }
-        .task {
-            await loadAvatar()
-        }
+        return ensClient
     }
 
-    func loadDisplayName() async {
-        // TODO(elise): Load ENS name
-    }
+    func loadEnsName() async {
+        do {
+            let ensClient = try setupEnsClient()
+            let nameService = EthereumNameService(client: ensClient)
 
-    func loadAvatar() async {
-        // TODO(elise): Load ENS image or fallback
+            let results = try await nameService.resolve(addresses: [EthereumAddress(conversation.peerAddress)])
+            if results.count > 0 {
+                switch results[0].output {
+                case let .resolved(value):
+                    print("Resolved ENS: \(value)")
+                    await MainActor.run {
+                        self.displayName = value
+                    }
+                case let .couldNotBeResolved(error):
+                    print("Could not resolve ENS: \(error)")
+                }
+            } else {
+                print("No ENS results for address: \(conversation.peerAddress)")
+            }
+        } catch {
+            print("Error resolving ens: \(error)")
+        }
     }
 }
