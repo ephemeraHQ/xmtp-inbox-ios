@@ -65,6 +65,7 @@
 		6A40157E2952B237003A6659 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
 		6ABDB41D2954A7070082EC42 /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		6AC5CFB22953FA750046325C /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
+		6AE264E52973D3CD0055250A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6AF033ED2954CF3F0043FB6A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		6AF033EF2954F62A0043FB6A /* ConversationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
 		6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewClientProvider.swift; sourceTree = "<group>"; };
@@ -140,6 +141,7 @@
 				6A40154D29526796003A6659 /* Preview Content */,
 				6AC5CFB22953FA750046325C /* .swiftformat */,
 				6AF033ED2954CF3F0043FB6A /* Localizable.strings */,
+				6AE264E52973D3CD0055250A /* README.md */,
 			);
 			path = "xmtp-inbox-ios";
 			sourceTree = "<group>";
