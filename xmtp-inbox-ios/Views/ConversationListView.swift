@@ -20,7 +20,7 @@ struct ConversationListView: View {
         ZStack {
             switch status {
             case .loading:
-                Text("loading")
+                ProgressView()
             case .empty:
                 Text("conversations-empty")
             case let .error(error):
@@ -33,6 +33,8 @@ struct ConversationListView: View {
                         }
                     }
                     .listRowBackground(Color.backgroundPrimary)
+                    .listRowInsets(EdgeInsets())
+                    .padding(.vertical)
                 }
                 .scrollContentBackground(.hidden)
                 .navigationDestination(for: Conversation.self) { _ in
@@ -72,7 +74,6 @@ struct ConversationListView: View {
     func streamConversations() async {
         do {
             for try await newConversation in client.conversations.stream()
-
             where newConversation.peerAddress != client.address {
                 await MainActor.run {
                     withAnimation {

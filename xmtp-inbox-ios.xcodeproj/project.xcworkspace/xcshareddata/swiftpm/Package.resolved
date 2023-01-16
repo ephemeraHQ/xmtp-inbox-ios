@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "enskit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Planetable/ENSKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d366b3268c9617c163bd8c48489674e2d62495cd"
+      }
+    },
+    {
       "identity" : "generic-json-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/iwill/generic-json-swift",
@@ -34,6 +43,15 @@
       "state" : {
         "revision" : "6bf35472cb8621481e59e6d1450b19627db81cea",
         "version" : "1.13.1"
+      }
+    },
+    {
+      "identity" : "igidenticon",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/seaburg/IGIdenticon.git",
+      "state" : {
+        "revision" : "b4ad2b7e31924c5a18e018da795f3caf0b5309e2",
+        "version" : "0.8.0"
       }
     },
     {
@@ -133,6 +151,24 @@
       "state" : {
         "revision" : "ab3a58b7209a17d781c0d1dbb3e1ff3da306bae8",
         "version" : "1.20.3"
+      }
+    },
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",
+      "state" : {
+        "revision" : "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+        "version" : "5.0.1"
+      }
+    },
+    {
+      "identity" : "uint256",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hyugit/UInt256.git",
+      "state" : {
+        "revision" : "1a499a1bf08afd10b9fcd0fd6d90b6dd9196be50",
+        "version" : "0.2.2"
       }
     },
     {
