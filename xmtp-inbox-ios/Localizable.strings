@@ -6,9 +6,6 @@
   
 */
 
-// Shared
-"loading" = "Loading...";
-
 // Splash
 "splash-title" = "Your interoperable web3 inbox";
 "splash-description" = "You’re just a few steps away from secure, wallet-to-wallet messaging";

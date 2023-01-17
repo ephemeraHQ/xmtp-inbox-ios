@@ -20,7 +20,7 @@ struct ConversationListView: View {
         ZStack {
             switch status {
             case .loading:
-                Text("loading")
+                ProgressView()
             case .empty:
                 Text("conversations-empty")
             case let .error(error):
@@ -33,6 +33,8 @@ struct ConversationListView: View {
                         }
                     }
                     .listRowBackground(Color.backgroundPrimary)
+                    .listRowInsets(EdgeInsets())
+                    .padding(.vertical)
                 }
                 .scrollContentBackground(.hidden)
                 .navigationDestination(for: Conversation.self) { _ in
@@ -53,30 +55,39 @@ struct ConversationListView: View {
 
     func loadConversations() async {
         do {
-            let conversations = try await client.conversations.list()
+            let newConversations = try await client.conversations.list()
 
             await MainActor.run {
-                self.conversations = conversations
-                self.status = conversations.isEmpty ? .empty : .success
+                withAnimation {
+                    self.conversations = newConversations
+                    self.status = conversations.isEmpty ? .empty : .success
+                }
             }
         } catch {
             print("Error loading conversations: \(error)")
-            self.status = .error(error.localizedDescription)
+            await MainActor.run {
+                self.status = .error(error.localizedDescription)
+            }
         }
     }
 
     func streamConversations() async {
         do {
-            for try await conversation in client.conversations.stream()
-
-            where conversation.peerAddress != client.address {
-                conversations.insert(conversation, at: 0)
-                self.status = .success
+            for try await newConversation in client.conversations.stream()
+            where newConversation.peerAddress != client.address {
+                await MainActor.run {
+                    withAnimation {
+                        conversations.insert(newConversation, at: 0)
+                        self.status = .success
+                    }
+                }
             }
         } catch {
             print("Error streaming conversations: \(error)")
             if conversations.isEmpty {
-                self.status = .error(error.localizedDescription)
+                await MainActor.run {
+                    self.status = .error(error.localizedDescription)
+                }
             } else {
                 // TODO(elise): Toast error
             }
