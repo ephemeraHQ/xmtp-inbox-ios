@@ -10,11 +10,17 @@ import XMTP
 
 struct ConversationListView: View {
 
+    enum LoadingStatus {
+        case loading, empty, success, error(String)
+    }
+
     var client: XMTP.Client
 
-    @State private var status: LoadingStatus = .loading
+    @State var messagePreviews = [String: String]()
 
-    @State private var conversations: [XMTP.Conversation] = []
+    @State var conversations: [XMTP.Conversation] = []
+
+    @State private var status: LoadingStatus = .loading
 
     var body: some View {
         ZStack {
@@ -29,7 +35,10 @@ struct ConversationListView: View {
                 List {
                     ForEach(conversations, id: \.peerAddress) { conversation in
                         NavigationLink(value: conversation) {
-                            ConversationListItemView(conversation: conversation)
+                            ConversationListItemView(
+                                conversation: conversation,
+                                messagePreview: messagePreviews[conversation.peerAddress] ?? ""
+                            )
                         }
                     }
                     .listRowBackground(Color.backgroundPrimary)
@@ -53,14 +62,45 @@ struct ConversationListView: View {
         }
     }
 
+    func loadMostRecentMessage(conversation: Conversation) async -> DecodedMessage? {
+        do {
+            let messagePreview = try await conversation.messages(limit: 1)
+            if !messagePreview.isEmpty {
+                return messagePreview.first
+            }
+        } catch {
+            print("Error loading message: \(conversation.peerAddress)")
+        }
+        return nil
+    }
+
+    func sortedConversations(conversations: [Conversation], messages: [String: DecodedMessage]) -> [Conversation] {
+        var newConversations = conversations
+        newConversations.sort {
+            guard let message1Sent = messages[$0.peerAddress]?.sent else {
+                return false
+            }
+            guard let message2Sent = messages[$1.peerAddress]?.sent else {
+                return true
+            }
+            return message1Sent > message2Sent
+        }
+        return newConversations
+    }
+
     func loadConversations() async {
         do {
-            let newConversations = try await client.conversations.list()
-
+            var newConversations = try await client.conversations.list()
+            var newMessages = [String: DecodedMessage]()
+            for conversation in newConversations {
+                let message = await loadMostRecentMessage(conversation: conversation)
+                messagePreviews[conversation.peerAddress] = try message?.content() ?? ""
+                newMessages[conversation.peerAddress] = message
+            }
+            self.conversations = sortedConversations(conversations: newConversations, messages: newMessages)
             await MainActor.run {
                 withAnimation {
-                    self.conversations = newConversations
-                    self.status = conversations.isEmpty ? .empty : .success
+                    self.status = .success
                 }
             }
         } catch {
@@ -75,9 +115,18 @@ struct ConversationListView: View {
         do {
             for try await newConversation in client.conversations.stream()
             where newConversation.peerAddress != client.address {
+
+                let message = await loadMostRecentMessage(conversation: newConversation)
+                let content = try message?.content() ?? ""
+                messagePreviews[newConversation.peerAddress] = content
+
                 await MainActor.run {
                     withAnimation {
-                        conversations.insert(newConversation, at: 0)
+                        if content.isEmpty {
+                            conversations.insert(newConversation, at: conversations.endIndex)
+                        } else {
+                            conversations.insert(newConversation, at: 0)
+                        }
                         self.status = .success
                     }
                 }
