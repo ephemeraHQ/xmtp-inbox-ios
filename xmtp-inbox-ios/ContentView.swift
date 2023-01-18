@@ -38,9 +38,9 @@ struct ContentView: View {
 
             switch auth.status {
             case .unknown:
-                SplashView(isLoading: false, onNewDemo: generateWallet)
+                SplashView(isLoading: false, onNewDemo: onNewDemo)
             case .connecting:
-                SplashView(isLoading: true, onNewDemo: generateWallet)
+                SplashView(isLoading: true, onNewDemo: onNewDemo)
             case let .connected(client):
                 HomeView(client: client)
             case let .error(error):
@@ -67,12 +67,11 @@ struct ContentView: View {
         }
     }
 
-    func generateWallet() {
+    func onNewDemo() {
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        self.auth.status = .connecting
         Task {
             do {
-                await MainActor.run {
-                    self.auth.status = .connecting
-                }
                 let account = try PrivateKey.generate()
                 let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
                 let keys = client.v1keys

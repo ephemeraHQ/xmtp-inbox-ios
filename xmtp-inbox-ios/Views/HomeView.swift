@@ -26,34 +26,37 @@ struct HomeView: View {
                 Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 
                 ConversationListView(client: client)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            ZStack {
-                                HStack {
-                                    EnsImageView(imageSize: 40.0, peerAddress: client.address)
-                                        .onLongPressGesture {
-                                            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                                            auth.signOut()
-                                        }
-                                    Spacer()
-                                }
-                                HStack {
-                                    Image("MessageIcon")
-                                        .renderingMode(.template)
-                                        .colorMultiply(.textPrimary)
-                                        .frame(width: 16.0, height: 16.0)
-                                    Text("home-title").font(.Title2H)
-                                }
-                                .onLongPressGesture {
-                                    #if DEBUG
-                                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                                    UIPasteboard.general.string = client.address
-                                    #endif
-                                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading:
+                ZStack {
+                    HStack {
+                        EnsImageView(imageSize: 40.0, peerAddress: client.address)
+                            .onLongPressGesture {
+                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                                auth.signOut()
                             }
-                        }
                     }
+                }
+            )
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    HStack {
+                        Image("MessageIcon")
+                            .renderingMode(.template)
+                            .colorMultiply(.textPrimary)
+                            .frame(width: 16.0, height: 16.0)
+                        Text("home-title").font(.Title2H)
+                            .accessibilityAddTraits(.isHeader)
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
+                    .onLongPressGesture {
+                        #if DEBUG
+                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                        UIPasteboard.general.string = client.address
+                        #endif
+                    }
+                }
             }
         }
         .environmentObject(environmentCoordinator)
