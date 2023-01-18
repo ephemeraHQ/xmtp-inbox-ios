@@ -33,7 +33,6 @@ struct HomeView: View {
                                 HStack {
                                     EnsImageView(imageSize: 40.0, peerAddress: client.address)
                                         .onLongPressGesture {
-                                            // TODO(elise): Try on device
                                             UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                                             auth.signOut()
                                         }
@@ -48,7 +47,7 @@ struct HomeView: View {
                                 }
                                 .onLongPressGesture {
                                     #if DEBUG
-                                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                                     UIPasteboard.general.string = client.address
                                     #endif
                                 }
