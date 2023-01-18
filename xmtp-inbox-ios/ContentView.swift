@@ -30,6 +30,24 @@ struct ContentView: View {
             case let .error(error):
                 Text("Error: \(error)").foregroundColor(.actionNegative)
             }
+        }.task {
+            await loadClient()
+        }
+    }
+
+    func loadClient() async {
+        do {
+            guard let keys = try Keystore.readKeys() else {
+                return
+            }
+            let client = try Client.from(bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
+            await MainActor.run {
+                withAnimation {
+                    self.status = .connected(client)
+                }
+            }
+        } catch {
+            print("Keystore read error: \(error.localizedDescription)")
         }
     }
 
@@ -39,8 +57,10 @@ struct ContentView: View {
                 await MainActor.run {
                     self.status = .connecting
                 }
-                let wallet = try PrivateKey.generate()
-                let client = try await Client.create(account: wallet)
+                let account = try PrivateKey.generate()
+                let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
+                let keys = client.v1keys
+                try Keystore.saveKeys(address: client.address, keys: keys)
 
                 #if DEBUG
                 UIPasteboard.general.string = client.address

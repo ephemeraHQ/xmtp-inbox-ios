@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import XMTP
 
 struct Constants {
+    static let xmtpEnv: XMTPEnvironment = .dev
     static let infuraUrl = URL(string: ProcessInfo.processInfo.environment["INFURA_MAINNET_URL"] ?? "")
 }
