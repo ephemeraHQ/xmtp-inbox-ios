@@ -20,6 +20,10 @@ struct Keystore {
 
     private static let addressKey = "KEY_ADDRESS"
 
+    static func address() -> String? {
+        return UserDefaults.standard.string(forKey: addressKey)
+    }
+
     static func saveKeys(address: String, keys: PrivateKeyBundleV1) throws {
         UserDefaults.standard.set(address, forKey: addressKey)
 

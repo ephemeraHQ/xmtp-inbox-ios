@@ -55,12 +55,11 @@ struct ConversationListItemView: View {
             if results.count > 0 {
                 switch results[0].output {
                 case let .resolved(value):
-                    print("Resolved ENS name: \(value)")
                     await MainActor.run {
                         self.ensName = value
                     }
-                case let .couldNotBeResolved(error):
-                    print("Could not resolve ENS name: \(error)")
+                case.couldNotBeResolved:
+                    return
                 }
             } else {
                 print("No ENS name results for address: \(conversation.peerAddress)")

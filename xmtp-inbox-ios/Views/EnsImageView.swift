@@ -79,8 +79,8 @@ struct EnsImageView: View {
                 switch results[0].output {
                 case let .resolved(value):
                     await loadEnsImage(ensName: value)
-                case let .couldNotBeResolved(error):
-                    print("Could not resolve ENS name: \(error)")
+                case .couldNotBeResolved:
+                    return
                 }
             }
         } catch {

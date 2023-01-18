@@ -18,13 +18,43 @@ struct HomeView: View {
 
     @StateObject var environmentCoordinator = EnvironmentCoordinator()
 
+    @EnvironmentObject var auth: Auth
+
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 
                 ConversationListView(client: client)
-                    .navigationBarTitle("home-title", displayMode: .inline)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            ZStack {
+                                HStack {
+                                    EnsImageView(imageSize: 40.0, peerAddress: client.address)
+                                        .onLongPressGesture {
+                                            // TODO(elise): Try on device
+                                            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                                            auth.signOut()
+                                        }
+                                    Spacer()
+                                }
+                                HStack {
+                                    Image("MessageIcon")
+                                        .renderingMode(.template)
+                                        .colorMultiply(.textPrimary)
+                                        .frame(width: 16.0, height: 16.0)
+                                    Text("home-title").font(.Title2H)
+                                }
+                                .onLongPressGesture {
+                                    #if DEBUG
+                                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                    UIPasteboard.general.string = client.address
+                                    #endif
+                                }
+                            }
+                        }
+                    }
             }
         }
         .environmentObject(environmentCoordinator)
