@@ -8,52 +8,83 @@
 import SwiftUI
 import XMTP
 
-struct ContentView: View {
+class Auth: ObservableObject {
 
     enum AuthStatus {
         case unknown, connecting, connected(Client), error(String)
     }
 
-    @State private var status: AuthStatus = .unknown
+    @Published var status: AuthStatus = .unknown
+
+    func signOut() {
+        do {
+            try Keystore.deleteKeys()
+            withAnimation {
+                self.status = .unknown
+            }
+        } catch {
+            print("Error signing out: \(error.localizedDescription)")
+        }
+    }
+}
+
+struct ContentView: View {
+
+    @StateObject private var auth = Auth()
 
     var body: some View {
         ZStack {
             Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 
-            switch status {
+            switch auth.status {
             case .unknown:
-                SplashView(isLoading: false, onNewDemo: generateWallet)
+                SplashView(isLoading: false, onNewDemo: onNewDemo)
             case .connecting:
-                SplashView(isLoading: true, onNewDemo: generateWallet)
+                SplashView(isLoading: true, onNewDemo: onNewDemo)
             case let .connected(client):
                 HomeView(client: client)
             case let .error(error):
                 Text("Error: \(error)").foregroundColor(.actionNegative)
             }
         }
+        .environmentObject(auth)
+        .task {
+            await loadClient()
+        }
     }
 
-    func generateWallet() {
+    func loadClient() async {
+        do {
+            guard let keys = try Keystore.readKeys() else {
+                return
+            }
+            let client = try Client.from(bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
+            await MainActor.run {
+                self.auth.status = .connected(client)
+            }
+        } catch {
+            print("Keystore read error: \(error.localizedDescription)")
+        }
+    }
+
+    func onNewDemo() {
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        self.auth.status = .connecting
         Task {
             do {
-                await MainActor.run {
-                    self.status = .connecting
-                }
-                let wallet = try PrivateKey.generate()
-                let client = try await Client.create(account: wallet)
-
-                #if DEBUG
-                UIPasteboard.general.string = client.address
-                #endif
+                let account = try PrivateKey.generate()
+                let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
+                let keys = client.v1keys
+                try Keystore.saveKeys(address: client.address, keys: keys)
 
                 await MainActor.run {
                     withAnimation {
-                        self.status = .connected(client)
+                        self.auth.status = .connected(client)
                     }
                 }
             } catch {
                 await MainActor.run {
-                    self.status = .error("Error generating wallet: \(error)")
+                    self.auth.status = .error("Error generating wallet: \(error)")
                 }
             }
         }

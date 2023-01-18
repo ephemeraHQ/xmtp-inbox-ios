@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/grpc/grpc-swift",
       "state" : {
-        "revision" : "6bf35472cb8621481e59e6d1450b19627db81cea",
-        "version" : "1.13.1"
+        "revision" : "1629de188c25682adc4cb47a80adca1ac90b494d",
+        "version" : "1.13.2"
       }
     },
     {
@@ -60,7 +60,7 @@
       "location" : "https://github.com/xmtp/proto",
       "state" : {
         "branch" : "main",
-        "revision" : "e10dc9bcfef9e520244171141e792ffaa40c7554"
+        "revision" : "795370409155074aedb0be0f38484c232fca59f3"
       }
     },
     {
@@ -69,7 +69,7 @@
       "location" : "https://github.com/GigaBitcoin/secp256k1.swift.git",
       "state" : {
         "branch" : "main",
-        "revision" : "3c79005a56b09780a751722db066ba79dd893cde"
+        "revision" : "53ff7a0ebd5dd23ffe3e2a354c7a52bb01831aa8"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "7e3b50b38e4e66f31db6cf4a784c6af148bac846",
-        "version" : "2.46.0"
+        "revision" : "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
+        "version" : "2.47.0"
       }
     },
     {
@@ -203,7 +203,7 @@
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "831546b24f122cff50a01eccb9c195b99b5d0555"
+        "revision" : "ebe404d1be846aa3c96d072bac149ffe95784bb6"
       }
     }
   ],
