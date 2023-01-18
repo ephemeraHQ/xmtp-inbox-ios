@@ -29,15 +29,11 @@ struct HomeView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading:
-                ZStack {
-                    HStack {
-                        EnsImageView(imageSize: 40.0, peerAddress: client.address)
-                            .onLongPressGesture {
-                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                                auth.signOut()
-                            }
+                EnsImageView(imageSize: 40.0, peerAddress: client.address)
+                    .onLongPressGesture {
+                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                        auth.signOut()
                     }
-                }
             )
             .toolbar {
                 ToolbarItem(placement: .principal) {
