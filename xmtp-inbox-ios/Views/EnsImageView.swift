@@ -39,6 +39,7 @@ struct EnsImageView: View {
                     .aspectRatio(contentMode: .fit)
                     .clipShape(Circle())
                     .frame(width: imageSize, height: imageSize)
+                // swiftlint:enable force_unwrapping
             } else if identicon != nil {
                 // swiftlint:disable force_unwrapping
                 Image(uiImage: identicon!)
@@ -46,6 +47,7 @@ struct EnsImageView: View {
                     .aspectRatio(contentMode: .fit)
                     .clipShape(Circle())
                     .frame(width: imageSize, height: imageSize)
+                // swiftlint:enable force_unwrapping
             } else {
                 Color.backgroundSecondary
                     .clipShape(Circle())

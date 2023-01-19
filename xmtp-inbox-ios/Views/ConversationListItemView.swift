@@ -17,6 +17,8 @@ struct ConversationListItemView: View {
 
     var conversation: XMTP.Conversation
 
+    var messagePreview: String
+
     @State private var ethClient: EthereumHttpClient?
 
     @State private var ensName: String?
@@ -24,10 +26,27 @@ struct ConversationListItemView: View {
     var body: some View {
         HStack(alignment: .top) {
             EnsImageView(imageSize: 48.0, peerAddress: conversation.peerAddress)
-            Text(ensName ?? conversation.peerAddress.truncatedAddress())
-                .padding(.horizontal, 4.0)
-                .lineLimit(1)
-                .font(.Body1B)
+            VStack(alignment: .leading) {
+                Text(ensName ?? conversation.peerAddress.truncatedAddress())
+                    .padding(.horizontal, 4.0)
+                    .padding(.bottom, 1.0)
+                    .lineLimit(1)
+                    .font(.Body1B)
+                if messagePreview.isEmpty {
+                    Text("no-message-preview")
+                        .padding(.horizontal, 4.0)
+                        .lineLimit(1)
+                        .font(.Body2)
+                        .foregroundColor(.textScondary)
+                        .italic()
+                } else {
+                    Text(messagePreview)
+                        .padding(.horizontal, 4.0)
+                        .lineLimit(1)
+                        .font(.Body2)
+                        .foregroundColor(.textScondary)
+                }
+            }
         }
         .task {
             await loadEnsName()
