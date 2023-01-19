@@ -16,9 +16,9 @@ struct ConversationListView: View {
 
     var client: XMTP.Client
 
-    @State var messagePreviews = [String: String]()
+    @State private var messagePreviews = [String: String]()
 
-    @State var conversations: [XMTP.Conversation] = []
+    @State private var conversations: [XMTP.Conversation] = []
 
     @State private var status: LoadingStatus = .loading
 
