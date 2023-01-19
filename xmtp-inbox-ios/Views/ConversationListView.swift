@@ -90,7 +90,7 @@ struct ConversationListView: View {
 
     func loadConversations() async {
         do {
-            var newConversations = try await client.conversations.list()
+            let newConversations = try await client.conversations.list()
             var newMessages = [String: DecodedMessage]()
             for conversation in newConversations {
                 let message = await loadMostRecentMessage(conversation: conversation)
