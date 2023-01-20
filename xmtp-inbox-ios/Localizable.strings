@@ -10,6 +10,7 @@
 "splash-title" = "Your interoperable web3 inbox";
 "splash-description" = "You’re just a few steps away from secure, wallet-to-wallet messaging";
 "try-demo-cta" = "Try demo mode";
+"awaiting-signature" = "Awaiting signature...";
 
 // Home
 "home-title" = "All messages";

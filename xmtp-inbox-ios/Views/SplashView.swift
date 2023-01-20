@@ -9,8 +9,9 @@ import SwiftUI
 
 struct SplashView: View {
 
-    var isLoading: Bool
-    var onNewDemo: () -> Void
+    var isConnecting: Bool
+    var onTryDemo: () -> Void
+    var onConnectWallet: () -> Void
 
     var body: some View {
         VStack {
@@ -32,22 +33,32 @@ struct SplashView: View {
                 .padding(.horizontal)
 
             let buttonHeight = 58.0
-            if isLoading {
-                ZStack {
-                    Text("")
-                        .padding()
-                        .frame(maxWidth: .infinity, maxHeight: buttonHeight)
-                        .background(Color.actionPrimary)
-                        .clipShape(Capsule())
-                        .padding()
-
+            if isConnecting {
+                Button(action: onTryDemo) {
                     ProgressView()
-                        .progressViewStyle(
-                            CircularProgressViewStyle(tint: .actionPrimaryText)
-                        )
+                        .progressViewStyle(CircularProgressViewStyle(tint: .actionPrimaryText))
+                    Text("awaiting-signature")
+                        .kerning(0.5)
+                        .foregroundColor(.actionPrimaryText)
+                        .font(.H1)
                 }
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: buttonHeight)
+                .background(Color.actionPrimary)
+                .clipShape(Capsule())
+                .padding()
+//                ZStack {
+//                    Text("awaiting-signature")
+//                        .padding()
+//                        .frame(maxWidth: .infinity, maxHeight: buttonHeight)
+//                        .background(Color.actionPrimary)
+//                        .clipShape(Capsule())
+//                        .padding()
+//                    ProgressView()
+//                        .progressViewStyle(CircularProgressViewStyle(tint: .actionPrimaryText))
+//                }
             } else {
-                Button(action: onNewDemo) {
+                Button(action: onTryDemo) {
                     Text("try-demo-cta")
                         .kerning(0.5)
                         .padding()
@@ -64,8 +75,9 @@ struct SplashView: View {
 }
 
 struct SplashView_Previews: PreviewProvider {
-    static var onNewDemo: () -> Void = { }
+    static var onTryDemo: () -> Void = { }
+    static var onConnectWallet: () -> Void = { }
     static var previews: some View {
-        SplashView(isLoading: false, onNewDemo: onNewDemo)
+        SplashView(isConnecting: false, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
     }
 }

@@ -100,7 +100,11 @@ struct ConversationListView: View {
             self.conversations = sortedConversations(conversations: newConversations, messages: newMessages)
             await MainActor.run {
                 withAnimation {
-                    self.status = .success
+                    if self.conversations.isEmpty {
+                        self.status = .empty
+                    } else {
+                        self.status = .success
+                    }
                 }
             }
         } catch {

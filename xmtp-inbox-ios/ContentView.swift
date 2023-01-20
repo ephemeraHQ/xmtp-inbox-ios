@@ -11,16 +11,16 @@ import XMTP
 class Auth: ObservableObject {
 
     enum AuthStatus {
-        case unknown, connecting, connected(Client), error(String)
+        case loadingKeys, signedOut, tryingDemo, connecting, connected(Client)
     }
 
-    @Published var status: AuthStatus = .unknown
+    @Published var status: AuthStatus = .loadingKeys
 
     func signOut() {
         do {
             try Keystore.deleteKeys()
             withAnimation {
-                self.status = .unknown
+                self.status = .signedOut
             }
         } catch {
             print("Error signing out: \(error.localizedDescription)")
@@ -37,14 +37,14 @@ struct ContentView: View {
             Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 
             switch auth.status {
-            case .unknown:
-                SplashView(isLoading: false, onNewDemo: onNewDemo)
+            case .loadingKeys:
+                ProgressView()
+            case .signedOut, .tryingDemo:
+                SplashView(isConnecting: false, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
             case .connecting:
-                SplashView(isLoading: true, onNewDemo: onNewDemo)
+                SplashView(isConnecting: true, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
             case let .connected(client):
                 HomeView(client: client)
-            case let .error(error):
-                Text("Error: \(error)").foregroundColor(.actionNegative)
             }
         }
         .environmentObject(auth)
@@ -56,6 +56,9 @@ struct ContentView: View {
     func loadClient() async {
         do {
             guard let keys = try Keystore.readKeys() else {
+                await MainActor.run {
+                    self.auth.status = .signedOut
+                }
                 return
             }
             let client = try Client.from(bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
@@ -64,12 +67,19 @@ struct ContentView: View {
             }
         } catch {
             print("Keystore read error: \(error.localizedDescription)")
+            await MainActor.run {
+                self.auth.status = .signedOut
+            }
         }
     }
 
-    func onNewDemo() {
+    func onConnectWallet() {
+
+    }
+
+    func onTryDemo() {
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        self.auth.status = .connecting
+        self.auth.status = .tryingDemo
         Task {
             do {
                 let account = try PrivateKey.generate()
@@ -84,7 +94,9 @@ struct ContentView: View {
                 }
             } catch {
                 await MainActor.run {
-                    self.auth.status = .error("Error generating wallet: \(error)")
+                    // TODO(elise): Toast error
+                    print("Error generating random wallet: \(error)")
+                    self.auth.status = .signedOut
                 }
             }
         }
