@@ -53,9 +53,8 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
             description: "Universal XMTP messaging app",
             icons: [],
             // swiftlint:disable force_unwrapping
-            url: URL(string: "https://safe.gnosis.io")!,
-            // swiftlint:enable force_unwrapping,
-            scheme: "xmtpinbox://"
+            url: URL(string: "https://safe.gnosis.io")!
+            // swiftlint:enable force_unwrapping
         )
         let dAppInfo = WalletConnectSwift.Session.DAppInfo(peerId: UUID().uuidString, peerMeta: peerMeta)
 
