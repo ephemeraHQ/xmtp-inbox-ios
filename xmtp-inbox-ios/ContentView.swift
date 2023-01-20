@@ -32,6 +32,8 @@ struct ContentView: View {
 
     @StateObject private var auth = Auth()
 
+    @State private var wcUrl: URL?
+
     var body: some View {
         ZStack {
             Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
@@ -74,7 +76,56 @@ struct ContentView: View {
     }
 
     func onConnectWallet() {
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
 
+        // If already connecting, bounce back out to the WalletConnect URL
+        if case .connecting = auth.status {
+            // swiftlint:disable force_unwrapping
+            if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
+                UIApplication.shared.open(wcUrl!)
+                return
+            }
+            // swiftlint:enable force_unwrapping
+        }
+
+        self.auth.status = .connecting
+        Task {
+            do {
+                let account = try Account.create()
+                let url = try account.wcUrl()
+                self.wcUrl = url
+                await UIApplication.shared.open(url)
+
+                try await account.connect()
+                for _ in 0 ... 30 {
+                    if account.isConnected {
+                        let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
+                        let keys = client.v1keys
+                        try Keystore.saveKeys(address: client.address, keys: keys)
+
+                        await MainActor.run {
+                            withAnimation {
+                                self.auth.status = .connected(client)
+                            }
+                        }
+                        return
+                    }
+
+                    try await Task.sleep(for: .seconds(1))
+                }
+                await MainActor.run {
+                    // TODO(elise): Toast error
+                    print("Timed out waiting to connect (30 seconds)")
+                    self.auth.status = .signedOut
+                }
+            } catch {
+                await MainActor.run {
+                    // TODO(elise): Toast error
+                    print("Error connecting: \(error)")
+                    self.auth.status = .signedOut
+                }
+            }
+        }
     }
 
     func onTryDemo() {

@@ -34,9 +34,10 @@ struct SplashView: View {
 
             let buttonHeight = 58.0
             if isConnecting {
-                Button(action: onTryDemo) {
+                Button(action: onConnectWallet) {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .actionPrimaryText))
+                        .padding(4.0)
                     Text("awaiting-signature")
                         .kerning(0.5)
                         .foregroundColor(.actionPrimaryText)
@@ -47,19 +48,9 @@ struct SplashView: View {
                 .background(Color.actionPrimary)
                 .clipShape(Capsule())
                 .padding()
-//                ZStack {
-//                    Text("awaiting-signature")
-//                        .padding()
-//                        .frame(maxWidth: .infinity, maxHeight: buttonHeight)
-//                        .background(Color.actionPrimary)
-//                        .clipShape(Capsule())
-//                        .padding()
-//                    ProgressView()
-//                        .progressViewStyle(CircularProgressViewStyle(tint: .actionPrimaryText))
-//                }
             } else {
-                Button(action: onTryDemo) {
-                    Text("try-demo-cta")
+                Button(action: onConnectWallet) {
+                    Text("connect-wallet-cta")
                         .kerning(0.5)
                         .padding()
                         .frame(maxWidth: .infinity, maxHeight: buttonHeight)
@@ -70,6 +61,13 @@ struct SplashView: View {
                         .padding()
                 }
             }
+            Text("try-demo-cta")
+                .kerning(0.5)
+                .foregroundColor(.actionPrimary)
+                .font(.Body1B)
+                .onTapGesture {
+                    onTryDemo()
+                }
         }
     }
 }

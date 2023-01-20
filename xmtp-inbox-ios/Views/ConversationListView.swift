@@ -33,7 +33,7 @@ struct ConversationListView: View {
                 Text("Error: \(error)").foregroundColor(.actionNegative)
             case .success:
                 List {
-                    ForEach(conversations, id: \.peerAddress) { conversation in
+                    ForEach(conversations, id: \.topic) { conversation in
                         NavigationLink(value: conversation) {
                             ConversationListItemView(
                                 conversation: conversation,
