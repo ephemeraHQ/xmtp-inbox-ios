@@ -35,6 +35,7 @@ struct ConversationDetailView: View {
                         await streamMessages()
                     }
                 MessageComposerView(onSend: sendMessage(text:))
+                    .padding(.horizontal, 8)
             }
         }
         .navigationTitle(displayName.resolvedName)
