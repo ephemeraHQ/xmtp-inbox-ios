@@ -7,6 +7,7 @@
 
 import SwiftUI
 import XMTP
+import web3
 
 struct ConversationListView: View {
 
@@ -16,7 +17,11 @@ struct ConversationListView: View {
 
     var client: XMTP.Client
 
+    @State private var ethClient: EthereumHttpClient?
+
     @State private var messagePreviews = [String: String]()
+
+    @State private var displayNames = [String: DisplayName]()
 
     @State private var conversations: [XMTP.Conversation] = []
 
@@ -34,10 +39,12 @@ struct ConversationListView: View {
             case .success:
                 List {
                     ForEach(conversations, id: \.topic) { conversation in
-                        NavigationLink(value: conversation) {
-                            ConversationListItemView(
+                        NavigationLink(destination: ConversationDetailView(client: client, displayName: displayName(conversation), conversation: conversation)
+                        ) {
+                            ConversationCellView(
                                 conversation: conversation,
-                                messagePreview: messagePreviews[conversation.peerAddress] ?? ""
+                                messagePreview: messagePreviews[conversation.peerAddress] ?? "",
+                                displayName: displayName(conversation)
                             )
                         }
                     }
@@ -46,9 +53,6 @@ struct ConversationListView: View {
                     .padding(.vertical)
                 }
                 .scrollContentBackground(.hidden)
-                .navigationDestination(for: Conversation.self) { _ in
-                    // TODO(elise): Open conversation detail
-                }
                 .refreshable {
                     await loadConversations()
                 }
@@ -60,6 +64,10 @@ struct ConversationListView: View {
         .task {
             await streamConversations()
         }
+    }
+
+    func displayName(_ conversation: Conversation) -> DisplayName {
+        return displayNames[conversation.peerAddress] ?? DisplayName(address: conversation.peerAddress)
     }
 
     func loadMostRecentMessage(conversation: Conversation) async -> DecodedMessage? {
@@ -97,6 +105,11 @@ struct ConversationListView: View {
                 messagePreviews[conversation.peerAddress] = try message?.content() ?? ""
                 newMessages[conversation.peerAddress] = message
             }
+
+            // Asynchronously load ENS names for each conversation
+            let newConversationAddresses = newConversations.map {EthereumAddress($0.peerAddress)}
+            loadEnsNames(addresses: newConversationAddresses)
+
             self.conversations = sortedConversations(conversations: newConversations, messages: newMessages)
             await MainActor.run {
                 withAnimation {
@@ -123,6 +136,7 @@ struct ConversationListView: View {
                 let message = await loadMostRecentMessage(conversation: newConversation)
                 let content = try message?.content() ?? ""
                 messagePreviews[newConversation.peerAddress] = content
+                loadEnsNames(addresses: [EthereumAddress(newConversation.peerAddress)])
 
                 await MainActor.run {
                     withAnimation {
@@ -143,6 +157,40 @@ struct ConversationListView: View {
                 }
             } else {
                 // TODO(elise): Toast error
+            }
+        }
+    }
+
+    func setupEthClient() throws -> EthereumHttpClient {
+        guard let ethClient = self.ethClient else {
+            guard let infuraUrl = Constants.infuraUrl else {
+                throw EnsError.invalidURL
+            }
+            let newEthClient = EthereumHttpClient(url: infuraUrl, network: .mainnet)
+            self.ethClient = newEthClient
+            return newEthClient
+        }
+        return ethClient
+    }
+
+    func loadEnsNames(addresses: [EthereumAddress]) {
+        Task {
+            do {
+                let ethClient = try setupEthClient()
+                let nameService = EthereumNameService(client: ethClient)
+
+                let results = try await nameService.resolve(addresses: addresses)
+                for result in results {
+                    guard case let .resolved(value) = result.output else {
+                        continue
+                    }
+                    let address = result.address.toChecksumAddress()
+                    await MainActor.run {
+                        displayNames[address] = DisplayName(ensName: value, address: address)
+                    }
+                }
+            } catch {
+                print("Error resolving ENS names: \(error)")
             }
         }
     }
