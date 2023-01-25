@@ -9,29 +9,42 @@ import SwiftUI
 import XMTP
 
 struct MessageComposerView: View {
+
     @State private var text: String = ""
+
     @State private var isSending = false
+
     @FocusState var isFocused
 
     var onSend: (String) async -> Void
 
     var body: some View {
         HStack {
-            TextField("Type something…", text: $text, onCommit: send)
-                .textFieldStyle(.roundedBorder)
+            TextField("Type a message…", text: $text, axis: .vertical)
                 .focused($isFocused)
+                .lineLimit(4)
+                .padding(12)
+                .onSubmit {
+                    send()
+                }
                 .onAppear {
                     self.isFocused = true
                 }
-            Button(action: send) {
-                Label("Send", systemImage: "arrow.up.circle.fill")
-                    .font(.title)
-                    .labelStyle(.iconOnly)
+            ZStack {
+                Color.actionPrimary
+                    .frame(width: 32, height: 32)
+                    .roundCorners(16, corners: [.topLeft, .topRight, .bottomLeft])
+                Button(action: send) {
+                    Label("Send", systemImage: "arrow.up")
+                        .font(.system(size: 16))
+                        .labelStyle(.iconOnly)
+                        .foregroundColor(Color.actionPrimaryText)
+                }
             }
-            .tint(.actionPrimary)
         }
+        .padding(.horizontal, 8)
+        .overlay(RoundedCorner(radius: 16, corners: [.topLeft, .topRight, .bottomLeft]).stroke(Color.actionPrimary, lineWidth: 2))
         .disabled(isSending)
-        .padding(4)
     }
 
     func send() {

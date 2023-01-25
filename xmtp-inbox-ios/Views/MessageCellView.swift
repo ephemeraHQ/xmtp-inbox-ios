@@ -15,19 +15,15 @@ struct MessageCellView: View {
     var message: DecodedMessage
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 if isFromMe {
                     Spacer()
                 }
-                VStack(alignment: .leading) {
-                    Text(bodyText)
-                }
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
-                .background(background)
-                .cornerRadius(16)
-                .foregroundColor(color)
+                Text(bodyText)
+                    .foregroundColor(textColor)
+                    .padding()
+                    .background(background)
                 if !isFromMe {
                     Spacer()
                 }
@@ -44,19 +40,19 @@ struct MessageCellView: View {
         }
     }
 
-    var background: Color {
+    var background: some View {
         if isFromMe {
-            return .actionPrimary
+            return Color.actionPrimary.roundCorners(16, corners: [.topLeft, .topRight, .bottomLeft])
         } else {
-            return .backgroundSecondary.opacity(0.2)
+            return Color.backgroundSecondary.roundCorners(16, corners: [.topRight, .bottomLeft, .bottomRight])
         }
     }
 
-    var color: Color {
+    var textColor: Color {
         if isFromMe {
             return .actionPrimaryText
         } else {
-            return .primary
+            return .textPrimary
         }
     }
 }
