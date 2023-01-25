@@ -35,6 +35,7 @@ struct ConversationDetailView: View {
                     }
                 MessageComposerView(onSend: sendMessage(text:))
                     .padding(.horizontal, 8)
+                    .padding(.bottom, 8)
             }
         }
         .navigationTitle(displayName.resolvedName)
@@ -70,7 +71,7 @@ struct ConversationDetailView: View {
                 self.messages = messages
             }
         } catch {
-            print("Error loading messages \(conversation.peerAddress): \(error)")
+            print("Error in detail messages \(conversation.peerAddress): \(error)")
         }
     }
 }
