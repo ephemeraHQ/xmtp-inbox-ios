@@ -58,8 +58,10 @@ struct ConversationListView: View {
                 }
             }
         }
-        .task {
-            await loadConversations()
+        .onAppear {
+            Task.detached {
+                await loadConversations()
+            }
         }
         .task {
             await streamConversations()
@@ -77,7 +79,7 @@ struct ConversationListView: View {
                 return messagePreview.first
             }
         } catch {
-            print("Error loading message: \(conversation.peerAddress)")
+            print("Error loading message: \(error)")
         }
         return nil
     }
@@ -122,8 +124,12 @@ struct ConversationListView: View {
             }
         } catch {
             print("Error loading conversations: \(error)")
-            await MainActor.run {
-                self.status = .error(error.localizedDescription)
+            if conversations.isEmpty {
+                await MainActor.run {
+                    self.status = .error(error.localizedDescription)
+                }
+            } else {
+                // TODO(elise): Toast error
             }
         }
     }
