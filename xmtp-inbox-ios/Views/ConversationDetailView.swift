@@ -21,7 +21,6 @@ struct ConversationDetailView: View {
     var body: some View {
         ZStack {
             Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-
             VStack {
                 // TODO(elise): Paginate list of messages
                 MessageListView(client: client, messages: messages)
@@ -40,6 +39,7 @@ struct ConversationDetailView: View {
         }
         .navigationTitle(displayName.resolvedName)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 
     func sendMessage(text: String) async {

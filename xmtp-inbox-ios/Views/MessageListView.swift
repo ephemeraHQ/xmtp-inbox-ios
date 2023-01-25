@@ -18,6 +18,7 @@ struct MessageListView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 VStack {
+                    Spacer()
                     ForEach(Array(messages.sorted(by: { $0.sent < $1.sent }).enumerated()), id: \.0) { i, message in
                         MessageCellView(isFromMe: message.senderAddress == client.address, message: message)
                             .transition(.scale)
