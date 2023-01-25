@@ -21,6 +21,10 @@
 		6A40157A29529F85003A6659 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157929529F85003A6659 /* HomeView.swift */; };
 		6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157C2952AEFB003A6659 /* ColorExtensions.swift */; };
 		6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157E2952B237003A6659 /* FontExtensions.swift */; };
+		6A4612FF298177B300346D68 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4612FE298177B300346D68 /* Auth.swift */; };
+		6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA65964297B2A2200E980AD /* WalletConnectSwift */; };
+		6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA65967297B2A7100E980AD /* WalletConnection.swift */; };
+		6AA6596B297B2DB000E980AD /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA6596A297B2DB000E980AD /* Account.swift */; };
 		6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDB41D2954A7070082EC42 /* SplashView.swift */; };
 		6AC5CFB32953FA750046325C /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 6AC5CFB22953FA750046325C /* .swiftformat */; };
 		6AE264E82974E63F0055250A /* ENSKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6AE264E72974E63F0055250A /* ENSKit */; };
@@ -68,6 +72,10 @@
 		6A40157929529F85003A6659 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		6A40157C2952AEFB003A6659 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		6A40157E2952B237003A6659 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
+		6A4612FE298177B300346D68 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		6AA65967297B2A7100E980AD /* WalletConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnection.swift; sourceTree = "<group>"; };
+		6AA65969297B2C4000E980AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6AA6596A297B2DB000E980AD /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		6ABDB41D2954A7070082EC42 /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		6AC5CFB22953FA750046325C /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
 		6AE264E52973D3CD0055250A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -87,6 +95,7 @@
 			files = (
 				6AE264EB2974F62B0055250A /* IGIdenticon in Frameworks */,
 				6AE264E82974E63F0055250A /* ENSKit in Frameworks */,
+				6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */,
 				6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */,
 				6A401573295267D7003A6659 /* XMTP in Frameworks */,
 			);
@@ -132,6 +141,9 @@
 		6A40154529526795003A6659 /* xmtp-inbox-ios */ = {
 			isa = PBXGroup;
 			children = (
+				6A4612FD298177A400346D68 /* Models */,
+				6AA65969297B2C4000E980AD /* Info.plist */,
+				6AA65966297B2A3600E980AD /* WalletConnect */,
 				6AF033F5295504CD0043FB6A /* Utilities */,
 				6A40157B2952AEE4003A6659 /* Extensions */,
 				6A40157429526A3C003A6659 /* Views */,
@@ -196,6 +208,23 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		6A4612FD298177A400346D68 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6A4612FE298177B300346D68 /* Auth.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6AA65966297B2A3600E980AD /* WalletConnect */ = {
+			isa = PBXGroup;
+			children = (
+				6AA65967297B2A7100E980AD /* WalletConnection.swift */,
+				6AA6596A297B2DB000E980AD /* Account.swift */,
+			);
+			path = WalletConnect;
+			sourceTree = "<group>";
+		};
 		6AF033F5295504CD0043FB6A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +256,7 @@
 				6A1C37DD2971A3C900AF6559 /* web3.swift */,
 				6AE264E72974E63F0055250A /* ENSKit */,
 				6AE264EA2974F62B0055250A /* IGIdenticon */,
+				6AA65964297B2A2200E980AD /* WalletConnectSwift */,
 			);
 			productName = "xmtp-inbox-ios";
 			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
@@ -305,6 +335,7 @@
 				6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */,
 				6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit" */,
 				6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */,
+				6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
 			projectDirPath = "";
@@ -377,7 +408,9 @@
 				6A1C37D82970D1BD00AF6559 /* ConversationListItemView.swift in Sources */,
 				6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */,
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
+				6AA6596B297B2DB000E980AD /* Account.swift in Sources */,
 				6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */,
+				6A4612FF298177B300346D68 /* Auth.swift in Sources */,
 				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
@@ -386,6 +419,7 @@
 				6A1ABA7829773EA4001E0B41 /* Keystore.swift in Sources */,
 				6AE264ED2975EFD40055250A /* Constants.swift in Sources */,
 				6AE264EF2975F2570055250A /* EnsImageView.swift in Sources */,
+				6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +578,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "xmtp-inbox-ios/Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -582,6 +617,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "xmtp-inbox-ios/Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -755,6 +791,14 @@
 				kind = branch;
 			};
 		};
+		6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WalletConnect/WalletConnectSwift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.7.0;
+			};
+		};
 		6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Planetable/ENSKit.git";
@@ -783,6 +827,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */;
 			productName = XMTP;
+		};
+		6AA65964297B2A2200E980AD /* WalletConnectSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift" */;
+			productName = WalletConnectSwift;
 		};
 		6AE264E72974E63F0055250A /* ENSKit */ = {
 			isa = XCSwiftPackageProductDependency;

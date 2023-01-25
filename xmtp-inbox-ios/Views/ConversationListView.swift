@@ -33,7 +33,7 @@ struct ConversationListView: View {
                 Text("Error: \(error)").foregroundColor(.actionNegative)
             case .success:
                 List {
-                    ForEach(conversations, id: \.peerAddress) { conversation in
+                    ForEach(conversations, id: \.topic) { conversation in
                         NavigationLink(value: conversation) {
                             ConversationListItemView(
                                 conversation: conversation,
@@ -100,7 +100,11 @@ struct ConversationListView: View {
             self.conversations = sortedConversations(conversations: newConversations, messages: newMessages)
             await MainActor.run {
                 withAnimation {
-                    self.status = .success
+                    if self.conversations.isEmpty {
+                        self.status = .empty
+                    } else {
+                        self.status = .success
+                    }
                 }
             }
         } catch {

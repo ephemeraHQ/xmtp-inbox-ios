@@ -46,6 +46,15 @@
       }
     },
     {
+      "identity" : "gzipswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/1024jp/GzipSwift",
+      "state" : {
+        "revision" : "7a7f17761c76a932662ab77028a4329f67d645a4",
+        "version" : "5.2.0"
+      }
+    },
+    {
       "identity" : "igidenticon",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/seaburg/IGIdenticon.git",
@@ -60,7 +69,7 @@
       "location" : "https://github.com/xmtp/proto",
       "state" : {
         "branch" : "main",
-        "revision" : "795370409155074aedb0be0f38484c232fca59f3"
+        "revision" : "07180005024b320da26ee35f0b47ae9a459043f0"
       }
     },
     {
@@ -69,7 +78,7 @@
       "location" : "https://github.com/GigaBitcoin/secp256k1.swift.git",
       "state" : {
         "branch" : "main",
-        "revision" : "53ff7a0ebd5dd23ffe3e2a354c7a52bb01831aa8"
+        "revision" : "e9752e2e3d2817a7cad23636bddffd79ce608d6b"
       }
     },
     {
@@ -95,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "6fe203dc33195667ce1759bf0182975e4653ba1c",
-        "version" : "1.4.4"
+        "revision" : "3e3ef75109d6801b2c44504e73f55f0dce6662c9",
+        "version" : "1.5.1"
       }
     },
     {
@@ -176,7 +185,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/WalletConnect/WalletConnectSwift.git",
       "state" : {
-        "revision" : "9e4dfba34fb35336fd5da551285d7986ff536cb8"
+        "revision" : "e0bbfd16d5c54a7aa7e316956d765399c6332fa2",
+        "version" : "1.7.0"
       }
     },
     {
@@ -203,7 +213,7 @@
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "ebe404d1be846aa3c96d072bac149ffe95784bb6"
+        "revision" : "f6509c75eabcadebe92a7f2068cc077b4f574095"
       }
     }
   ],
