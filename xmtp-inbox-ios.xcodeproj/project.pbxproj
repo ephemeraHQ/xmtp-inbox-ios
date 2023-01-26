@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6A1ABA7829773EA4001E0B41 /* Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1ABA7729773EA4001E0B41 /* Keystore.swift */; };
-		6A1C37D82970D1BD00AF6559 /* ConversationListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C37D72970D1BD00AF6559 /* ConversationListItemView.swift */; };
+		6A1C37D82970D1BD00AF6559 /* ConversationCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1C37D72970D1BD00AF6559 /* ConversationCellView.swift */; };
 		6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6A1C37DD2971A3C900AF6559 /* web3.swift */; };
 		6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */; };
 		6A40154929526795003A6659 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40154829526795003A6659 /* ContentView.swift */; };
@@ -22,6 +22,12 @@
 		6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157C2952AEFB003A6659 /* ColorExtensions.swift */; };
 		6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40157E2952B237003A6659 /* FontExtensions.swift */; };
 		6A4612FF298177B300346D68 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4612FE298177B300346D68 /* Auth.swift */; };
+		6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4613002981826B00346D68 /* MessageComposerView.swift */; };
+		6A4613032981831D00346D68 /* ConversationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4613022981831D00346D68 /* ConversationDetailView.swift */; };
+		6A4613052981836F00346D68 /* MessageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4613042981836F00346D68 /* MessageListView.swift */; };
+		6A461307298183A600346D68 /* MessageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A461306298183A600346D68 /* MessageCellView.swift */; };
+		6A461309298191F700346D68 /* DisplayName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A461308298191F700346D68 /* DisplayName.swift */; };
+		6A46130B2981ABF500346D68 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46130A2981ABF500346D68 /* ViewExtensions.swift */; };
 		6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA65964297B2A2200E980AD /* WalletConnectSwift */; };
 		6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA65967297B2A7100E980AD /* WalletConnection.swift */; };
 		6AA6596B297B2DB000E980AD /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA6596A297B2DB000E980AD /* Account.swift */; };
@@ -57,7 +63,7 @@
 
 /* Begin PBXFileReference section */
 		6A1ABA7729773EA4001E0B41 /* Keystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keystore.swift; sourceTree = "<group>"; };
-		6A1C37D72970D1BD00AF6559 /* ConversationListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListItemView.swift; sourceTree = "<group>"; };
+		6A1C37D72970D1BD00AF6559 /* ConversationCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCellView.swift; sourceTree = "<group>"; };
 		6A40154329526795003A6659 /* xmtp-inbox-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "xmtp-inbox-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A40154629526795003A6659 /* xmtp_inbox_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xmtp_inbox_iosApp.swift; sourceTree = "<group>"; };
 		6A40154829526795003A6659 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -73,6 +79,12 @@
 		6A40157C2952AEFB003A6659 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		6A40157E2952B237003A6659 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
 		6A4612FE298177B300346D68 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		6A4613002981826B00346D68 /* MessageComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerView.swift; sourceTree = "<group>"; };
+		6A4613022981831D00346D68 /* ConversationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailView.swift; sourceTree = "<group>"; };
+		6A4613042981836F00346D68 /* MessageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageListView.swift; sourceTree = "<group>"; };
+		6A461306298183A600346D68 /* MessageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellView.swift; sourceTree = "<group>"; };
+		6A461308298191F700346D68 /* DisplayName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayName.swift; sourceTree = "<group>"; };
+		6A46130A2981ABF500346D68 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		6AA65967297B2A7100E980AD /* WalletConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnection.swift; sourceTree = "<group>"; };
 		6AA65969297B2C4000E980AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6AA6596A297B2DB000E980AD /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -192,8 +204,12 @@
 				6A40157929529F85003A6659 /* HomeView.swift */,
 				6AF033EF2954F62A0043FB6A /* ConversationListView.swift */,
 				6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */,
-				6A1C37D72970D1BD00AF6559 /* ConversationListItemView.swift */,
+				6A1C37D72970D1BD00AF6559 /* ConversationCellView.swift */,
 				6AE264EE2975F2570055250A /* EnsImageView.swift */,
+				6A4613002981826B00346D68 /* MessageComposerView.swift */,
+				6A4613022981831D00346D68 /* ConversationDetailView.swift */,
+				6A4613042981836F00346D68 /* MessageListView.swift */,
+				6A461306298183A600346D68 /* MessageCellView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -202,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				6A40157C2952AEFB003A6659 /* ColorExtensions.swift */,
+				6A46130A2981ABF500346D68 /* ViewExtensions.swift */,
 				6A40157E2952B237003A6659 /* FontExtensions.swift */,
 				6AE264F22975FD270055250A /* StringExtensions.swift */,
 			);
@@ -212,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				6A4612FE298177B300346D68 /* Auth.swift */,
+				6A461308298191F700346D68 /* DisplayName.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -404,22 +422,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A40157A29529F85003A6659 /* HomeView.swift in Sources */,
+				6A4613032981831D00346D68 /* ConversationDetailView.swift in Sources */,
 				6A40154929526795003A6659 /* ContentView.swift in Sources */,
-				6A1C37D82970D1BD00AF6559 /* ConversationListItemView.swift in Sources */,
+				6A1C37D82970D1BD00AF6559 /* ConversationCellView.swift in Sources */,
 				6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */,
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
 				6AA6596B297B2DB000E980AD /* Account.swift in Sources */,
+				6A461309298191F700346D68 /* DisplayName.swift in Sources */,
 				6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */,
+				6A4613052981836F00346D68 /* MessageListView.swift in Sources */,
 				6A4612FF298177B300346D68 /* Auth.swift in Sources */,
 				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
 				6AF033F4295504B70043FB6A /* Print.swift in Sources */,
+				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
+				6A46130B2981ABF500346D68 /* ViewExtensions.swift in Sources */,
 				6AE264F32975FD270055250A /* StringExtensions.swift in Sources */,
 				6A1ABA7829773EA4001E0B41 /* Keystore.swift in Sources */,
 				6AE264ED2975EFD40055250A /* Constants.swift in Sources */,
 				6AE264EF2975F2570055250A /* EnsImageView.swift in Sources */,
 				6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */,
+				6A461307298183A600346D68 /* MessageCellView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +513,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -547,6 +572,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -571,8 +597,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "xmtp-inbox-ios/xmtp_inbox_ios.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"xmtp-inbox-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = YSGZF455SJ;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -594,7 +623,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xtmplabs.xmtpinbox.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -610,8 +639,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "xmtp-inbox-ios/xmtp_inbox_ios.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"xmtp-inbox-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = YSGZF455SJ;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -633,7 +665,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.xmtplabs.xmtp-inbox-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xtmplabs.xmtpinbox.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -650,6 +682,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = YSGZF455SJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
@@ -673,6 +706,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = YSGZF455SJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
@@ -695,6 +729,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = YSGZF455SJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
@@ -717,6 +752,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = YSGZF455SJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;

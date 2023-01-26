@@ -55,6 +55,7 @@ struct HomeView: View {
                 }
             }
         }
+        .accentColor(.textPrimary)
         .environmentObject(environmentCoordinator)
     }
 }

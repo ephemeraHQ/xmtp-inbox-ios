@@ -78,5 +78,6 @@ struct Keystore {
         guard status == noErr else {
             throw KeystoreError.deleteError("Unable to delete item: \(status.description)")
         }
+        UserDefaults.standard.removeObject(forKey: addressKey)
     }
 }
