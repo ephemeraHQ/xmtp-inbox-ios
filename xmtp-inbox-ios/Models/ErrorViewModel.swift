@@ -9,7 +9,7 @@ import Foundation
 
 class ErrorViewModel: ObservableObject {
 
-    @Published var errorMessage: String?
+    var errorMessage: String?
 
     @Published var isShowing = false
 
