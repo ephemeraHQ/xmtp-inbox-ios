@@ -8,6 +8,7 @@
 import SwiftUI
 import XMTP
 import web3
+import AlertToast
 
 struct ConversationListView: View {
 
@@ -27,6 +28,8 @@ struct ConversationListView: View {
 
     @State private var status: LoadingStatus = .loading
 
+    @StateObject private var errorViewModel = ErrorViewModel()
+
     var body: some View {
         ZStack {
             switch status {
@@ -34,8 +37,10 @@ struct ConversationListView: View {
                 ProgressView()
             case .empty:
                 Text("conversations-empty")
-            case let .error(error):
-                Text("Error: \(error)").foregroundColor(.actionNegative)
+                    .padding()
+            case let .error(errorMessage):
+                Text(errorMessage)
+                    .padding()
             case .success:
                 List {
                     ForEach(conversations, id: \.topic) { conversation in
@@ -65,6 +70,9 @@ struct ConversationListView: View {
         }
         .task {
             await streamConversations()
+        }
+        .toast(isPresenting: $errorViewModel.isShowing) {
+            AlertToast.error(errorViewModel.errorMessage)
         }
     }
 
@@ -123,13 +131,12 @@ struct ConversationListView: View {
                 }
             }
         } catch {
-            print("Error loading conversations: \(error)")
-            if conversations.isEmpty {
-                await MainActor.run {
+            await MainActor.run {
+                if conversations.isEmpty {
                     self.status = .error(error.localizedDescription)
+                } else {
+                    self.errorViewModel.showError("Error loading conversations: \(error)")
                 }
-            } else {
-                // TODO(elise): Toast error
             }
         }
     }
@@ -156,13 +163,12 @@ struct ConversationListView: View {
                 }
             }
         } catch {
-            print("Error streaming conversations: \(error)")
-            if conversations.isEmpty {
-                await MainActor.run {
+            await MainActor.run {
+                if conversations.isEmpty {
                     self.status = .error(error.localizedDescription)
+                } else {
+                    self.errorViewModel.showError("Error streaming conversations: \(error)")
                 }
-            } else {
-                // TODO(elise): Toast error
             }
         }
     }
@@ -191,9 +197,7 @@ struct ConversationListView: View {
                         continue
                     }
                     let address = result.address.toChecksumAddress()
-                    await MainActor.run {
-                        displayNames[address] = DisplayName(ensName: value, address: address)
-                    }
+                    self.displayNames[address] = DisplayName(ensName: value, address: address)
                 }
             } catch {
                 print("Error resolving ENS names: \(error)")
