@@ -15,7 +15,7 @@ struct ConversationListView: View {
         case loading, empty, success, error(String)
     }
 
-    var client: XMTP.Client
+    let client: XMTP.Client
 
     @State private var ethClient: EthereumHttpClient?
 

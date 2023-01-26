@@ -10,11 +10,11 @@ import XMTP
 
 struct ConversationDetailView: View {
 
-    var client: XMTP.Client
+    let client: XMTP.Client
 
-    var displayName: DisplayName
+    let displayName: DisplayName
 
-    var conversation: XMTP.Conversation
+    let conversation: XMTP.Conversation
 
     @State private var messages: [DecodedMessage] = []
 

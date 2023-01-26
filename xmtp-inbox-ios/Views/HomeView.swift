@@ -14,11 +14,9 @@ class EnvironmentCoordinator: ObservableObject {
 
 struct HomeView: View {
 
-    var client: XMTP.Client
+    let client: XMTP.Client
 
     @StateObject var environmentCoordinator = EnvironmentCoordinator()
-
-    @EnvironmentObject var auth: Auth
 
     var body: some View {
         NavigationStack {
@@ -28,13 +26,9 @@ struct HomeView: View {
                 ConversationListView(client: client)
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading:
+            .navigationBarItems(leading: NavigationLink(destination: SettingsView(client: client)) {
                 EnsImageView(imageSize: 40.0, peerAddress: client.address)
-                    .onLongPressGesture {
-                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                        auth.signOut()
-                    }
-            )
+            })
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     HStack {
@@ -45,12 +39,6 @@ struct HomeView: View {
                         Text("home-title").font(.Title2H)
                             .accessibilityAddTraits(.isHeader)
                             .fixedSize(horizontal: true, vertical: false)
-                    }
-                    .onLongPressGesture {
-                        #if DEBUG
-                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                        UIPasteboard.general.string = client.address
-                        #endif
                     }
                 }
             }
