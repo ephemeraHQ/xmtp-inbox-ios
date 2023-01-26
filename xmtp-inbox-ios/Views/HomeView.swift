@@ -24,7 +24,6 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-
                 ConversationListView(client: client)
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -46,12 +45,12 @@ struct HomeView: View {
                             .accessibilityAddTraits(.isHeader)
                             .fixedSize(horizontal: true, vertical: false)
                     }
+                    #if DEBUG
                     .onLongPressGesture {
-                        #if DEBUG
                         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                         UIPasteboard.general.string = client.address
-                        #endif
                     }
+                    #endif
                 }
             }
         }

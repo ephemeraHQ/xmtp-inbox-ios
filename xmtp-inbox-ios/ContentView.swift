@@ -7,12 +7,15 @@
 
 import SwiftUI
 import XMTP
+import AlertToast
 
 struct ContentView: View {
 
     @StateObject private var auth = Auth()
 
     @State private var wcUrl: URL?
+
+    @StateObject private var errorViewModel = ErrorViewModel()
 
     var body: some View {
         ZStack {
@@ -28,6 +31,9 @@ struct ContentView: View {
             case let .connected(client):
                 HomeView(client: client)
             }
+        }
+        .toast(isPresenting: $errorViewModel.isShowing) {
+            AlertToast.error(errorViewModel.errorMessage)
         }
         .environmentObject(auth)
         .task {
@@ -94,15 +100,13 @@ struct ContentView: View {
                     try await Task.sleep(for: .seconds(1))
                 }
                 await MainActor.run {
-                    // TODO(elise): Toast error
-                    print("Timed out waiting to connect (30 seconds)")
                     self.auth.status = .signedOut
+                    self.errorViewModel.showError("Timed out waiting to connect (30 seconds)")
                 }
             } catch {
                 await MainActor.run {
-                    // TODO(elise): Toast error
-                    print("Error connecting: \(error)")
                     self.auth.status = .signedOut
+                    self.errorViewModel.showError("Error connecting: \(error)")
                 }
             }
         }
@@ -125,9 +129,8 @@ struct ContentView: View {
                 }
             } catch {
                 await MainActor.run {
-                    // TODO(elise): Toast error
-                    print("Error generating random wallet: \(error)")
                     self.auth.status = .signedOut
+                    self.errorViewModel.showError("Error generating random wallet: \(error)")
                 }
             }
         }

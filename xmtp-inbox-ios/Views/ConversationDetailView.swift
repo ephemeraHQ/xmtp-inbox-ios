@@ -7,6 +7,7 @@
 
 import SwiftUI
 import XMTP
+import AlertToast
 
 struct ConversationDetailView: View {
 
@@ -18,11 +19,14 @@ struct ConversationDetailView: View {
 
     @State private var messages: [DecodedMessage] = []
 
+    @State private var errorViewModel = ErrorViewModel()
+
     var body: some View {
         ZStack {
             Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
             VStack {
-                // TODO(elise): Paginate list of messages
+                // TODO(elise): Paginate list of messages and migrate fetch into MessageListView
+                // to match ConversationListView.
                 MessageListView(client: client, messages: messages)
                     .refreshable {
                         await loadMessages()
@@ -41,14 +45,17 @@ struct ConversationDetailView: View {
         .navigationTitle(displayName.resolvedName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
+        .toast(isPresenting: $errorViewModel.isShowing) {
+            AlertToast.error(errorViewModel.errorMessage)
+        }
     }
 
     func sendMessage(text: String) async {
         do {
+            // TODO(elise): Optimistic upload / undo
             try await conversation.send(text: text)
         } catch {
-            // TODO(elise): Toast error + optimistic upload
-            print("Error sending message: \(error)")
+            self.errorViewModel.showError("Error sending message: \(error)")
         }
     }
 
@@ -60,7 +67,7 @@ struct ConversationDetailView: View {
                 }
             }
         } catch {
-            print("Error in message stream: \(error)")
+            self.errorViewModel.showError("Error streaming messages: \(error)")
         }
     }
 
@@ -71,7 +78,7 @@ struct ConversationDetailView: View {
                 self.messages = messages
             }
         } catch {
-            print("Error in detail messages \(conversation.peerAddress): \(error)")
+            self.errorViewModel.showError("Error loading detail messages: \(error)")
         }
     }
 }
