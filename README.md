@@ -4,10 +4,10 @@
 
 ### Configure Infura
 
-Add your Infura Key as a [build configuration](https://help.apple.com/xcode/mac/11.4/#/deve97bde215) in Xcode.
+Add your Infura Key as a [build configuration setting](https://help.apple.com/xcode/mac/11.4/#/deve97bde215) in a file called `Secrets.xcconfig` in Xcode.
 
 ```
-File -> New -> File... -> Configuration Settings File -> Name the file **Secrets.xcconfig**
+File -> New -> File... -> Configuration Settings File -> **Secrets.xcconfig**
 ```
 
 Then add the following as a [static environment varaible](https://help.apple.com/xcode/#/dev745c5c974).
