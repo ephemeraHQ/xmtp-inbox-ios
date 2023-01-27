@@ -19,3 +19,10 @@
 // Conversations
 "conversations-empty" = "No conversations yet";
 "no-message-preview" = "No messages yet";
+
+// Settings
+"settings" = "Settings";
+"debug-settings" = "Debug settings";
+"sign-out-cta" = "Are you sure you'd like to sign out?";
+"sign-out" = "Sign out";
+"cancel" = "Cancel";

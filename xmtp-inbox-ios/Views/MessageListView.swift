@@ -10,9 +10,9 @@ import XMTP
 
 struct MessageListView: View {
 
-    var client: Client
+    let client: Client
 
-    var messages: [DecodedMessage]
+    let messages: [DecodedMessage]
 
     var body: some View {
         ScrollViewReader { proxy in

@@ -4,14 +4,16 @@
 
 ### Configure Infura
 
-Add your Infura mainnet URL as an environment variable by editing your [Scheme](https://developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project) in Xcode.
-
-`Product -> Scheme -> Edit Scheme... -> Run -> Arguments`
-
-Then add the following as an [Environment Variable](https://developer.apple.com/documentation/xcode/environment-variable-reference) and unselect the `Shared` checkbox before closing:
+Add your Infura Key as a [build configuration setting](https://help.apple.com/xcode/mac/11.4/#/deve97bde215) in a file called `Secrets.xcconfig` in Xcode.
 
 ```
-INFURA_MAINNET_URL={MAINNET_URL}
+File -> New -> File... -> Configuration Settings File -> **Secrets.xcconfig**
 ```
 
-If you do not have an Infura URL, you can follow [these instructions](https://blog.infura.io/getting-started-with-infura-28e41844cc89/) to get one.
+Then add the following as a [static environment varaible](https://help.apple.com/xcode/#/dev745c5c974).
+
+```
+INFURA_KEY = {REPLACE_WITH_YOUR_KEY}
+```
+
+If you do not have an Infura Key, you can follow [these instructions](https://blog.infura.io/getting-started-with-infura-28e41844cc89/) to get one.

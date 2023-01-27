@@ -31,6 +31,7 @@
 		6A4613112981F96300346D68 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 6A4613102981F96300346D68 /* AlertToast */; };
 		6A4613192982080E00346D68 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4613182982080E00346D68 /* AlertExtensions.swift */; };
 		6A46131B2982118500346D68 /* ErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46131A2982118500346D68 /* ErrorViewModel.swift */; };
+		6A46132929831BD800346D68 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46132829831BD800346D68 /* SettingsView.swift */; };
 		6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA65964297B2A2200E980AD /* WalletConnectSwift */; };
 		6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA65967297B2A7100E980AD /* WalletConnection.swift */; };
 		6AA6596B297B2DB000E980AD /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA6596A297B2DB000E980AD /* Account.swift */; };
@@ -90,6 +91,8 @@
 		6A46130A2981ABF500346D68 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		6A4613182982080E00346D68 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		6A46131A2982118500346D68 /* ErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewModel.swift; sourceTree = "<group>"; };
+		6A461327298314D100346D68 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		6A46132829831BD800346D68 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6AA65967297B2A7100E980AD /* WalletConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnection.swift; sourceTree = "<group>"; };
 		6AA65969297B2C4000E980AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6AA6596A297B2DB000E980AD /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -140,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				6AE264E52973D3CD0055250A /* README.md */,
+				6A461327298314D100346D68 /* Secrets.xcconfig */,
 				6A40154529526795003A6659 /* xmtp-inbox-ios */,
 				6A40155729526796003A6659 /* xmtp-inbox-iosTests */,
 				6A40156129526796003A6659 /* xmtp-inbox-iosUITests */,
@@ -216,6 +220,7 @@
 				6A4613022981831D00346D68 /* ConversationDetailView.swift */,
 				6A4613042981836F00346D68 /* MessageListView.swift */,
 				6A461306298183A600346D68 /* MessageCellView.swift */,
+				6A46132829831BD800346D68 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -436,6 +441,7 @@
 				6A40154929526795003A6659 /* ContentView.swift in Sources */,
 				6A1C37D82970D1BD00AF6559 /* ConversationCellView.swift in Sources */,
 				6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */,
+				6A46132929831BD800346D68 /* SettingsView.swift in Sources */,
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
 				6AA6596B297B2DB000E980AD /* Account.swift in Sources */,
 				6A461309298191F700346D68 /* DisplayName.swift in Sources */,
@@ -494,6 +500,7 @@
 /* Begin XCBuildConfiguration section */
 		6A40156629526796003A6659 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A461327298314D100346D68 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -553,6 +560,7 @@
 		};
 		6A40156729526796003A6659 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A461327298314D100346D68 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
