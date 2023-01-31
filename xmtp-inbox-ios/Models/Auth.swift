@@ -16,6 +16,7 @@ class Auth: ObservableObject {
     }
 
     @Published var status: AuthStatus = .loadingKeys
+		@Published var isShowingQRCode = false
 
     func signOut() {
         do {
