@@ -17,5 +17,7 @@
 	</array>
 	<key>INFURA_KEY</key>
 	<string>$(INFURA_KEY)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
