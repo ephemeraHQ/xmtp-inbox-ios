@@ -24,15 +24,22 @@ struct Keystore {
         return UserDefaults.standard.string(forKey: addressKey)
     }
 
+    private static func accountName() -> String? {
+        guard let address = address() else {
+            return nil
+        }
+        return "\(Constants.xmtpEnv):\(address)"
+    }
+
     static func saveKeys(address: String, keys: PrivateKeyBundleV1) throws {
         UserDefaults.standard.set(address, forKey: addressKey)
 
         let keysData = try keys.serializedData()
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: address,
+            kSecAttrAccount as String: accountName() ?? "",
             kSecValueData as String: keysData,
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlocked
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
         ]
 
         let status = SecItemAdd(query as CFDictionary, nil)
@@ -42,13 +49,13 @@ struct Keystore {
     }
 
     static func readKeys() throws -> PrivateKeyBundleV1? {
-        guard let address = UserDefaults.standard.string(forKey: addressKey) else {
+        guard let accountName = accountName() else {
             return nil
         }
 
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: address,
+            kSecAttrAccount as String: accountName,
             kSecMatchLimit as String: kSecMatchLimitOne,
             kSecReturnAttributes as String: true,
             kSecReturnData as String: true
@@ -65,13 +72,13 @@ struct Keystore {
     }
 
     static func deleteKeys() throws {
-        guard let address = UserDefaults.standard.string(forKey: addressKey) else {
-            throw KeystoreError.noKeys
+        guard let accountName = accountName() else {
+            return
         }
 
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: address
+            kSecAttrAccount as String: accountName
         ]
 
         let status = SecItemDelete(query as CFDictionary)
