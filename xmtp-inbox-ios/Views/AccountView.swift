@@ -32,7 +32,8 @@ struct AccountView: View {
 
                     HStack {
                         Image("EthereumIcon")
-                            .foregroundColor(Color.textPrimary)
+                            .renderingMode(.template)
+                            .colorMultiply(.textPrimary)
                             .frame(width: 20.0, height: 20.0)
 
                         Text(client.address.truncatedAddress())
@@ -58,7 +59,7 @@ struct AccountView: View {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 8)
                                             .fill(Color.actionPrimary)
-                                            .opacity(0.1)
+                                            .opacity(0.2)
                                             .frame(width: 40, height: 40)
 
                                         Image("PrivacyIcon")
@@ -86,7 +87,7 @@ struct AccountView: View {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 8)
                                             .fill(Color.actionPrimary)
-                                            .opacity(0.1)
+                                            .opacity(0.2)
                                             .frame(width: 40, height: 40)
 
                                         Image("SupportIcon")
@@ -110,7 +111,7 @@ struct AccountView: View {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 8)
                                             .fill(Color.actionNegative)
-                                            .opacity(0.1)
+                                            .opacity(0.2)
                                             .frame(width: 40, height: 40)
 
                                         Image("DisconnectIcon")
