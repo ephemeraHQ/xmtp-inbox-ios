@@ -8,15 +8,15 @@
 import Foundation
 
 func print(_ object: Any...) {
-    #if DEBUG
-    object.forEach { item in
-        Swift.print(item)
-    }
-    #endif
+	#if DEBUG
+		object.forEach { item in
+			Swift.print(item)
+		}
+	#endif
 }
 
 func print(_ object: Any) {
-    #if DEBUG
-    Swift.print(object)
-    #endif
+	#if DEBUG
+		Swift.print(object)
+	#endif
 }

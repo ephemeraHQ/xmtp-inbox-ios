@@ -5,18 +5,18 @@
 //  Created by Elise Alix on 1/25/23.
 //
 
-import Foundation
 import AlertToast
+import Foundation
 
 extension AlertToast {
-    static func error(_ errorMessage: String?) -> AlertToast {
-        return AlertToast(
-            type: .regular,
-            title: errorMessage,
-            style: .style(
-                backgroundColor: .actionNegative,
-                titleColor: .actionPrimaryText
-            )
-        )
-    }
+	static func error(_ errorMessage: String?) -> AlertToast {
+		return AlertToast(
+			type: .regular,
+			title: errorMessage,
+			style: .style(
+				backgroundColor: .actionNegative,
+				titleColor: .actionPrimaryText
+			)
+		)
+	}
 }
