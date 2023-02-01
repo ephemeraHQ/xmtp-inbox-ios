@@ -6,25 +6,25 @@
 //
 
 import Foundation
-import XMTP
 import SwiftUI
+import XMTP
 
 class Auth: ObservableObject {
+	enum AuthStatus {
+		case loadingKeys, signedOut, tryingDemo, connecting, connected(Client)
+	}
 
-    enum AuthStatus {
-        case loadingKeys, signedOut, tryingDemo, connecting, connected(Client)
-    }
+	@Published var status: AuthStatus = .loadingKeys
+	@Published var isShowingQRCode = false
 
-    @Published var status: AuthStatus = .loadingKeys
-
-    func signOut() {
-        do {
-            try Keystore.deleteKeys()
-            withAnimation {
-                self.status = .signedOut
-            }
-        } catch {
-            print("Error signing out: \(error.localizedDescription)")
-        }
-    }
+	func signOut() {
+		do {
+			try Keystore.deleteKeys()
+			withAnimation {
+				self.status = .signedOut
+			}
+		} catch {
+			print("Error signing out: \(error.localizedDescription)")
+		}
+	}
 }
