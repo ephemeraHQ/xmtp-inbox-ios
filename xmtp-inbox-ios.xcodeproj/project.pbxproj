@@ -112,6 +112,7 @@
 		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
 		A66339A12989D1FE00477E2E /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		A682B1E9298B074700121651 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				A663399E2989CF1600477E2E /* Secrets.xcconfig */,
+				A682B1E8298B071800121651 /* ci_scripts */,
 				6AE264E52973D3CD0055250A /* README.md */,
 				6A40154529526795003A6659 /* xmtp-inbox-ios */,
 				6A40155729526796003A6659 /* xmtp-inbox-iosTests */,
@@ -272,6 +274,14 @@
 				A663399F2989D14400477E2E /* QRCode.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A682B1E8298B071800121651 /* ci_scripts */ = {
+			isa = PBXGroup;
+			children = (
+				A682B1E9298B074700121651 /* ci_post_clone.sh */,
+			);
+			path = ci_scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

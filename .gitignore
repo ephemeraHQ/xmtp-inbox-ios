@@ -5,6 +5,9 @@
 # Secrets
 Secrets.xcconfig
 
+# No one ever wants to see these ever, macos
+.DS_Store
+
 ## Build generated
 build/
 DerivedData/
