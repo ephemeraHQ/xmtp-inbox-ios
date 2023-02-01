@@ -144,6 +144,7 @@ struct AccountView: View {
                             .listRowSeparator(.hidden)
                     }
                     .frame(maxWidth: .infinity)
+                    .listRowBackground(Color.backgroundPrimary)
                 }
                 .scrollContentBackground(.hidden)
                 .background(Color.backgroundPrimary)
