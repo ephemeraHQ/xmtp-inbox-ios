@@ -18,32 +18,33 @@ struct MessageListView: View {
 
     @State private var errorViewModel = ErrorViewModel()
 
-        // TODO(elise): Paginate list of messages and migrate fetch into MessageListView
-        // to match ConversationListView.
-    /** Reverses the message list to render from bottom to top. */
+    // TODO(elise): Paginate list of messages
     var body: some View {
-//        ScrollViewReader { proxy in
+        ScrollViewReader { proxy in
             ScrollView {
-                LazyVStack {
+                VStack {
                     Spacer()
                     ForEach(Array(messages.sorted(by: { $0.sent > $1.sent }).enumerated()), id: \.0) { i, message in
                         MessageCellView(isFromMe: message.senderAddress == client.address, message: message)
                             .transition(.scale)
                             .id(i)
-                            .scaleEffect(x: 1, y: -1, anchor: .center)
                     }
                     Spacer()
+                        .onChange(of: messages.count) { _ in
+                            withAnimation {
+                                proxy.scrollTo(messages.count - 1, anchor: .bottom)
+                            }
+                        }
                 }
-//            }
             }
-            .scaleEffect(x: 1, y: -1, anchor: .center)
-            .padding(.horizontal)
-            .task {
-                await loadMessages()
-            }
-            .task {
-                await streamMessages()
-            }
+        }
+        .padding(.horizontal)
+        .task {
+            await loadMessages()
+        }
+        .task {
+            await streamMessages()
+        }
     }
 
     func streamMessages() async {
