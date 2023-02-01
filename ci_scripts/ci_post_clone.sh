@@ -6,5 +6,4 @@
 #  Created by Pat Nakajima on 2/1/23.
 #  
 
-cd $CI_WORKSPACE
-echo "INFURA_KEY = $INFURA_KEY" > "Secrets.xcconfig"
+echo "INFURA_KEY = $INFURA_KEY" > "$CI_WORKSPACE/Secrets.xcconfig"
