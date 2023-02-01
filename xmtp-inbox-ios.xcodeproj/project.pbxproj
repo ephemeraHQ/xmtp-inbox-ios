@@ -106,6 +106,13 @@
 		6AF033EF2954F62A0043FB6A /* ConversationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
 		6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewClientProvider.swift; sourceTree = "<group>"; };
 		6AF033F3295504B70043FB6A /* Print.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Print.swift; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
+=======
+		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		A66339A12989D1FE00477E2E /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		A682B1E9298B074700121651 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
+>>>>>>> Stashed changes
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +149,11 @@
 		6A40153A29526795003A6659 = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< Updated upstream
+=======
+				A663399E2989CF1600477E2E /* Secrets.xcconfig */,
+				A682B1E8298B071800121651 /* ci_scripts */,
+>>>>>>> Stashed changes
 				6AE264E52973D3CD0055250A /* README.md */,
 				6A461327298314D100346D68 /* Secrets.xcconfig */,
 				6A40154529526795003A6659 /* xmtp-inbox-ios */,
@@ -263,6 +275,14 @@
 				6A1ABA7729773EA4001E0B41 /* Keystore.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A682B1E8298B071800121651 /* ci_scripts */ = {
+			isa = PBXGroup;
+			children = (
+				A682B1E9298B074700121651 /* ci_post_clone.sh */,
+			);
+			path = ci_scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
