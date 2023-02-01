@@ -35,6 +35,13 @@ struct ContentView: View {
         .toast(isPresenting: $errorViewModel.isShowing) {
             AlertToast.error(errorViewModel.errorMessage)
         }
+				.sheet(isPresented: $auth.isShowingQRCode) {
+					if let wcUrl {
+						QRCodeView(data: Data(wcUrl.absoluteString.utf8))
+					} else {
+						Text("Cannot connect to wallet.")
+					}
+				}
         .environmentObject(auth)
         .task {
             await loadClient()
@@ -70,7 +77,7 @@ struct ContentView: View {
             if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
                 UIApplication.shared.open(wcUrl!)
                 return
-            }
+						}
             // swiftlint:enable force_unwrapping
         }
 
@@ -79,7 +86,14 @@ struct ContentView: View {
             do {
                 let account = try Account.create()
                 let url = try account.wcUrl()
-                self.wcUrl = url
+
+								await MainActor.run {
+									self.wcUrl = url
+
+									#if DEBUG
+									auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
+									#endif
+								}
                 await UIApplication.shared.open(url)
 
                 try await account.connect()
