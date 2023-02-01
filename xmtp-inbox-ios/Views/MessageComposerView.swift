@@ -28,7 +28,9 @@ struct MessageComposerView: View {
                     send()
                 }
                 .onAppear {
+                    UIView.setAnimationsEnabled(false)
                     self.isFocused = true
+                    UIView.setAnimationsEnabled(true)
                 }
             ZStack {
                 Color.actionPrimary
