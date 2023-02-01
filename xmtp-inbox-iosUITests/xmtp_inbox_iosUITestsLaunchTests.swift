@@ -8,7 +8,6 @@
 import XCTest
 
 final class xmtp_inbox_iosUITestsLaunchTests: XCTestCase {
-
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

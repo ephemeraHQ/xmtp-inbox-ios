@@ -13,47 +13,47 @@ import XMTP
 ///
 /// > Warning: The WalletConnect V1 API will be deprecated soon.
 public struct Account {
-    var connection: WalletConnection
+	var connection: WalletConnection
 
-    public static func create() throws -> Account {
-        let connection = WCWalletConnection()
-        return try Account(connection: connection)
-    }
+	public static func create() throws -> Account {
+		let connection = WCWalletConnection()
+		return try Account(connection: connection)
+	}
 
-    init(connection: WalletConnection) throws {
-        self.connection = connection
-    }
+	init(connection: WalletConnection) throws {
+		self.connection = connection
+	}
 
-    public var isConnected: Bool {
-        connection.isConnected
-    }
+	public var isConnected: Bool {
+		connection.isConnected
+	}
 
-    public var address: String {
-        connection.walletAddress ?? ""
-    }
+	public var address: String {
+		connection.walletAddress ?? ""
+	}
 
-    public func wcUrl() throws -> URL {
-        try connection.wcUrl()
-    }
+	public func wcUrl() throws -> URL {
+		try connection.wcUrl()
+	}
 
-    public func connect() async throws {
-        try await connection.connect()
-    }
+	public func connect() async throws {
+		try await connection.connect()
+	}
 }
 
 extension Account: SigningKey {
-    public func sign(_ data: Data) async throws -> Signature {
-        let signatureData = try await connection.sign(data)
+	public func sign(_ data: Data) async throws -> Signature {
+		let signatureData = try await connection.sign(data)
 
-        var signature = Signature()
+		var signature = Signature()
 
-        signature.ecdsaCompact.bytes = signatureData[0 ..< 64]
-        signature.ecdsaCompact.recovery = UInt32(signatureData[64])
+		signature.ecdsaCompact.bytes = signatureData[0 ..< 64]
+		signature.ecdsaCompact.recovery = UInt32(signatureData[64])
 
-        return signature
-    }
+		return signature
+	}
 
-    public func sign(message: String) async throws -> Signature {
-        return try await sign(Data(message.utf8))
-    }
+	public func sign(message: String) async throws -> Signature {
+		return try await sign(Data(message.utf8))
+	}
 }

@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct xmtp_inbox_iosApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
+	var body: some Scene {
+		WindowGroup {
+			ContentView()
+		}
+	}
 }

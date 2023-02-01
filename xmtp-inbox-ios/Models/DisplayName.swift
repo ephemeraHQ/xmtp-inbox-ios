@@ -8,10 +8,10 @@
 import Foundation
 
 struct DisplayName {
-    var ensName: String?
-    var address: String
+	var ensName: String?
+	var address: String
 
-    var resolvedName: String {
-        ensName ?? address.truncatedAddress()
-    }
+	var resolvedName: String {
+		ensName ?? address.truncatedAddress()
+	}
 }
