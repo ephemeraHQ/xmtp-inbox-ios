@@ -42,7 +42,9 @@ struct ConversationDetailView: View {
             // TODO(elise): Optimistic upload / undo
             try await conversation.send(text: text)
         } catch {
-            self.errorViewModel.showError("Error sending message: \(error)")
+            await MainActor.run {
+                self.errorViewModel.showError("Error sending message: \(error)")
+            }
         }
     }
 }

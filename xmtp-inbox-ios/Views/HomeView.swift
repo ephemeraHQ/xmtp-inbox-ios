@@ -27,12 +27,11 @@ struct HomeView: View {
                 ConversationListView(client: client)
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: EnsImageView(imageSize: 40.0, peerAddress: client.address)
-                .onTapGesture {
-                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                    isShowingAccount.toggle()
-                }
-            )
+            .navigationBarItems(leading: HapticButton {
+                isShowingAccount.toggle()
+            } label: {
+                EnsImageView(imageSize: 40.0, peerAddress: client.address)
+            })
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     HStack {

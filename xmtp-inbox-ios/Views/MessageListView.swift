@@ -55,7 +55,9 @@ struct MessageListView: View {
                 }
             }
         } catch {
-            self.errorViewModel.showError("Error streaming messages: \(error)")
+            await MainActor.run {
+                self.errorViewModel.showError("Error streaming messages: \(error)")
+            }
         }
     }
 
@@ -66,7 +68,9 @@ struct MessageListView: View {
                 self.messages = messages
             }
         } catch {
-            self.errorViewModel.showError("Error loading detail messages: \(error)")
+            await MainActor.run {
+                self.errorViewModel.showError("Error streaming messages: \(error)")
+            }
         }
     }
 }

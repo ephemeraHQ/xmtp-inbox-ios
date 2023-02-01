@@ -26,144 +26,145 @@ struct AccountView: View {
         NavigationView {
             ZStack {
                 Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-                VStack {
-                    EnsImageView(imageSize: 80, peerAddress: client.address)
-                        .padding()
+                List {
+                    VStack(alignment: .center) {
+                        EnsImageView(imageSize: 80, peerAddress: client.address)
+                            .padding()
 
-                    HStack {
-                        Image("EthereumIcon")
-                            .renderingMode(.template)
-                            .colorMultiply(.textPrimary)
-                            .frame(width: 20.0, height: 20.0)
+                        HapticButton(action: {
+                            UIPasteboard.general.string = client.address
+                        }) {
+                            HStack {
+                                Image("EthereumIcon")
+                                    .renderingMode(.template)
+                                    .colorMultiply(.textPrimary)
+                                    .frame(width: 20.0, height: 20.0)
 
-                        Text(client.address.truncatedAddress())
-                            .font(.Body1B)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.backgroundPrimary)
-                    .clipShape(Capsule())
-                    .shadow(color: .backgroundSecondary, radius: 3, x: 0, y: 1)
-                    .onTapGesture(perform: onCopyAddress)
-
-                    List {
-                        Section {
-                            Button {
-                                guard let url = URL(string: privacyUrl) else {
-                                    return
-                                }
-                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                                UIApplication.shared.open(url)
-                            } label: {
-                                HStack {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.actionPrimary)
-                                            .opacity(0.2)
-                                            .frame(width: 40, height: 40)
-
-                                        Image("PrivacyIcon")
-                                            .foregroundColor(Color.actionPrimary)
-                                            .frame(width: 24.0, height: 24.0)
-                                    }
-                                    .padding(.trailing, 4)
-
-                                    Text("privacy")
-                                        .font(.Body1B)
-                                        .foregroundColor(Color.textPrimary)
-                                }
+                                Text(client.address.truncatedAddress())
+                                    .font(.Body1B)
+                                    .foregroundColor(.textPrimary)
                             }
-                            .listRowBackground(Color.backgroundTertiary)
-                            .listRowSeparator(.hidden)
-
-                            Button {
-                                guard let url = URL(string: supportUrl) else {
-                                    return
-                                }
-                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                                UIApplication.shared.open(url)
-                            } label: {
-                                HStack {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.actionPrimary)
-                                            .opacity(0.2)
-                                            .frame(width: 40, height: 40)
-
-                                        Image("SupportIcon")
-                                            .foregroundColor(Color.actionPrimary)
-                                            .frame(width: 24.0, height: 24.0)
-                                    }
-                                    .padding(.trailing, 4)
-
-                                    Text("support")
-                                        .font(.Body1B)
-                                        .foregroundColor(Color.textPrimary)
-                                }
-                            }
-                            .listRowBackground(Color.backgroundTertiary)
-                            .listRowSeparator(.hidden)
-                        }
-
-                        Section {
-                            Button(action: onSignOut) {
-                                HStack {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.actionNegative)
-                                            .opacity(0.2)
-                                            .frame(width: 40, height: 40)
-
-                                        Image("DisconnectIcon")
-                                            .foregroundColor(Color.actionNegative)
-                                            .frame(width: 24.0, height: 24.0)
-                                    }
-                                    .padding(.trailing, 4)
-
-                                    Text("disconnect-wallet")
-                                        .font(.Body1B)
-                                        .foregroundColor(Color.textPrimary)
-                                }
-                            }
-                            .listRowBackground(Color.backgroundTertiary)
-                            .listRowSeparator(.hidden)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.backgroundPrimary)
+                            .clipShape(Capsule())
+                            .shadow(color: .backgroundSecondary, radius: 3, x: 0, y: 1)
                         }
                     }
-                    .scrollContentBackground(.hidden)
-                    .background(Color.backgroundPrimary)
-                    .listStyle(.insetGrouped)
+                    .listRowBackground(Color.backgroundPrimary)
+                    .frame(maxWidth: .infinity)
 
-                    Text(footer)
-                        .font(.Body2)
-                        .foregroundColor(Color.textScondary)
+                    Section {
+                        HapticButton {
+                            guard let url = URL(string: privacyUrl) else {
+                                return
+                            }
+                            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                            UIApplication.shared.open(url)
+                        } label: {
+                            HStack {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color.actionPrimary)
+                                        .opacity(0.2)
+                                        .frame(width: 40, height: 40)
+
+                                    Image("PrivacyIcon")
+                                        .foregroundColor(Color.actionPrimary)
+                                        .frame(width: 24.0, height: 24.0)
+                                }
+                                .padding(.trailing, 4)
+
+                                Text("privacy")
+                                    .font(.Body1B)
+                                    .foregroundColor(Color.textPrimary)
+                            }
+                        }
+                        .listRowBackground(Color.backgroundTertiary)
+                        .listRowSeparator(.hidden)
+
+                        HapticButton {
+                            guard let url = URL(string: supportUrl) else {
+                                return
+                            }
+                            UIApplication.shared.open(url)
+                        } label: {
+                            HStack {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color.actionPrimary)
+                                        .opacity(0.2)
+                                        .frame(width: 40, height: 40)
+
+                                    Image("SupportIcon")
+                                        .foregroundColor(Color.actionPrimary)
+                                        .frame(width: 24.0, height: 24.0)
+                                }
+                                .padding(.trailing, 4)
+
+                                Text("support")
+                                    .font(.Body1B)
+                                    .foregroundColor(Color.textPrimary)
+                            }
+                        }
+                        .listRowBackground(Color.backgroundTertiary)
+                        .listRowSeparator(.hidden)
+                    }
+
+                    Section {
+                        HapticButton {
+                            showSignOutAlert.toggle()
+                        } label: {
+                            HStack {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color.actionNegative)
+                                        .opacity(0.2)
+                                        .frame(width: 40, height: 40)
+
+                                    Image("DisconnectIcon")
+                                        .foregroundColor(Color.actionNegative)
+                                        .frame(width: 24.0, height: 24.0)
+                                }
+                                .padding(.trailing, 4)
+
+                                Text("disconnect-wallet")
+                                    .font(.Body1B)
+                                    .foregroundColor(Color.textPrimary)
+                            }
+                        }
+                        .listRowBackground(Color.backgroundTertiary)
+                        .listRowSeparator(.hidden)
+                    }
+
+                    VStack(alignment: .center) {
+                        Text(footer)
+                            .font(.Body2)
+                            .foregroundColor(Color.textScondary)
+                            .listRowSeparator(.hidden)
+                    }
+                    .frame(maxWidth: .infinity)
                 }
-                .navigationTitle("account")
-                .navigationBarItems(trailing: Image("XIcon")
+                .scrollContentBackground(.hidden)
+                .background(Color.backgroundPrimary)
+                .listStyle(.insetGrouped)
+            }
+            .navigationTitle("account")
+            .navigationBarItems(trailing: Button {
+                dismiss()
+            } label: {
+                Image("XIcon")
                     .renderingMode(.template)
                     .colorMultiply(.textPrimary)
-                    .onTapGesture {
-                        dismiss()
-                    }
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .alert("disconnect-cta", isPresented: $showSignOutAlert) {
-                    Button("cancel", role: .cancel) { }
-                    Button("disconnect", role: .destructive) {
-                        auth.signOut()
-                    }
+            })
+            .navigationBarTitleDisplayMode(.inline)
+            .alert("disconnect-cta", isPresented: $showSignOutAlert) {
+                Button("cancel", role: .cancel) { }
+                Button("disconnect", role: .destructive) {
+                    auth.signOut()
                 }
             }
         }
-    }
-
-    func onSignOut() {
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        showSignOutAlert.toggle()
-    }
-
-    func onCopyAddress() {
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        UIPasteboard.general.string = client.address
     }
 
     var footer: String {
