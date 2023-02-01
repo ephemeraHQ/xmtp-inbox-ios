@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct HapticButton<Content: View>: View {
-    var action: () -> Void
-    @ViewBuilder var label: () -> Content
+	var action: () -> Void
+	@ViewBuilder var label: () -> Content
 
-    var body: some View {
-        Button(action: {
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-            action()
-        }) {
-            label()
-        }
-    }
+	var body: some View {
+		Button(action: {
+			UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+			action()
+		}) {
+			label()
+		}
+	}
 }

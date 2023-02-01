@@ -5,8 +5,8 @@
 //  Created by Pat Nakajima on 1/31/23.
 //
 
-import UIKit
 import CoreImage.CIFilterBuiltins
+import UIKit
 
 struct QRCode {
 	static func generate(for data: Data) -> UIImage {

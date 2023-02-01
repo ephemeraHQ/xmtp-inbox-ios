@@ -8,14 +8,13 @@
 import Foundation
 
 class ErrorViewModel: ObservableObject {
+	var errorMessage: String?
 
-    var errorMessage: String?
+	@Published var isShowing = false
 
-    @Published var isShowing = false
-
-    func showError(_ errorMessage: String) {
-        self.errorMessage = errorMessage
-        self.isShowing = true
-        print(errorMessage)
-    }
+	func showError(_ errorMessage: String) {
+		self.errorMessage = errorMessage
+		isShowing = true
+		print(errorMessage)
+	}
 }
