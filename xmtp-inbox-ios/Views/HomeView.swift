@@ -16,6 +16,8 @@ struct HomeView: View {
 
     let client: XMTP.Client
 
+    @State var isShowingAccount = false
+
     @StateObject var environmentCoordinator = EnvironmentCoordinator()
 
     var body: some View {
@@ -25,7 +27,9 @@ struct HomeView: View {
                 ConversationListView(client: client)
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: NavigationLink(destination: SettingsView(client: client)) {
+            .navigationBarItems(leading: HapticButton {
+                isShowingAccount.toggle()
+            } label: {
                 EnsImageView(imageSize: 40.0, peerAddress: client.address)
             })
             .toolbar {
@@ -44,6 +48,9 @@ struct HomeView: View {
         }
         .accentColor(.textPrimary)
         .environmentObject(environmentCoordinator)
+        .sheet(isPresented: $isShowingAccount) {
+            AccountView(client: client)
+        }
     }
 }
 

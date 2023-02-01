@@ -31,12 +31,13 @@
 		6A4613112981F96300346D68 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 6A4613102981F96300346D68 /* AlertToast */; };
 		6A4613192982080E00346D68 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4613182982080E00346D68 /* AlertExtensions.swift */; };
 		6A46131B2982118500346D68 /* ErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46131A2982118500346D68 /* ErrorViewModel.swift */; };
-		6A46132929831BD800346D68 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46132829831BD800346D68 /* SettingsView.swift */; };
+		6A46132929831BD800346D68 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46132829831BD800346D68 /* AccountView.swift */; };
 		6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA65964297B2A2200E980AD /* WalletConnectSwift */; };
 		6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA65967297B2A7100E980AD /* WalletConnection.swift */; };
 		6AA6596B297B2DB000E980AD /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA6596A297B2DB000E980AD /* Account.swift */; };
 		6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABDB41D2954A7070082EC42 /* SplashView.swift */; };
 		6AC5CFB32953FA750046325C /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 6AC5CFB22953FA750046325C /* .swiftformat */; };
+		6ACD972F298AE3F000C6AD66 /* HapticButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACD972E298AE3F000C6AD66 /* HapticButton.swift */; };
 		6AE264E82974E63F0055250A /* ENSKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6AE264E72974E63F0055250A /* ENSKit */; };
 		6AE264EB2974F62B0055250A /* IGIdenticon in Frameworks */ = {isa = PBXBuildFile; productRef = 6AE264EA2974F62B0055250A /* IGIdenticon */; };
 		6AE264ED2975EFD40055250A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE264EC2975EFD40055250A /* Constants.swift */; };
@@ -93,12 +94,13 @@
 		6A46130A2981ABF500346D68 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		6A4613182982080E00346D68 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		6A46131A2982118500346D68 /* ErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewModel.swift; sourceTree = "<group>"; };
-		6A46132829831BD800346D68 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6A46132829831BD800346D68 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		6AA65967297B2A7100E980AD /* WalletConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnection.swift; sourceTree = "<group>"; };
 		6AA65969297B2C4000E980AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6AA6596A297B2DB000E980AD /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		6ABDB41D2954A7070082EC42 /* SplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		6AC5CFB22953FA750046325C /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
+		6ACD972E298AE3F000C6AD66 /* HapticButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticButton.swift; sourceTree = "<group>"; };
 		6AE264E52973D3CD0055250A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6AE264EC2975EFD40055250A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6AE264EE2975F2570055250A /* EnsImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnsImageView.swift; sourceTree = "<group>"; };
@@ -224,8 +226,9 @@
 				6A4613022981831D00346D68 /* ConversationDetailView.swift */,
 				6A4613042981836F00346D68 /* MessageListView.swift */,
 				6A461306298183A600346D68 /* MessageCellView.swift */,
-				6A46132829831BD800346D68 /* SettingsView.swift */,
+				6A46132829831BD800346D68 /* AccountView.swift */,
 				A66339A12989D1FE00477E2E /* QRCodeView.swift */,
+				6ACD972E298AE3F000C6AD66 /* HapticButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -448,7 +451,7 @@
 				6A1C37D82970D1BD00AF6559 /* ConversationCellView.swift in Sources */,
 				A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */,
 				6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */,
-				6A46132929831BD800346D68 /* SettingsView.swift in Sources */,
+				6A46132929831BD800346D68 /* AccountView.swift in Sources */,
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
 				6AA6596B297B2DB000E980AD /* Account.swift in Sources */,
 				6A461309298191F700346D68 /* DisplayName.swift in Sources */,
@@ -459,6 +462,7 @@
 				6A4612FF298177B300346D68 /* Auth.swift in Sources */,
 				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
+				6ACD972F298AE3F000C6AD66 /* HapticButton.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
 				6AF033F4295504B70043FB6A /* Print.swift in Sources */,
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,

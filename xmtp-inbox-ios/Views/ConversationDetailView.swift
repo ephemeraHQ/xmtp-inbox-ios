@@ -17,26 +17,13 @@ struct ConversationDetailView: View {
 
     let conversation: XMTP.Conversation
 
-    @State private var messages: [DecodedMessage] = []
-
     @State private var errorViewModel = ErrorViewModel()
 
     var body: some View {
         ZStack {
             Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
             VStack {
-                // TODO(elise): Paginate list of messages and migrate fetch into MessageListView
-                // to match ConversationListView.
-                MessageListView(client: client, messages: messages)
-                    .refreshable {
-                        await loadMessages()
-                    }
-                    .task {
-                        await loadMessages()
-                    }
-                    .task {
-                        await streamMessages()
-                    }
+                MessageListView(client: client, conversation: conversation)
                 MessageComposerView(onSend: sendMessage(text:))
                     .padding(.horizontal, 8)
                     .padding(.bottom, 8)
@@ -55,30 +42,9 @@ struct ConversationDetailView: View {
             // TODO(elise): Optimistic upload / undo
             try await conversation.send(text: text)
         } catch {
-            self.errorViewModel.showError("Error sending message: \(error)")
-        }
-    }
-
-    func streamMessages() async {
-        do {
-            for try await message in conversation.streamMessages() {
-                await MainActor.run {
-                    messages.append(message)
-                }
-            }
-        } catch {
-            self.errorViewModel.showError("Error streaming messages: \(error)")
-        }
-    }
-
-    func loadMessages() async {
-        do {
-            let messages = try await conversation.messages()
             await MainActor.run {
-                self.messages = messages
+                self.errorViewModel.showError("Error sending message: \(error)")
             }
-        } catch {
-            self.errorViewModel.showError("Error loading detail messages: \(error)")
         }
     }
 }
