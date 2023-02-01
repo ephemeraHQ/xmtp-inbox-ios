@@ -46,6 +46,8 @@
 		6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033EF2954F62A0043FB6A /* ConversationListView.swift */; };
 		6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */; };
 		6AF033F4295504B70043FB6A /* Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F3295504B70043FB6A /* Print.swift */; };
+		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
+		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,7 +93,6 @@
 		6A46130A2981ABF500346D68 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		6A4613182982080E00346D68 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		6A46131A2982118500346D68 /* ErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewModel.swift; sourceTree = "<group>"; };
-		6A461327298314D100346D68 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		6A46132829831BD800346D68 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6AA65967297B2A7100E980AD /* WalletConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnection.swift; sourceTree = "<group>"; };
 		6AA65969297B2C4000E980AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -106,6 +107,9 @@
 		6AF033EF2954F62A0043FB6A /* ConversationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
 		6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewClientProvider.swift; sourceTree = "<group>"; };
 		6AF033F3295504B70043FB6A /* Print.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Print.swift; sourceTree = "<group>"; };
+		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		A66339A12989D1FE00477E2E /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,8 +146,8 @@
 		6A40153A29526795003A6659 = {
 			isa = PBXGroup;
 			children = (
+				A663399E2989CF1600477E2E /* Secrets.xcconfig */,
 				6AE264E52973D3CD0055250A /* README.md */,
-				6A461327298314D100346D68 /* Secrets.xcconfig */,
 				6A40154529526795003A6659 /* xmtp-inbox-ios */,
 				6A40155729526796003A6659 /* xmtp-inbox-iosTests */,
 				6A40156129526796003A6659 /* xmtp-inbox-iosUITests */,
@@ -221,6 +225,7 @@
 				6A4613042981836F00346D68 /* MessageListView.swift */,
 				6A461306298183A600346D68 /* MessageCellView.swift */,
 				6A46132829831BD800346D68 /* SettingsView.swift */,
+				A66339A12989D1FE00477E2E /* QRCodeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 			children = (
 				6AF033F3295504B70043FB6A /* Print.swift */,
 				6A1ABA7729773EA4001E0B41 /* Keystore.swift */,
+				A663399F2989D14400477E2E /* QRCode.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -440,6 +446,7 @@
 				6A4613032981831D00346D68 /* ConversationDetailView.swift in Sources */,
 				6A40154929526795003A6659 /* ContentView.swift in Sources */,
 				6A1C37D82970D1BD00AF6559 /* ConversationCellView.swift in Sources */,
+				A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */,
 				6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */,
 				6A46132929831BD800346D68 /* SettingsView.swift in Sources */,
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
@@ -459,6 +466,7 @@
 				6AE264F32975FD270055250A /* StringExtensions.swift in Sources */,
 				6A1ABA7829773EA4001E0B41 /* Keystore.swift in Sources */,
 				6AE264ED2975EFD40055250A /* Constants.swift in Sources */,
+				A66339A02989D14400477E2E /* QRCode.swift in Sources */,
 				6AE264EF2975F2570055250A /* EnsImageView.swift in Sources */,
 				6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */,
 				6A461307298183A600346D68 /* MessageCellView.swift in Sources */,
@@ -500,7 +508,7 @@
 /* Begin XCBuildConfiguration section */
 		6A40156629526796003A6659 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6A461327298314D100346D68 /* Secrets.xcconfig */;
+			baseConfigurationReference = A663399E2989CF1600477E2E /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -560,7 +568,6 @@
 		};
 		6A40156729526796003A6659 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6A461327298314D100346D68 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -617,13 +624,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "xmtp-inbox-ios/xmtp_inbox_ios.entitlements";
-				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"xmtp-inbox-ios/Preview Content\"";
-				DEVELOPMENT_TEAM = FY4NZR34Z3;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -647,6 +653,7 @@
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xmtplabs.inbox.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
