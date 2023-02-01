@@ -37,8 +37,8 @@ struct MessageListView: View {
                         }
                 }
             }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
         .task {
             await loadMessages()
         }
