@@ -12,6 +12,13 @@ struct xmtp_inbox_iosApp: App {
 	var body: some Scene {
 		WindowGroup {
 			ContentView()
+				.onAppear {
+					do {
+						try DB.shared.prepare(passphrase: "make this real")
+					} catch {
+						print("Error preparing DB: \(error)")
+					}
+				}
 		}
 	}
 }

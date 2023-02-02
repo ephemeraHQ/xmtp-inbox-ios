@@ -14,7 +14,7 @@ struct ConversationDetailView: View {
 
 	let displayName: DisplayName
 
-	let conversation: XMTP.Conversation
+	let conversation: DB.Conversation
 
 	@State private var errorViewModel = ErrorViewModel()
 

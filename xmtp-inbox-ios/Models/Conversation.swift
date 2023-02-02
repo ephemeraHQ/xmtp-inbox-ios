@@ -6,6 +6,7 @@
 //
 
 import GRDB
+import XMTP
 
 extension DB {
 	struct Conversation {
@@ -19,6 +20,29 @@ extension DB {
 			self.topic = topic
 			self.peerAddress = peerAddress
 			self.createdAt = createdAt
+		}
+
+		static func from(_ xmtpConversation: XMTP.Conversation) throws -> DB.Conversation {
+			var conversation = DB.Conversation.find(Column("topic") == xmtpConversation.topic) ?? DB.Conversation(
+				topic: xmtpConversation.topic,
+				peerAddress: xmtpConversation.peerAddress,
+				createdAt: Date() // TODO: update
+			)
+
+			try conversation.save()
+
+			return conversation
+		}
+
+		func send(text _: String) async throws {}
+
+		public func streamMessages() -> AsyncThrowingStream<DecodedMessage, Error> {
+			AsyncThrowingStream { _ in
+			}
+		}
+
+		public func messages() async throws -> [DecodedMessage] {
+			return []
 		}
 	}
 }

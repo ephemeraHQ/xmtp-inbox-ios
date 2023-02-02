@@ -7,6 +7,7 @@
 
 import Foundation
 import XCTest
+import XMTP
 @testable import xmtp_inbox_ios
 
 final class DBConversationTests: XCTestCase {

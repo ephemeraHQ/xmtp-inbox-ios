@@ -11,7 +11,7 @@ import XMTP
 struct MessageListView: View {
 	let client: Client
 
-	let conversation: Conversation
+	let conversation: DB.Conversation
 
 	@State private var messages: [DecodedMessage] = []
 

@@ -30,7 +30,9 @@ class DB {
 		self.mode = mode
 
 		if reset {
-			try FileManager.default.removeItem(at: location)
+			// swiftlint:disable no_optional_try
+			try? FileManager.default.removeItem(at: location)
+			// swiftlint:enable no_optional_try
 		}
 
 		config.prepareDatabase { db in

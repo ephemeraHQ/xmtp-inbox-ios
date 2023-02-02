@@ -23,11 +23,16 @@ struct ConversationListView: View {
 
 	@State private var displayNames = [String: DisplayName]()
 
-	@State private var conversations: [XMTP.Conversation] = []
-
 	@State private var status: LoadingStatus = .loading
 
 	@StateObject private var errorViewModel = ErrorViewModel()
+
+	@StateObject private var conversationLoader: ConversationLoader
+
+	init(client: XMTP.Client) {
+		self.client = client
+		_conversationLoader = StateObject(wrappedValue: ConversationLoader(client: client))
+	}
 
 	var body: some View {
 		ZStack {
@@ -42,7 +47,7 @@ struct ConversationListView: View {
 					.padding()
 			case .success:
 				List {
-					ForEach(conversations, id: \.topic) { conversation in
+					ForEach(conversationLoader.conversations, id: \.id) { conversation in
 						NavigationLink(destination: ConversationDetailView(client: client, displayName: displayName(conversation), conversation: conversation)
 						) {
 							ConversationCellView(
@@ -62,10 +67,10 @@ struct ConversationListView: View {
 				}
 			}
 		}
-		.onAppear {
-			Task.detached {
-				await loadConversations()
-			}
+		.task {
+//			Task.detached {
+			await loadConversations()
+//			}
 		}
 		.task {
 			await streamConversations()
@@ -75,13 +80,13 @@ struct ConversationListView: View {
 		}
 	}
 
-	func displayName(_ conversation: Conversation) -> DisplayName {
+	func displayName(_ conversation: DB.Conversation) -> DisplayName {
 		return displayNames[conversation.peerAddress] ?? DisplayName(address: conversation.peerAddress)
 	}
 
-	func loadMostRecentMessage(conversation: Conversation) async -> DecodedMessage? {
+	func loadMostRecentMessage(conversation: DB.Conversation) async -> DecodedMessage? {
 		do {
-			let messagePreview = try await conversation.messages(limit: 1)
+			let messagePreview = try await conversation.messages()
 			if !messagePreview.isEmpty {
 				return messagePreview.first
 			}
@@ -107,22 +112,26 @@ struct ConversationListView: View {
 
 	func loadConversations() async {
 		do {
-			let newConversations = try await client.conversations.list()
+			// Fetch from the DB first
+			try await conversationLoader.loadInitial()
+
+			// Then fetch from the network
+			try await conversationLoader.fetchInitial()
+
 			var newMessages = [String: DecodedMessage]()
-			for conversation in newConversations {
+			for conversation in conversationLoader.conversations {
 				let message = await loadMostRecentMessage(conversation: conversation)
 				mostRecentMessages[conversation.peerAddress] = message
 				newMessages[conversation.peerAddress] = message
 			}
 
 			// Asynchronously load ENS names for each conversation
-			let newConversationAddresses = newConversations.map { EthereumAddress($0.peerAddress) }
+			let newConversationAddresses = conversationLoader.conversations.map { EthereumAddress($0.peerAddress) }
 			loadEnsNames(addresses: newConversationAddresses)
 
-			conversations = sortedConversations(conversations: newConversations, messages: newMessages)
 			await MainActor.run {
 				withAnimation {
-					if self.conversations.isEmpty {
+					if conversationLoader.conversations.isEmpty {
 						self.status = .empty
 					} else {
 						self.status = .success
@@ -130,8 +139,9 @@ struct ConversationListView: View {
 				}
 			}
 		} catch {
+			print("ERROR LOADING CONVERSATIONS \(error)")
 			await MainActor.run {
-				if conversations.isEmpty {
+				if conversationLoader.conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
 				} else {
 					self.errorViewModel.showError("Error loading conversations: \(error)")
@@ -145,6 +155,8 @@ struct ConversationListView: View {
 			for try await newConversation in client.conversations.stream()
 				where newConversation.peerAddress != client.address
 			{
+				let newConversation = try DB.Conversation.from(newConversation)
+
 				let message = await loadMostRecentMessage(conversation: newConversation)
 				mostRecentMessages[newConversation.peerAddress] = message
 				loadEnsNames(addresses: [EthereumAddress(newConversation.peerAddress)])
@@ -153,9 +165,9 @@ struct ConversationListView: View {
 				await MainActor.run {
 					withAnimation {
 						if content.isEmpty {
-							conversations.insert(newConversation, at: conversations.endIndex)
+							conversationLoader.conversations.insert(newConversation, at: conversationLoader.conversations.endIndex)
 						} else {
-							conversations.insert(newConversation, at: 0)
+							conversationLoader.conversations.insert(newConversation, at: 0)
 						}
 						self.status = .success
 					}
@@ -163,7 +175,7 @@ struct ConversationListView: View {
 			}
 		} catch {
 			await MainActor.run {
-				if conversations.isEmpty {
+				if conversationLoader.conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
 				} else {
 					self.errorViewModel.showError("Error streaming conversations: \(error)")

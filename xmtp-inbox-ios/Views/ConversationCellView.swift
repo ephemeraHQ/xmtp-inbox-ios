@@ -9,7 +9,7 @@ import SwiftUI
 import XMTP
 
 struct ConversationCellView: View {
-	var conversation: XMTP.Conversation
+	var conversation: DB.Conversation
 
 	var mostRecentMessage: DecodedMessage?
 
