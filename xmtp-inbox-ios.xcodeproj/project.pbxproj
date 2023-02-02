@@ -32,6 +32,8 @@
 		6A4613192982080E00346D68 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4613182982080E00346D68 /* AlertExtensions.swift */; };
 		6A46131B2982118500346D68 /* ErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46131A2982118500346D68 /* ErrorViewModel.swift */; };
 		6A46132929831BD800346D68 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46132829831BD800346D68 /* AccountView.swift */; };
+		6A5DA48A298C03A700CEA7CD /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5DA489298C03A700CEA7CD /* DateExtensions.swift */; };
+		6A5DA48C298C113400CEA7CD /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 6A5DA48B298C113400CEA7CD /* .swiftformat */; };
 		6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA65964297B2A2200E980AD /* WalletConnectSwift */; };
 		6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA65967297B2A7100E980AD /* WalletConnection.swift */; };
 		6AA6596B297B2DB000E980AD /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA6596A297B2DB000E980AD /* Account.swift */; };
@@ -95,6 +97,8 @@
 		6A4613182982080E00346D68 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		6A46131A2982118500346D68 /* ErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewModel.swift; sourceTree = "<group>"; };
 		6A46132829831BD800346D68 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		6A5DA489298C03A700CEA7CD /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		6A5DA48B298C113400CEA7CD /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
 		6AA65967297B2A7100E980AD /* WalletConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnection.swift; sourceTree = "<group>"; };
 		6AA65969297B2C4000E980AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6AA6596A297B2DB000E980AD /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -149,6 +153,7 @@
 		6A40153A29526795003A6659 = {
 			isa = PBXGroup;
 			children = (
+				6A5DA48B298C113400CEA7CD /* .swiftformat */,
 				A663399E2989CF1600477E2E /* Secrets.xcconfig */,
 				A682B1E8298B071800121651 /* ci_scripts */,
 				6AE264E52973D3CD0055250A /* README.md */,
@@ -243,6 +248,7 @@
 				6A40157E2952B237003A6659 /* FontExtensions.swift */,
 				6AE264F22975FD270055250A /* StringExtensions.swift */,
 				6A4613182982080E00346D68 /* AlertExtensions.swift */,
+				6A5DA489298C03A700CEA7CD /* DateExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -405,6 +411,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A5DA48C298C113400CEA7CD /* .swiftformat in Resources */,
 				6AF033EE2954CF3F0043FB6A /* Localizable.strings in Resources */,
 				6AC5CFB32953FA750046325C /* .swiftformat in Resources */,
 				6A40154F29526796003A6659 /* Preview Assets.xcassets in Resources */,
@@ -466,6 +473,7 @@
 				6AA6596B297B2DB000E980AD /* Account.swift in Sources */,
 				6A461309298191F700346D68 /* DisplayName.swift in Sources */,
 				6A4613192982080E00346D68 /* AlertExtensions.swift in Sources */,
+				6A5DA48A298C03A700CEA7CD /* DateExtensions.swift in Sources */,
 				6A46131B2982118500346D68 /* ErrorViewModel.swift in Sources */,
 				6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */,
 				6A4613052981836F00346D68 /* MessageListView.swift in Sources */,
@@ -643,7 +651,7 @@
 				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"xmtp-inbox-ios/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = FY4NZR34Z3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

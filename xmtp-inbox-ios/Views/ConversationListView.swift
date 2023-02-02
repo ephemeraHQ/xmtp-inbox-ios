@@ -19,7 +19,7 @@ struct ConversationListView: View {
 
 	@State private var ethClient: EthereumHttpClient?
 
-	@State private var messagePreviews = [String: String]()
+	@State private var mostRecentMessages = [String: DecodedMessage]()
 
 	@State private var displayNames = [String: DisplayName]()
 
@@ -47,7 +47,7 @@ struct ConversationListView: View {
 						) {
 							ConversationCellView(
 								conversation: conversation,
-								messagePreview: messagePreviews[conversation.peerAddress] ?? "",
+								mostRecentMessage: mostRecentMessages[conversation.peerAddress],
 								displayName: displayName(conversation)
 							)
 						}
@@ -111,7 +111,7 @@ struct ConversationListView: View {
 			var newMessages = [String: DecodedMessage]()
 			for conversation in newConversations {
 				let message = await loadMostRecentMessage(conversation: conversation)
-				messagePreviews[conversation.peerAddress] = try message?.content() ?? ""
+				mostRecentMessages[conversation.peerAddress] = message
 				newMessages[conversation.peerAddress] = message
 			}
 
@@ -146,10 +146,10 @@ struct ConversationListView: View {
 				where newConversation.peerAddress != client.address
 			{
 				let message = await loadMostRecentMessage(conversation: newConversation)
-				let content = try message?.content() ?? ""
-				messagePreviews[newConversation.peerAddress] = content
+				mostRecentMessages[newConversation.peerAddress] = message
 				loadEnsNames(addresses: [EthereumAddress(newConversation.peerAddress)])
 
+				let content = try message?.content() ?? ""
 				await MainActor.run {
 					withAnimation {
 						if content.isEmpty {
