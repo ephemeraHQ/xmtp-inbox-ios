@@ -27,7 +27,7 @@ struct ConversationCellView: View {
 						.font(.Body1B)
 					if mostRecentMessage != nil {
 						// swiftlint:disable force_unwrapping
-						Text(mostRecentMessage!.sent.timeAgo())
+						Text(mostRecentMessage!.sent.timeAgo)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 							.lineLimit(1)
 							.font(.BodyXS)
@@ -60,7 +60,7 @@ struct ConversationCellView: View {
 			guard let mostRecentMessage else {
 				return ""
 			}
-			return try message.content()
+			return try mostRecentMessage.content()
 		} catch {
 			print("Error reading message content")
 			return ""
