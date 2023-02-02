@@ -68,9 +68,7 @@ struct ConversationListView: View {
 			}
 		}
 		.task {
-//			Task.detached {
 			await loadConversations()
-//			}
 		}
 		.task {
 			await streamConversations()
