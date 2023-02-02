@@ -50,6 +50,11 @@
 		A65544A7298C5B13005337C3 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65544A6298C5B13005337C3 /* PersistenceTests.swift */; };
 		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
+		A68C8A44298C5D97003A9A95 /* DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A43298C5D97003A9A95 /* DB.swift */; };
+		A68C8A46298C61C6003A9A95 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A45298C61C6003A9A95 /* Model.swift */; };
+		A68C8A48298C61E9003A9A95 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A47298C61E9003A9A95 /* Conversation.swift */; };
+		A68C8A4A298C64FC003A9A95 /* DBConversationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A49298C64FC003A9A95 /* DBConversationTests.swift */; };
+		A68C8A4C298C6818003A9A95 /* XMTP in Frameworks */ = {isa = PBXBuildFile; productRef = A68C8A4B298C6818003A9A95 /* XMTP */; };
 		C0FC8F7534D053D77C7844DE /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 317FFBF07954FD4F1A3422AD /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework */; };
 		CF1B45F2A383A42721D7B5B6 /* Pods_xmtp_inbox_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAB8C6461BBE02BE6BF8821 /* Pods_xmtp_inbox_iosTests.framework */; };
 		F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D16EA21E60F9FF562F6B944D /* Pods_xmtp_inbox_ios.framework */; };
@@ -125,6 +130,10 @@
 		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
 		A66339A12989D1FE00477E2E /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		A682B1E9298B074700121651 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
+		A68C8A43298C5D97003A9A95 /* DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB.swift; sourceTree = "<group>"; };
+		A68C8A45298C61C6003A9A95 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		A68C8A47298C61E9003A9A95 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		A68C8A49298C64FC003A9A95 /* DBConversationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBConversationTests.swift; sourceTree = "<group>"; };
 		C99AE74FEC77F3029E8F36C6 /* Pods-xmtp-inbox-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-iosTests/Pods-xmtp-inbox-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D16EA21E60F9FF562F6B944D /* Pods_xmtp_inbox_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_xmtp_inbox_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2668044F5BCBB4A1437CAED /* Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.debug.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -150,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF1B45F2A383A42721D7B5B6 /* Pods_xmtp_inbox_iosTests.framework in Frameworks */,
+				A68C8A4C298C6818003A9A95 /* XMTP in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +213,7 @@
 		6A40154529526795003A6659 /* xmtp-inbox-ios */ = {
 			isa = PBXGroup;
 			children = (
+				A68C8A42298C5D8D003A9A95 /* Models */,
 				6A4612FD298177A400346D68 /* ViewModels */,
 				6AA65969297B2C4000E980AD /* Info.plist */,
 				6AA65966297B2A3600E980AD /* WalletConnect */,
@@ -234,6 +245,7 @@
 			children = (
 				6A40155829526796003A6659 /* xmtp_inbox_iosTests.swift */,
 				A65544A6298C5B13005337C3 /* PersistenceTests.swift */,
+				A68C8A49298C64FC003A9A95 /* DBConversationTests.swift */,
 			);
 			path = "xmtp-inbox-iosTests";
 			sourceTree = "<group>";
@@ -316,6 +328,16 @@
 			path = ci_scripts;
 			sourceTree = "<group>";
 		};
+		A68C8A42298C5D8D003A9A95 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A68C8A43298C5D97003A9A95 /* DB.swift */,
+				A68C8A45298C61C6003A9A95 /* Model.swift */,
+				A68C8A47298C61E9003A9A95 /* Conversation.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		CDE5052D4E36926AFC31564A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,6 +397,9 @@
 				6A40155629526796003A6659 /* PBXTargetDependency */,
 			);
 			name = "xmtp-inbox-iosTests";
+			packageProductDependencies = (
+				A68C8A4B298C6818003A9A95 /* XMTP */,
+			);
 			productName = "xmtp-inbox-iosTests";
 			productReference = 6A40155429526796003A6659 /* xmtp-inbox-iosTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -540,7 +565,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: swiftlint not installed, run `brew install swiftlint`\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint xmtp-inbox-ios/**/*.swift\nelse\n  echo \"warning: swiftlint not installed, run `brew install swiftlint`\"\nfi\n";
 		};
 		745DD2F9E461A1BD69E7DCF1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -620,6 +645,7 @@
 				6A46131B2982118500346D68 /* ErrorViewModel.swift in Sources */,
 				6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */,
 				6A4613052981836F00346D68 /* MessageListView.swift in Sources */,
+				A68C8A44298C5D97003A9A95 /* DB.swift in Sources */,
 				6A4612FF298177B300346D68 /* Auth.swift in Sources */,
 				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
@@ -627,9 +653,11 @@
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
 				6AF033F4295504B70043FB6A /* Print.swift in Sources */,
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
+				A68C8A46298C61C6003A9A95 /* Model.swift in Sources */,
 				6A46130B2981ABF500346D68 /* ViewExtensions.swift in Sources */,
 				6AE264F32975FD270055250A /* StringExtensions.swift in Sources */,
 				6A1ABA7829773EA4001E0B41 /* Keystore.swift in Sources */,
+				A68C8A48298C61E9003A9A95 /* Conversation.swift in Sources */,
 				6AE264ED2975EFD40055250A /* Constants.swift in Sources */,
 				A66339A02989D14400477E2E /* QRCode.swift in Sources */,
 				6AE264EF2975F2570055250A /* EnsImageView.swift in Sources */,
@@ -644,6 +672,7 @@
 			files = (
 				6A40155929526796003A6659 /* xmtp_inbox_iosTests.swift in Sources */,
 				A65544A7298C5B13005337C3 /* PersistenceTests.swift in Sources */,
+				A68C8A4A298C64FC003A9A95 /* DBConversationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1093,6 +1122,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */;
 			productName = IGIdenticon;
+		};
+		A68C8A4B298C6818003A9A95 /* XMTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A401571295267D7003A6659 /* XCRemoteSwiftPackageReference "xmtp-ios" */;
+			productName = XMTP;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

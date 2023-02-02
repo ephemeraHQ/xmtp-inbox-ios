@@ -6,11 +6,9 @@
 //
 
 import Foundation
-import XCTest
 import GRDB
+import XCTest
 
 final class PersistenceTests: XCTestCase {
-	func testCanImportGRDB() async throws {
-		
-	}
+	func testCanImportGRDB() async throws {}
 }
