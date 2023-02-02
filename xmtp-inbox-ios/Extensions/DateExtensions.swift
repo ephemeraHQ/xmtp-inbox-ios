@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-	func timeAgo() -> String {
+	var timeAgo: String {
 		let formatter = RelativeDateTimeFormatter()
 		formatter.unitsStyle = .short
 		return formatter.localizedString(for: self, relativeTo: Date())
