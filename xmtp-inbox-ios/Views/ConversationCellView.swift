@@ -9,13 +9,9 @@ import SwiftUI
 import XMTP
 
 struct ConversationCellView: View {
-	enum EnsError: Error {
-		case invalidURL
-	}
-
 	var conversation: XMTP.Conversation
 
-	var messagePreview: String
+	var mostRecentMessage: DecodedMessage?
 
 	var displayName: DisplayName
 
@@ -23,11 +19,24 @@ struct ConversationCellView: View {
 		HStack(alignment: .top) {
 			EnsImageView(imageSize: 48.0, peerAddress: conversation.peerAddress)
 			VStack(alignment: .leading) {
-				Text(displayName.resolvedName)
-					.padding(.horizontal, 4.0)
-					.padding(.bottom, 1.0)
-					.lineLimit(1)
-					.font(.Body1B)
+				HStack {
+					Text(displayName.resolvedName)
+						.padding(.horizontal, 4.0)
+						.padding(.bottom, 1.0)
+						.lineLimit(1)
+						.font(.Body1B)
+					if mostRecentMessage != nil {
+						// swiftlint:disable force_unwrapping
+						Text(mostRecentMessage!.sent.timeAgo)
+							.frame(maxWidth: .infinity, alignment: .trailing)
+							.lineLimit(1)
+							.font(.BodyXS)
+							.foregroundColor(.textScondary)
+							.padding(.horizontal, 4.0)
+							.padding(.bottom, 1.0)
+						// swiftlint:enable force_unwrapping
+					}
+				}
 				if messagePreview.isEmpty {
 					Text("no-message-preview")
 						.padding(.horizontal, 4.0)
@@ -43,6 +52,18 @@ struct ConversationCellView: View {
 						.foregroundColor(.textScondary)
 				}
 			}
+		}
+	}
+
+	var messagePreview: String {
+		do {
+			guard let mostRecentMessage else {
+				return ""
+			}
+			return try mostRecentMessage.content()
+		} catch {
+			print("Error reading message content")
+			return ""
 		}
 	}
 }
