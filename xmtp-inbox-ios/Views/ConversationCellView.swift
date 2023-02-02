@@ -57,7 +57,7 @@ struct ConversationCellView: View {
 
 	var messagePreview: String {
 		do {
-			guard let message = mostRecentMessage else {
+			guard let mostRecentMessage else {
 				return ""
 			}
 			return try message.content()
