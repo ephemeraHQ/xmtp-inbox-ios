@@ -1074,7 +1074,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = "public-convos";
+				branch = main;
 				kind = branch;
 			};
 		};
