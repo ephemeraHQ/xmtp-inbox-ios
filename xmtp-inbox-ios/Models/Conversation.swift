@@ -59,8 +59,6 @@ extension DB {
 				conversation.version = Version.v1
 			}
 
-			conversation.ens = await ENS.shared.ens(address: conversation.peerAddress)
-
 			try conversation.save()
 
 			return conversation

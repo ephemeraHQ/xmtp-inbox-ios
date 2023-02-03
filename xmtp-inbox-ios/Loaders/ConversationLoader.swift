@@ -61,16 +61,31 @@ class ConversationLoader: ObservableObject {
 
 		// Reload
 		try await fetchLocal()
+
+		let conversations = await conversations
+		let addresses = conversations.map(\.peerAddress)
+		let ensResults = try await ENS.shared.ens(addresses: addresses)
+		for (i, conversation) in conversations.enumerated() {
+			var conversation = conversation
+			conversation.ens = ensResults[i]
+			try conversation.save()
+		}
+
+		// Reload view now that we have ENS names
+		try await fetchLocal()
 	}
 
 	func fetchRecentMessages() async throws {
-		for conversation in await conversations {
-			var conversation = conversation
-
-			do {
-				try await conversation.loadMostRecentMessage(client: client)
-			} catch {
-				print("Error loading most recent message for \(conversation.topic): \(error)")
+		await withTaskGroup(of: Void.self) { group in
+			for conversation in await conversations {
+				group.addTask {
+					do {
+						var conversation = conversation
+						try await conversation.loadMostRecentMessage(client: self.client)
+					} catch {
+						print("Error loading most recent message for \(conversation.topic): \(error)")
+					}
+				}
 			}
 		}
 	}

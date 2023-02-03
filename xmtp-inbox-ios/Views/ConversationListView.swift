@@ -17,7 +17,7 @@ struct ConversationListView: View {
 	let client: XMTP.Client
 
 	@State private var mostRecentMessages = [String: DecodedMessage]()
-	@State private var status: LoadingStatus = .loading
+	@State private var status: LoadingStatus = .success
 
 	@StateObject private var errorViewModel = ErrorViewModel()
 	@StateObject private var conversationLoader: ConversationLoader
@@ -69,6 +69,14 @@ struct ConversationListView: View {
 
 	func loadConversations() async {
 		do {
+			await MainActor.run {
+				withAnimation {
+					if conversationLoader.conversations.isEmpty {
+						self.status = .loading
+					}
+				}
+			}
+
 			try await conversationLoader.load()
 
 			await MainActor.run {

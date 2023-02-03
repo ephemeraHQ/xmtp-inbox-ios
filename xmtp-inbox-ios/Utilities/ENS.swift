@@ -22,6 +22,22 @@ class ENS: ObservableObject {
 		}
 	}
 
+	func ens(addresses: [String]) async throws -> [String?] {
+		guard let service else {
+			return addresses.map { _ in nil }
+		}
+
+		let results = try await service.resolve(addresses: addresses.map { EthereumAddress($0) })
+
+		return results.map { result in
+			if case let .resolved(value) = result.output {
+				return value
+			}
+
+			return nil
+		}
+	}
+
 	func ens(address: String) async -> String? {
 		guard let service else {
 			return nil
