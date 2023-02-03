@@ -6,8 +6,13 @@
 //
 
 import Foundation
-import XMTP
 import GRDB
+import XMTP
+
+struct ConversationWithLastMessage: Codable, FetchableRecord {
+	var conversation: DB.Conversation
+	var lastMessage: DB.Message?
+}
 
 class ConversationLoader: ObservableObject {
 	var client: XMTP.Client
@@ -34,9 +39,14 @@ class ConversationLoader: ObservableObject {
 
 	func fetchLocal() async throws {
 		let conversations = try await DB.shared.queue.read { db in
-			return try DB.Conversation
+			try DB.Conversation
 				.including(optional: DB.Conversation.lastMessage.forKey("lastMessage"))
+				.asRequest(of: ConversationWithLastMessage.self)
 				.fetchAll(db)
+		}.map { result in
+			var conversation = result.conversation
+			conversation.lastMessage = result.lastMessage
+			return conversation
 		}
 
 		await MainActor.run {
@@ -45,8 +55,8 @@ class ConversationLoader: ObservableObject {
 	}
 
 	func fetchRemote() async throws {
-		let conversations = try await client.conversations.list().map { conversation in
-			try DB.Conversation.from(conversation)
+		for conversation in try await client.conversations.list() {
+			try await DB.Conversation.from(conversation)
 		}
 
 		// Reload
@@ -54,7 +64,6 @@ class ConversationLoader: ObservableObject {
 	}
 
 	func fetchRecentMessages() async throws {
-		print("--------- FETCHING RECENT MESSAGES \((await conversations).count)")
 		for conversation in await conversations {
 			var conversation = conversation
 

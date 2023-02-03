@@ -50,6 +50,8 @@
 		A65544A7298C5B13005337C3 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65544A6298C5B13005337C3 /* PersistenceTests.swift */; };
 		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
+		A677CE9F298CADF000055697 /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A677CE9E298CADF000055697 /* ENS.swift */; };
+		A677CEA6298CB97100055697 /* MessageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A677CEA5298CB97100055697 /* MessageLoader.swift */; };
 		A68C8A44298C5D97003A9A95 /* DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A43298C5D97003A9A95 /* DB.swift */; };
 		A68C8A46298C61C6003A9A95 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A45298C61C6003A9A95 /* Model.swift */; };
 		A68C8A48298C61E9003A9A95 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A47298C61E9003A9A95 /* Conversation.swift */; };
@@ -131,6 +133,8 @@
 		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
 		A66339A12989D1FE00477E2E /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		A677CE9E298CADF000055697 /* ENS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENS.swift; sourceTree = "<group>"; };
+		A677CEA5298CB97100055697 /* MessageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageLoader.swift; sourceTree = "<group>"; };
 		A682B1E9298B074700121651 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		A68C8A43298C5D97003A9A95 /* DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB.swift; sourceTree = "<group>"; };
 		A68C8A45298C61C6003A9A95 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -321,6 +325,7 @@
 				6AF033F3295504B70043FB6A /* Print.swift */,
 				6A1ABA7729773EA4001E0B41 /* Keystore.swift */,
 				A663399F2989D14400477E2E /* QRCode.swift */,
+				A677CE9E298CADF000055697 /* ENS.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -348,6 +353,7 @@
 			isa = PBXGroup;
 			children = (
 				A68C8A4E298C6CC1003A9A95 /* ConversationLoader.swift */,
+				A677CEA5298CB97100055697 /* MessageLoader.swift */,
 			);
 			path = Loaders;
 			sourceTree = "<group>";
@@ -665,7 +671,9 @@
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
 				6ACD972F298AE3F000C6AD66 /* HapticButton.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
+				A677CE9F298CADF000055697 /* ENS.swift in Sources */,
 				6AF033F4295504B70043FB6A /* Print.swift in Sources */,
+				A677CEA6298CB97100055697 /* MessageLoader.swift in Sources */,
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
 				A68C8A4F298C6CC1003A9A95 /* ConversationLoader.swift in Sources */,
 				A68C8A46298C61C6003A9A95 /* Model.swift in Sources */,

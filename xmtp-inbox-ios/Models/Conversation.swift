@@ -5,11 +5,12 @@
 //  Created by Pat Nakajima on 2/2/23.
 //
 
+import Foundation
 import GRDB
 import XMTP
 
 extension DB {
-	struct Conversation {
+	struct Conversation: Codable {
 		enum ConversationError: Error {
 			case conversionError(String)
 		}
@@ -19,6 +20,7 @@ extension DB {
 		}
 
 		var id: Int?
+		var ens: String?
 		var topic: String
 		var peerAddress: String
 		var createdAt: Date
@@ -28,7 +30,7 @@ extension DB {
 		var version: Version = .v2 // Default to v2
 
 		enum CodingKeys: String, CodingKey {
-			case id, topic, peerAddress, createdAt, updatedAt, keyMaterial, contextData, version
+			case id, topic, ens, peerAddress, createdAt, updatedAt, keyMaterial, contextData, version
 		}
 
 		// Can be prefilled
@@ -42,7 +44,7 @@ extension DB {
 			self.updatedAt = updatedAt ?? createdAt
 		}
 
-		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation) throws -> DB.Conversation {
+		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation) async throws -> DB.Conversation {
 			var conversation = DB.Conversation.find(Column("topic") == xmtpConversation.topic) ?? DB.Conversation(
 				topic: xmtpConversation.topic,
 				peerAddress: xmtpConversation.peerAddress,
@@ -57,9 +59,15 @@ extension DB {
 				conversation.version = Version.v1
 			}
 
+			conversation.ens = await ENS.shared.ens(address: conversation.peerAddress)
+
 			try conversation.save()
 
 			return conversation
+		}
+
+		var title: String {
+			ens ?? peerAddress.truncatedAddress()
 		}
 
 		mutating func loadMostRecentMessage(client: Client) async throws {
@@ -70,7 +78,7 @@ extension DB {
 			var lastMessage = try DB.Message.from(lastMessageXMTP, conversation: self)
 			try lastMessage.save()
 
-			self.updatedAt = lastMessage.createdAt
+			updatedAt = lastMessage.createdAt
 			try save()
 
 			self.lastMessage = lastMessage
@@ -79,26 +87,29 @@ extension DB {
 		func toXMTP(client: Client) throws -> XMTP.Conversation {
 			switch version {
 			case .v1:
-				return XMTP.Conversation.v1(XMTP.ConversationV1(client: client, peerAddress: "lkjasdlfja", sentAt: Date()))
+				return XMTP.Conversation.v1(
+					XMTP.ConversationV1(
+						client: client,
+						peerAddress: peerAddress,
+						sentAt: createdAt
+					)
+				)
 			case .v2:
 				guard let contextData, let keyMaterial else {
 					throw ConversationError.conversionError("missing v2 fields")
 				}
 
 				let context = try InvitationV1.Context(serializedData: contextData)
-				return XMTP.Conversation.v2(XMTP.ConversationV2(topic: topic, keyMaterial: keyMaterial, context: context, peerAddress: peerAddress, client: client))
+				return XMTP.Conversation.v2(
+					XMTP.ConversationV2(
+						topic: topic,
+						keyMaterial: keyMaterial,
+						context: context,
+						peerAddress: peerAddress,
+						client: client
+					)
+				)
 			}
-		}
-
-		func send(text _: String) async throws {}
-
-		public func streamMessages() -> AsyncThrowingStream<DecodedMessage, Error> {
-			AsyncThrowingStream { _ in
-			}
-		}
-
-		public func messages() async throws -> [DecodedMessage] {
-			return []
 		}
 	}
 }
@@ -108,6 +119,7 @@ extension DB.Conversation: Model {
 		try db.create(table: "conversation", ifNotExists: true) { t in
 			t.autoIncrementedPrimaryKey("id")
 			t.column("topic", .text).notNull().unique().indexed()
+			t.column("ens", .text)
 			t.column("peerAddress", .text).notNull().unique()
 			t.column("createdAt", .date).notNull()
 			t.column("updatedAt", .date).notNull()
@@ -120,4 +132,3 @@ extension DB.Conversation: Model {
 	// Associations
 	static let lastMessage = hasOne(DB.Message.self, key: "id", using: ForeignKey(["conversationID"])).order(Column("createdAt").desc)
 }
-

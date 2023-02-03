@@ -11,7 +11,7 @@ import XMTP
 struct MessageCellView: View {
 	var isFromMe: Bool
 
-	var message: DecodedMessage
+	var message: DB.Message
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -19,7 +19,7 @@ struct MessageCellView: View {
 				if isFromMe {
 					Spacer()
 				}
-				Text(bodyText)
+				Text(message.body)
 					.foregroundColor(textColor)
 					.padding()
 					.background(background)
@@ -27,15 +27,6 @@ struct MessageCellView: View {
 					Spacer()
 				}
 			}
-		}
-	}
-
-	var bodyText: String {
-		do {
-			return try message.content() ?? ""
-		} catch {
-			print("Error getting message body: \(error)")
-			return ""
 		}
 	}
 
@@ -59,7 +50,7 @@ struct MessageCellView: View {
 struct MessageCellView_Previews: PreviewProvider {
 	static var previews: some View {
 		List {
-			MessageCellView(isFromMe: true, message: DecodedMessage.preview(body: "Hi, how is it going?", senderAddress: "0x00", sent: Date()))
+			MessageCellView(isFromMe: true, message: DB.Message.preview)
 		}
 		.listStyle(.plain)
 	}

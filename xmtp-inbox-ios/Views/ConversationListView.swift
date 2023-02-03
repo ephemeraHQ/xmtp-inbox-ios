@@ -7,7 +7,6 @@
 
 import AlertToast
 import SwiftUI
-import web3
 import XMTP
 
 struct ConversationListView: View {
@@ -17,16 +16,10 @@ struct ConversationListView: View {
 
 	let client: XMTP.Client
 
-	@State private var ethClient: EthereumHttpClient?
-
 	@State private var mostRecentMessages = [String: DecodedMessage]()
-
-	@State private var displayNames = [String: DisplayName]()
-
 	@State private var status: LoadingStatus = .loading
 
 	@StateObject private var errorViewModel = ErrorViewModel()
-
 	@StateObject private var conversationLoader: ConversationLoader
 
 	init(client: XMTP.Client) {
@@ -48,12 +41,9 @@ struct ConversationListView: View {
 			case .success:
 				List {
 					ForEach(conversationLoader.conversations, id: \.id) { conversation in
-						NavigationLink(destination: ConversationDetailView(client: client, displayName: displayName(conversation), conversation: conversation)
+						NavigationLink(destination: ConversationDetailView(client: client, conversation: conversation)
 						) {
-							ConversationCellView(
-								conversation: conversation,
-								displayName: displayName(conversation)
-							)
+							ConversationCellView(conversation: conversation)
 						}
 					}
 					.listRowBackground(Color.backgroundPrimary)
@@ -77,17 +67,9 @@ struct ConversationListView: View {
 		}
 	}
 
-	func displayName(_ conversation: DB.Conversation) -> DisplayName {
-		return displayNames[conversation.peerAddress] ?? DisplayName(address: conversation.peerAddress)
-	}
-
 	func loadConversations() async {
 		do {
 			try await conversationLoader.load()
-
-			// Asynchronously load ENS names for each conversation
-			let newConversationAddresses = conversationLoader.conversations.map { EthereumAddress($0.peerAddress) }
-			loadEnsNames(addresses: newConversationAddresses)
 
 			await MainActor.run {
 				withAnimation {
@@ -115,9 +97,7 @@ struct ConversationListView: View {
 			for try await newConversation in client.conversations.stream()
 				where newConversation.peerAddress != client.address
 			{
-				var newConversation = try DB.Conversation.from(newConversation)
-
-				loadEnsNames(addresses: [EthereumAddress(newConversation.peerAddress)])
+				var newConversation = try await DB.Conversation.from(newConversation)
 
 				try await newConversation.loadMostRecentMessage(client: client)
 
@@ -139,38 +119,6 @@ struct ConversationListView: View {
 				} else {
 					self.errorViewModel.showError("Error streaming conversations: \(error)")
 				}
-			}
-		}
-	}
-
-	func setupEthClient() throws -> EthereumHttpClient {
-		guard let ethClient = ethClient else {
-			guard let infuraUrl = Constants.infuraUrl else {
-				throw EnsError.invalidURL
-			}
-			let newEthClient = EthereumHttpClient(url: infuraUrl, network: .mainnet)
-			self.ethClient = newEthClient
-			return newEthClient
-		}
-		return ethClient
-	}
-
-	func loadEnsNames(addresses: [EthereumAddress]) {
-		Task {
-			do {
-				let ethClient = try setupEthClient()
-				let nameService = EthereumNameService(client: ethClient)
-
-				let results = try await nameService.resolve(addresses: addresses)
-				for result in results {
-					guard case let .resolved(value) = result.output else {
-						continue
-					}
-					let address = result.address.toChecksumAddress()
-					self.displayNames[address] = DisplayName(ensName: value, address: address)
-				}
-			} catch {
-				print("Error resolving ENS names: \(error)")
 			}
 		}
 	}

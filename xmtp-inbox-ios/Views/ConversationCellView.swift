@@ -10,14 +10,13 @@ import XMTP
 
 struct ConversationCellView: View {
 	var conversation: DB.Conversation
-	var displayName: DisplayName
 
 	var body: some View {
 		HStack(alignment: .top) {
 			EnsImageView(imageSize: 48.0, peerAddress: conversation.peerAddress)
 			VStack(alignment: .leading) {
 				HStack {
-					Text(displayName.resolvedName)
+					Text(conversation.title)
 						.padding(.horizontal, 4.0)
 						.padding(.bottom, 1.0)
 						.lineLimit(1)
@@ -53,7 +52,6 @@ struct ConversationCellView: View {
 	}
 
 	var messagePreview: String {
-		print("MESSAGE PREVIEW HI \(conversation.lastMessage)")
 		return conversation.lastMessage?.body ?? ""
 	}
 }
