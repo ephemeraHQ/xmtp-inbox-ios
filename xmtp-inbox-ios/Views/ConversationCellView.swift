@@ -22,7 +22,6 @@ struct ConversationCellView: View {
 						.lineLimit(1)
 						.font(.Body1B)
 					if let lastMessage = conversation.lastMessage {
-						// swiftlint:disable force_unwrapping
 						Text(lastMessage.createdAt.timeAgo)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 							.lineLimit(1)
@@ -30,7 +29,6 @@ struct ConversationCellView: View {
 							.foregroundColor(.textScondary)
 							.padding(.horizontal, 4.0)
 							.padding(.bottom, 1.0)
-						// swiftlint:enable force_unwrapping
 					}
 				}
 				if messagePreview.isEmpty {
