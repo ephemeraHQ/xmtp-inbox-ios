@@ -52,7 +52,6 @@ struct ConversationListView: View {
 						) {
 							ConversationCellView(
 								conversation: conversation,
-								mostRecentMessage: mostRecentMessages[conversation.peerAddress],
 								displayName: displayName(conversation)
 							)
 						}
@@ -82,46 +81,9 @@ struct ConversationListView: View {
 		return displayNames[conversation.peerAddress] ?? DisplayName(address: conversation.peerAddress)
 	}
 
-	func loadMostRecentMessage(conversation: DB.Conversation) async -> DecodedMessage? {
-		do {
-			let messagePreview = try await conversation.messages()
-			if !messagePreview.isEmpty {
-				return messagePreview.first
-			}
-		} catch {
-			print("Error loading message: \(error)")
-		}
-		return nil
-	}
-
-	func sortedConversations(conversations: [Conversation], messages: [String: DecodedMessage]) -> [Conversation] {
-		var newConversations = conversations
-		newConversations.sort {
-			guard let message1Sent = messages[$0.peerAddress]?.sent else {
-				return false
-			}
-			guard let message2Sent = messages[$1.peerAddress]?.sent else {
-				return true
-			}
-			return message1Sent > message2Sent
-		}
-		return newConversations
-	}
-
 	func loadConversations() async {
 		do {
-			// Fetch from the DB first
-			try await conversationLoader.loadInitial()
-
-			// Then fetch from the network
-			try await conversationLoader.fetchInitial()
-
-			var newMessages = [String: DecodedMessage]()
-			for conversation in conversationLoader.conversations {
-				let message = await loadMostRecentMessage(conversation: conversation)
-				mostRecentMessages[conversation.peerAddress] = message
-				newMessages[conversation.peerAddress] = message
-			}
+			try await conversationLoader.load()
 
 			// Asynchronously load ENS names for each conversation
 			let newConversationAddresses = conversationLoader.conversations.map { EthereumAddress($0.peerAddress) }
@@ -153,16 +115,15 @@ struct ConversationListView: View {
 			for try await newConversation in client.conversations.stream()
 				where newConversation.peerAddress != client.address
 			{
-				let newConversation = try DB.Conversation.from(newConversation)
+				var newConversation = try DB.Conversation.from(newConversation)
 
-				let message = await loadMostRecentMessage(conversation: newConversation)
-				mostRecentMessages[newConversation.peerAddress] = message
 				loadEnsNames(addresses: [EthereumAddress(newConversation.peerAddress)])
 
-				let content = try message?.content() ?? ""
+				try await newConversation.loadMostRecentMessage(client: client)
+
 				await MainActor.run {
 					withAnimation {
-						if content.isEmpty {
+						if newConversation.lastMessage == nil {
 							conversationLoader.conversations.insert(newConversation, at: conversationLoader.conversations.endIndex)
 						} else {
 							conversationLoader.conversations.insert(newConversation, at: 0)

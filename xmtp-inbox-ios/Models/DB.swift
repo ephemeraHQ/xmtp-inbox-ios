@@ -52,6 +52,7 @@ class DB {
 	func createTables() throws {
 		try queue.write { db in
 			try DB.Conversation.createTable(db: db)
+			try DB.Message.createTable(db: db)
 		}
 	}
 

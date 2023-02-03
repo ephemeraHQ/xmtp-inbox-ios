@@ -10,9 +10,6 @@ import XMTP
 
 struct ConversationCellView: View {
 	var conversation: DB.Conversation
-
-	var mostRecentMessage: DecodedMessage?
-
 	var displayName: DisplayName
 
 	var body: some View {
@@ -25,9 +22,9 @@ struct ConversationCellView: View {
 						.padding(.bottom, 1.0)
 						.lineLimit(1)
 						.font(.Body1B)
-					if mostRecentMessage != nil {
+					if let lastMessage = conversation.lastMessage {
 						// swiftlint:disable force_unwrapping
-						Text(mostRecentMessage!.sent.timeAgo)
+						Text(lastMessage.createdAt.timeAgo)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 							.lineLimit(1)
 							.font(.BodyXS)
@@ -56,14 +53,7 @@ struct ConversationCellView: View {
 	}
 
 	var messagePreview: String {
-		do {
-			guard let mostRecentMessage else {
-				return ""
-			}
-			return try mostRecentMessage.content()
-		} catch {
-			print("Error reading message content")
-			return ""
-		}
+		print("MESSAGE PREVIEW HI \(conversation.lastMessage)")
+		return conversation.lastMessage?.body ?? ""
 	}
 }
