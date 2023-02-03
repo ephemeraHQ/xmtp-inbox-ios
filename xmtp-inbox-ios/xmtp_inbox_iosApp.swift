@@ -14,7 +14,7 @@ struct xmtp_inbox_iosApp: App {
 			ContentView()
 				.onAppear {
 					do {
-						try DB.shared.prepare(passphrase: "make this real", reset: true)
+						try DB.shared.prepare(passphrase: "make this real", reset: false)
 					} catch {
 						print("Error preparing DB: \(error)")
 					}
