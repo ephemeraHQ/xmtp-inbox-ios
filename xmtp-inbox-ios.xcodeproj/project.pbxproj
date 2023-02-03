@@ -47,7 +47,6 @@
 		6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033EF2954F62A0043FB6A /* ConversationListView.swift */; };
 		6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */; };
 		6AF033F4295504B70043FB6A /* Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F3295504B70043FB6A /* Print.swift */; };
-		A65544A7298C5B13005337C3 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65544A6298C5B13005337C3 /* PersistenceTests.swift */; };
 		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
 		A677CE9F298CADF000055697 /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A677CE9E298CADF000055697 /* ENS.swift */; };
@@ -129,7 +128,6 @@
 		7E2FCF1D984B2A694A607529 /* Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9B491ED89471263D2CAFB3CB /* Pods-xmtp-inbox-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios.release.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios/Pods-xmtp-inbox-ios.release.xcconfig"; sourceTree = "<group>"; };
 		A65544A5298C5AA8005337C3 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A65544A6298C5B13005337C3 /* PersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceTests.swift; sourceTree = "<group>"; };
 		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
 		A66339A12989D1FE00477E2E /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
@@ -253,7 +251,6 @@
 			isa = PBXGroup;
 			children = (
 				6A40155829526796003A6659 /* xmtp_inbox_iosTests.swift */,
-				A65544A6298C5B13005337C3 /* PersistenceTests.swift */,
 				A68C8A49298C64FC003A9A95 /* DBConversationTests.swift */,
 			);
 			path = "xmtp-inbox-iosTests";
@@ -695,7 +692,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A40155929526796003A6659 /* xmtp_inbox_iosTests.swift in Sources */,
-				A65544A7298C5B13005337C3 /* PersistenceTests.swift in Sources */,
 				A68C8A4A298C64FC003A9A95 /* DBConversationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
