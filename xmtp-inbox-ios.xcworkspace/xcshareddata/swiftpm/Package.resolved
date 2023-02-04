@@ -230,8 +230,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "main",
-        "revision" : "c8786935f4a0049344f02f0dd269f91b960d3af4"
+        "branch" : "public-convos",
+        "revision" : "5d4289555e149c7ad7103fbb46b459ee0fb5dbeb"
       }
     }
   ],
