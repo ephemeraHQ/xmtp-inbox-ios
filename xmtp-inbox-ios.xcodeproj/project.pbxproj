@@ -1074,8 +1074,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = revision;
+				revision = c8786935f4a0049344f02f0dd269f91b960d3af4;
 			};
 		};
 		6A46130F2981F96300346D68 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
