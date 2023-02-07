@@ -32,7 +32,7 @@ enum Keystore {
 
 	static func saveKeys(address: String, keys: PrivateKeyBundleV1) throws {
 		try deleteKeys()
-		
+
 		UserDefaults.standard.set(address, forKey: addressKey)
 
 		let keysData = try keys.serializedData()
