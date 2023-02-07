@@ -9,32 +9,26 @@ import SwiftUI
 import XMTP
 
 struct ConversationCellView: View {
-	var conversation: XMTP.Conversation
-
-	var mostRecentMessage: DecodedMessage?
-
-	var displayName: DisplayName
+	var conversation: DB.Conversation
 
 	var body: some View {
 		HStack(alignment: .top) {
 			EnsImageView(imageSize: 48.0, peerAddress: conversation.peerAddress)
 			VStack(alignment: .leading) {
 				HStack {
-					Text(displayName.resolvedName)
+					Text(conversation.title)
 						.padding(.horizontal, 4.0)
 						.padding(.bottom, 1.0)
 						.lineLimit(1)
 						.font(.Body1B)
-					if mostRecentMessage != nil {
-						// swiftlint:disable force_unwrapping
-						Text(mostRecentMessage!.sent.timeAgo)
+					if let lastMessage = conversation.lastMessage {
+						Text(lastMessage.createdAt.timeAgo)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 							.lineLimit(1)
 							.font(.BodyXS)
 							.foregroundColor(.textScondary)
 							.padding(.horizontal, 4.0)
 							.padding(.bottom, 1.0)
-						// swiftlint:enable force_unwrapping
 					}
 				}
 				if messagePreview.isEmpty {
@@ -56,14 +50,6 @@ struct ConversationCellView: View {
 	}
 
 	var messagePreview: String {
-		do {
-			guard let mostRecentMessage else {
-				return ""
-			}
-			return try mostRecentMessage.content()
-		} catch {
-			print("Error reading message content")
-			return ""
-		}
+		return conversation.lastMessage?.body ?? ""
 	}
 }
