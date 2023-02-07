@@ -89,9 +89,7 @@ struct ContentView: View {
 				await MainActor.run {
 					self.wcUrl = url
 
-					#if DEBUG
-						auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
-					#endif
+					auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
 				}
 				await UIApplication.shared.open(url)
 
