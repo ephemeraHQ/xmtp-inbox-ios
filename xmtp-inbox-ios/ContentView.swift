@@ -55,7 +55,7 @@ struct ContentView: View {
 				}
 				return
 			}
-			let client = try Client.from(bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
+			let client = try Client.from(v1Bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
 			await MainActor.run {
 				self.auth.status = .connected(client)
 			}

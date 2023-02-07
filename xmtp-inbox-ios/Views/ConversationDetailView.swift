@@ -11,10 +11,7 @@ import XMTP
 
 struct ConversationDetailView: View {
 	let client: XMTP.Client
-
-	let displayName: DisplayName
-
-	let conversation: XMTP.Conversation
+	let conversation: DB.Conversation
 
 	@State private var errorViewModel = ErrorViewModel()
 
@@ -28,7 +25,7 @@ struct ConversationDetailView: View {
 					.padding(.bottom, 8)
 			}
 		}
-		.navigationTitle(displayName.resolvedName)
+		.navigationTitle(conversation.title)
 		.navigationBarTitleDisplayMode(.inline)
 		.toolbarBackground(.visible, for: .navigationBar)
 		.toast(isPresenting: $errorViewModel.isShowing) {
@@ -39,7 +36,7 @@ struct ConversationDetailView: View {
 	func sendMessage(text: String) async {
 		do {
 			// TODO(elise): Optimistic upload / undo
-			try await conversation.send(text: text)
+			try await conversation.toXMTP(client: client).send(text: text)
 		} catch {
 			await MainActor.run {
 				self.errorViewModel.showError("Error sending message: \(error)")

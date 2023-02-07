@@ -10,28 +10,32 @@ import XMTP
 
 struct MessageListView: View {
 	let client: Client
-
-	let conversation: Conversation
-
-	@State private var messages: [DecodedMessage] = []
+	let conversation: DB.Conversation
 
 	@State private var errorViewModel = ErrorViewModel()
+	@StateObject private var messageLoader: MessageLoader
 
-	// TODO(elise): Paginate list of messages
+	init(client: Client, conversation: DB.Conversation) {
+		self.client = client
+		self.conversation = conversation
+		_messageLoader = StateObject(wrappedValue: MessageLoader(client: client, conversation: conversation))
+	}
+
+	// TODO(elise and pat): Paginate list of messages
 	var body: some View {
 		ScrollViewReader { proxy in
 			ScrollView {
 				VStack {
 					Spacer()
-					ForEach(Array(messages.sorted(by: { $0.sent > $1.sent }).enumerated()), id: \.0) { i, message in
+					ForEach(messageLoader.messages, id: \.xmtpID) { message in
 						MessageCellView(isFromMe: message.senderAddress == client.address, message: message)
 							.transition(.scale)
-							.id(i)
+							.id(message.xmtpID)
 					}
 					Spacer()
-						.onChange(of: messages.count) { _ in
+						.onChange(of: messageLoader.messages.count) { _ in
 							withAnimation {
-								proxy.scrollTo(messages.count - 1, anchor: .bottom)
+								proxy.scrollTo(messageLoader.messages.count - 1, anchor: .bottom)
 							}
 						}
 				}
@@ -48,9 +52,11 @@ struct MessageListView: View {
 
 	func streamMessages() async {
 		do {
-			for try await message in conversation.streamMessages() {
+			for try await message in try conversation.toXMTP(client: client).streamMessages() {
+				let message = try DB.Message.from(message, conversation: conversation)
+
 				await MainActor.run {
-					messages.append(message)
+					messageLoader.messages.append(message)
 				}
 			}
 		} catch {
@@ -62,13 +68,10 @@ struct MessageListView: View {
 
 	func loadMessages() async {
 		do {
-			let messages = try await conversation.messages()
-			await MainActor.run {
-				self.messages = messages
-			}
+			try await messageLoader.load()
 		} catch {
 			await MainActor.run {
-				self.errorViewModel.showError("Error streaming messages: \(error)")
+				self.errorViewModel.showError("Error loading messages: \(error)")
 			}
 		}
 	}
