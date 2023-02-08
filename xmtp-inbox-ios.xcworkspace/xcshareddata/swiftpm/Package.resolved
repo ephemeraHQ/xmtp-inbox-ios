@@ -208,6 +208,15 @@
       }
     },
     {
+      "identity" : "walletconnectswiftv2",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/WalletConnect/WalletConnectSwiftV2",
+      "state" : {
+        "branch" : "main",
+        "revision" : "f5bd5ff22171f480909e4fef973945a670b8d21f"
+      }
+    },
+    {
       "identity" : "web3.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/argentlabs/web3.swift",
@@ -230,8 +239,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "public-convos",
-        "revision" : "5d4289555e149c7ad7103fbb46b459ee0fb5dbeb"
+        "branch" : "main",
+        "revision" : "912c135f6c29b41cb6884f938b66eeeeae17b141"
       }
     }
   ],

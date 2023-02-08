@@ -8,6 +8,9 @@
 import AlertToast
 import SwiftUI
 import XMTP
+import WalletConnectSign
+import WalletConnectPairing
+import Web3Wallet
 
 struct ContentView: View {
 	@StateObject private var auth = Auth()
@@ -44,7 +47,10 @@ struct ContentView: View {
 		.environmentObject(auth)
 		.task {
 			await loadClient()
-		}
+        }
+        .task {
+            setupWalletConnect()
+        }
 	}
 
 	func loadClient() async {
@@ -67,61 +73,87 @@ struct ContentView: View {
 		}
 	}
 
-	func onConnectWallet() {
-		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+    func setupWalletConnect() {
+        let metadata = AppMetadata(
+            name: "XMTP Inbox",
+            description: "Universal XMTP messaging app",
+            url: "https://safe.gnosis.io",
+            icons: []
+        )
+        Networking.configure(projectId: "23cb9822bac7d819ca363c85f3a0434a", socketFactory: SocketFactory())
+        // TODO -- use pair or web3wallet? Also where are these factories??
+        Pair.configure(metadata: metadata)
+        Web3Wallet.configure(metadata: metadata, signerFactory: DefaultSignerFactory())
+    }
 
-		// If already connecting, bounce back out to the WalletConnect URL
-		if case .connecting = auth.status {
-			// swiftlint:disable force_unwrapping
-			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
-				UIApplication.shared.open(wcUrl!)
-				return
-			}
-			// swiftlint:enable force_unwrapping
-		}
+    func onConnectWallet() {
+        Task {
+            do {
+                let uri = try await Pair.instance.create()
+                self.wcUrl = URL(string: uri.absoluteString)
+//                await PairingClient.pair(uri: uri)
+                try await Web3Wallet.instance.pair(uri: uri)
+            } catch {
+                print("Error connecting wallet \(error)")
+            }
+        }
+    }
 
-		auth.status = .connecting
-		Task {
-			do {
-				let account = try Account.create()
-				let url = try account.wcUrl()
-
-				await MainActor.run {
-					self.wcUrl = url
-
-					auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
-				}
-				await UIApplication.shared.open(url)
-
-				try await account.connect()
-				for _ in 0 ... 30 {
-					if account.isConnected {
-						let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
-						let keys = client.v1keys
-						try Keystore.saveKeys(address: client.address, keys: keys)
-
-						await MainActor.run {
-							withAnimation {
-								self.auth.status = .connected(client)
-							}
-						}
-						return
-					}
-
-					try await Task.sleep(for: .seconds(1))
-				}
-				await MainActor.run {
-					self.auth.status = .signedOut
-					self.errorViewModel.showError("Timed out waiting to connect (30 seconds)")
-				}
-			} catch {
-				await MainActor.run {
-					self.auth.status = .signedOut
-					self.errorViewModel.showError("Error connecting: \(error)")
-				}
-			}
-		}
-	}
+//	func onConnectWallet() {
+//		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+//
+//		// If already connecting, bounce back out to the WalletConnect URL
+//		if case .connecting = auth.status {
+//			// swiftlint:disable force_unwrapping
+//			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
+//				UIApplication.shared.open(wcUrl!)
+//				return
+//			}
+//			// swiftlint:enable force_unwrapping
+//		}
+//
+//		auth.status = .connecting
+//		Task {
+//			do {
+//				let account = try Account.create()
+//				let url = try account.wcUrl()
+//
+//				await MainActor.run {
+//					self.wcUrl = url
+//
+//					auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
+//				}
+//				await UIApplication.shared.open(url)
+//
+//				try await account.connect()
+//				for _ in 0 ... 30 {
+//					if account.isConnected {
+//						let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
+//						let keys = client.v1keys
+//						try Keystore.saveKeys(address: client.address, keys: keys)
+//
+//						await MainActor.run {
+//							withAnimation {
+//								self.auth.status = .connected(client)
+//							}
+//						}
+//						return
+//					}
+//
+//					try await Task.sleep(for: .seconds(1))
+//				}
+//				await MainActor.run {
+//					self.auth.status = .signedOut
+//					self.errorViewModel.showError("Timed out waiting to connect (30 seconds)")
+//				}
+//			} catch {
+//				await MainActor.run {
+//					self.auth.status = .signedOut
+//					self.errorViewModel.showError("Error connecting: \(error)")
+//				}
+//			}
+//		}
+//	}
 
 	func onTryDemo() {
 		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
