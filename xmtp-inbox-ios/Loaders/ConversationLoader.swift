@@ -58,6 +58,7 @@ class ConversationLoader: ObservableObject {
 
 	func fetchRemote() async throws {
 		for conversation in try await client.conversations.list() {
+			print("FOUND A CONVO \(conversation)")
 			try await DB.Conversation.from(conversation)
 		}
 
@@ -66,14 +67,19 @@ class ConversationLoader: ObservableObject {
 
 		let conversations = await conversations
 		let addresses = conversations.map(\.peerAddress)
-		let ensResults = try await ENS.shared.ens(addresses: addresses)
-		for (i, conversation) in conversations.enumerated() {
-			var conversation = conversation
-			conversation.ens = ensResults[i]
-			try conversation.save()
+		do {
+			let ensResults = try await ENS.shared.ens(addresses: addresses)
+			
+			for (i, conversation) in conversations.enumerated() {
+				var conversation = conversation
+				conversation.ens = ensResults[i]
+				try conversation.save()
+			}
+		} catch {
+			print("Error loading ENS: \(error)")
 		}
 
-		// Reload view now that we have ENS names
+//		// Reload view now that we have ENS names
 		try await fetchLocal()
 	}
 
