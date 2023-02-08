@@ -42,8 +42,10 @@ class ConversationLoader: ObservableObject {
 			try DB.Conversation
 				.including(optional: DB.Conversation.lastMessage.forKey("lastMessage"))
 				.asRequest(of: ConversationWithLastMessage.self)
+				.group(Column("id"))
 				.fetchAll(db)
 		}.map { result in
+			print("RESULT \(result.conversation.id ?? -1)")
 			var conversation = result.conversation
 			conversation.lastMessage = result.lastMessage
 			return conversation
