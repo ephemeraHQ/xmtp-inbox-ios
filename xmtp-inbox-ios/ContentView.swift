@@ -7,12 +7,13 @@
 
 import AlertToast
 import SwiftUI
+import Web3Wallet
 import XMTP
 
 struct ContentView: View {
 	@StateObject private var auth = Auth()
 
-	@State private var wcUrl: URL?
+	@State private var wcUrl: WalletConnectURI?
 
 	@StateObject private var errorViewModel = ErrorViewModel()
 
@@ -31,7 +32,7 @@ struct ContentView: View {
 				HomeView(client: client)
 			}
 		}
-		.toast(isPresenting: $errorViewModel.isShowing) {
+		.toast(isPresenting: $errorViewModel.isShowing, duration: 10) {
 			AlertToast.error(errorViewModel.errorMessage)
 		}
 		.sheet(isPresented: $auth.isShowingQRCode) {
@@ -70,50 +71,69 @@ struct ContentView: View {
 	func onConnectWallet() {
 		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
 
-		// If already connecting, bounce back out to the WalletConnect URL
-		if case .connecting = auth.status {
-			// swiftlint:disable force_unwrapping
-			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
-				UIApplication.shared.open(wcUrl!)
-				return
-			}
-			// swiftlint:enable force_unwrapping
-		}
+//		// If already connecting, bounce back out to the WalletConnect URL
+//		if case .connecting = auth.status {
+//			// swiftlint:disable force_unwrapping
+//			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
+//				UIApplication.shared.open(wcUrl!)
+//				return
+//			}
+//			// swiftlint:enable force_unwrapping
+//		}
 
 		auth.status = .connecting
 		Task {
 			do {
-				let account = try Account.create()
-				let url = try account.wcUrl()
+				print("Configuring")
+				WCWalletConnection.configure()
+				print("Configured connection")
+
+				let uri = try await Pair.instance.create()
+				print("URI is \(uri)")
+
+				// swiftlint:disable force_try
+				let url = URL(string: "\(uri.absoluteString)")!
+				print("URL IS \(url)")
+
 
 				await MainActor.run {
-					self.wcUrl = url
-
+					self.wcUrl = uri
 					auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
 				}
-				await UIApplication.shared.open(url)
 
-				try await account.connect()
-				for _ in 0 ... 30 {
-					if account.isConnected {
-						let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
-						let keys = client.v1keys
-						try Keystore.saveKeys(address: client.address, keys: keys)
 
-						await MainActor.run {
-							withAnimation {
-								self.auth.status = .connected(client)
-							}
-						}
-						return
-					}
+			let namespaces: [String: ProposalNamespace] = [
+					"eip155": ProposalNamespace(
+						chains: [Blockchain("eip155:1")!],
+						methods: ["personal_sign"],
+						events: ["any"]
+					),
+				]
 
-					try await Task.sleep(for: .seconds(1))
-				}
-				await MainActor.run {
-					self.auth.status = .signedOut
-					self.errorViewModel.showError("Timed out waiting to connect (30 seconds)")
-				}
+				try await Sign.instance.connect(requiredNamespaces: namespaces, topic: uri.topic)
+
+//				await UIApplication.shared.open(url)
+
+//				for _ in 0 ... 30 {
+//					if account.isConnected {
+//						let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
+//						let keys = client.v1keys
+//						try Keystore.saveKeys(address: client.address, keys: keys)
+//
+//						await MainActor.run {
+//							withAnimation {
+//								self.auth.status = .connected(client)
+//							}
+//						}
+//						return
+//					}
+//
+//					try await Task.sleep(for: .seconds(1))
+//				}
+//				await MainActor.run {
+//					self.auth.status = .signedOut
+//					self.errorViewModel.showError("Timed out waiting to connect (30 seconds)")
+//				}
 			} catch {
 				await MainActor.run {
 					self.auth.status = .signedOut

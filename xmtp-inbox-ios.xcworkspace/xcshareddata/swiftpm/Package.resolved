@@ -199,12 +199,12 @@
       }
     },
     {
-      "identity" : "walletconnectswift",
+      "identity" : "walletconnectswiftv2",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/WalletConnect/WalletConnectSwift.git",
+      "location" : "https://github.com/WalletConnect/WalletConnectSwiftV2",
       "state" : {
-        "revision" : "e0bbfd16d5c54a7aa7e316956d765399c6332fa2",
-        "version" : "1.7.0"
+        "branch" : "main",
+        "revision" : "f5bd5ff22171f480909e4fef973945a670b8d21f"
       }
     },
     {
@@ -230,8 +230,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "public-convos",
-        "revision" : "5d4289555e149c7ad7103fbb46b459ee0fb5dbeb"
+        "branch" : "main",
+        "revision" : "912c135f6c29b41cb6884f938b66eeeeae17b141"
       }
     }
   ],

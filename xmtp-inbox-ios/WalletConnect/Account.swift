@@ -6,6 +6,7 @@
 //
 import Foundation
 import UIKit
+import Web3Wallet
 import XMTP
 
 /// Wrapper around a WalletConnect V1 wallet connection. Account conforms to ``SigningKey`` so
@@ -32,7 +33,7 @@ public struct Account {
 		connection.walletAddress ?? ""
 	}
 
-	public func wcUrl() throws -> URL {
+	public func wcUrl() throws -> WalletConnectURI {
 		try connection.wcUrl()
 	}
 

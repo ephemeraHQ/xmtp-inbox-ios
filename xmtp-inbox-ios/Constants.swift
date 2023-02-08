@@ -19,6 +19,8 @@ struct Constants {
 	static let infuraUrl = URL(string: "https://mainnet.infura.io/v3/\(infuraKey)")
 	static let hasInfuraKey = !infuraKey.isEmpty
 
+	static let walletConnectKey = Bundle.main.infoDictionary?["WC_PROJECT_ID"] as? String ?? ""
+
 	static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 	static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
 }

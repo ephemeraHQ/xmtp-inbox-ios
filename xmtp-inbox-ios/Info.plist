@@ -4,6 +4,8 @@
 <dict>
 	<key>INFURA_KEY</key>
 	<string>$(INFURA_KEY)</string>
+	<key>WC_PROJECT_ID</key>
+	<string>$(WC_PROJECT_ID)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>

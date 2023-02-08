@@ -7,17 +7,10 @@
 
 import Foundation
 import UIKit
-import WalletConnectSwift
 import web3
+import Web3Wallet
+import Combine
 import XMTP
-
-extension WCURL {
-	var asURL: URL {
-		// swiftlint:disable force_unwrapping
-		URL(string: "wc://wc?uri=\(absoluteString)")!
-		// swiftlint:enable force_unwrapping
-	}
-}
 
 enum WalletConnectionError: String, Error {
 	case walletConnectURL
@@ -30,162 +23,129 @@ enum WalletConnectionError: String, Error {
 protocol WalletConnection {
 	var isConnected: Bool { get }
 	var walletAddress: String? { get }
-	func wcUrl() throws -> URL
+	func wcUrl() throws -> WalletConnectURI
 	func connect() async throws
 	func sign(_ data: Data) async throws -> Data
 }
 
-class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
-	@Published public var isConnected = false
+class WS: WalletConnectRelay.WebSocketConnecting {
+	var webSocketTask: URLSessionWebSocketTask?
 
-	var walletConnectClient: WalletConnectSwift.Client!
-	var session: WalletConnectSwift.Session? {
-		didSet {
-			DispatchQueue.main.async {
-				self.isConnected = self.session != nil
+	var isConnected: Bool = false
+	var onConnect: (() -> Void)?
+	var onDisconnect: ((Error?) -> Void)?
+
+	var overridingOnText = true
+	var onText: ((String) -> Void)?
+	var request: URLRequest
+
+	init(request: URLRequest) {
+		self.request = request
+	}
+
+	func connect() {
+		let urlSession = URLSession(configuration: .default)
+		webSocketTask = urlSession.webSocketTask(with: request)
+
+		isConnected = true
+		onConnect?()
+
+		webSocketTask?.resume()
+		receive()
+	}
+
+	func receive() {
+		guard let webSocketTask else {
+			return
+		}
+
+		webSocketTask.receive { result in
+			switch result {
+			case let .failure(error):
+				print("WS receive failure: \(error)")
+			case let .success(message):
+				switch message {
+				case let .string(text):
+					print("Received text message: \(text)")
+					self.onText?(text)
+				case let .data(data):
+					print("Received binary message: \(data)")
+				@unknown default:
+					print("Unkown message: \(message)")
+				}
 			}
+
+			self.receive()
 		}
 	}
 
-	init() {
-		let peerMeta = Session.ClientMeta(
-			name: "XMTP Inbox",
-			description: "Universal XMTP messaging app",
-			icons: [],
-			// swiftlint:disable force_unwrapping
-			url: URL(string: "https://safe.gnosis.io")!
-			// swiftlint:enable force_unwrapping
-		)
-		let dAppInfo = WalletConnectSwift.Session.DAppInfo(peerId: UUID().uuidString, peerMeta: peerMeta)
-
-		walletConnectClient = WalletConnectSwift.Client(delegate: self, dAppInfo: dAppInfo)
+	func disconnect() {
+		onDisconnect?(nil)
 	}
 
-	func wcUrl() throws -> URL {
-		guard let url = walletConnectURL?.asURL else {
-			throw WalletConnectionError.walletConnectURL
+	func write(string: String, completion: (() -> Void)?) {
+		guard let webSocketTask else {
+			return
 		}
-		return url
+
+		webSocketTask.send(URLSessionWebSocketTask.Message.string(string)) { error in
+			completion?()
+		}
+	}
+}
+
+struct WSFactory: WebSocketFactory {
+	func create(with url: URL) -> WalletConnectRelay.WebSocketConnecting {
+		let request = URLRequest(url: url)
+		return WS(request: request)
+	}
+}
+
+struct Signer: EthereumSigner {
+	func sign(message: Data, with key: Data) throws -> EthereumSignature {
+		let data = try KeyUtil.sign(message: message, with: key, hashing: false)
+		return EthereumSignature(serialized: data)
 	}
 
-	lazy var walletConnectURL: WCURL? = {
-		do {
-			let keybytes = try secureRandomBytes(count: 32)
+	func recoverPubKey(signature: EthereumSignature, message: Data) throws -> Data {
+		let data = signature.serialized
+		return try KeyUtil.recoverPublicKey(message: message, signature: data)
+	}
 
-			return WCURL(
-				topic: UUID().uuidString,
-				// swiftlint:disable force_unwrapping
-				bridgeURL: URL(string: "https://bridge.walletconnect.org")!,
-				// swiftlint:enable force_unwrapping
-				key: keybytes.reduce("") { $0 + String(format: "%02x", $1) }
-			)
-		} catch {
-			return nil
-		}
-	}()
+	func keccak256(_ data: Data) -> Data {
+		data.web3.keccak256
+	}
+}
 
-	func secureRandomBytes(count: Int) throws -> Data {
-		var bytes = [UInt8](repeating: 0, count: count)
+struct XMTPSignerFactory: SignerFactory {
+	func createEthereumSigner() -> EthereumSigner {
+		Signer()
+	}
+}
 
-		// Fill bytes with secure random data
-		let status = SecRandomCopyBytes(
-			kSecRandomDefault,
-			count,
-			&bytes
-		)
+class WCWalletConnection: WalletConnection {
+	static private var publishers = [AnyCancellable]()
+	static func configure() {
+		let metadata = AppMetadata(name: "XMTP Inbox", description: "", url: "https://xmtp.org", icons: [])
+		Networking.configure(projectId: Constants.walletConnectKey, socketFactory: WSFactory())
+		Web3Wallet.configure(metadata: metadata, signerFactory: XMTPSignerFactory())
+		Pair.configure(metadata: metadata)
+		Web3Wallet.instance.sessionProposalPublisher.sink { proposal in
+			print("got a proposal \(proposal)")
+		}.store(in: &publishers)
+	}
+	var isConnected: Bool = false
+	var walletAddress: String?
 
-		// A status of errSecSuccess indicates success
-		if status == errSecSuccess {
-			return Data(bytes)
-		} else {
-			fatalError("could not generate random bytes")
-		}
+	func wcUrl() throws -> WalletConnectURI {
+		WalletConnectURI(topic: "hi", symKey: "hi", relay: .init(protocol: "irn", data: nil))
 	}
 
 	func connect() async throws {
-		guard let url = walletConnectURL else {
-			throw WalletConnectionError.walletConnectURL
-		}
-
-		try walletConnectClient.connect(to: url)
+		
 	}
 
-	func sign(_ data: Data) async throws -> Data {
-		guard session != nil else {
-			throw WalletConnectionError.noSession
-		}
-
-		guard let walletAddress = walletAddress else {
-			throw WalletConnectionError.noAddress
-		}
-
-		guard let url = walletConnectURL else {
-			throw WalletConnectionError.walletConnectURL
-		}
-
-		guard let message = String(data: data, encoding: .utf8) else {
-			throw WalletConnectionError.invalidMessage
-		}
-
-		return try await withCheckedThrowingContinuation { continuation in
-			do {
-				try walletConnectClient.personal_sign(url: url, message: message, account: walletAddress) { response in
-					if let error = response.error {
-						continuation.resume(throwing: error)
-						return
-					}
-
-					do {
-						var resultString = try response.result(as: String.self)
-
-						// Strip leading 0x that we get back from `personal_sign`
-						if resultString.hasPrefix("0x"), resultString.count == 132 {
-							resultString = String(resultString.dropFirst(2))
-						}
-
-						guard let resultDataBytes = resultString.web3.bytesFromHex else {
-							continuation.resume(throwing: WalletConnectionError.noSignature)
-							return
-						}
-
-						var resultData = Data(resultDataBytes)
-
-						// Ensure we have a valid recovery byte
-						resultData[resultData.count - 1] = 1 - resultData[resultData.count - 1] % 2
-
-						continuation.resume(returning: resultData)
-					} catch {
-						continuation.resume(throwing: error)
-					}
-				}
-			} catch {
-				continuation.resume(throwing: error)
-			}
-		}
-	}
-
-	var walletAddress: String? {
-		if let address = session?.walletInfo?.accounts.first {
-			return EthereumAddress(address).toChecksumAddress()
-		}
-
-		return nil
-	}
-
-	func client(_: WalletConnectSwift.Client, didConnect _: WalletConnectSwift.WCURL) {}
-
-	func client(_: WalletConnectSwift.Client, didFailToConnect _: WalletConnectSwift.WCURL) {}
-
-	func client(_: WalletConnectSwift.Client, didConnect session: WalletConnectSwift.Session) {
-		// TODO: Cache session
-		self.session = session
-	}
-
-	func client(_: WalletConnectSwift.Client, didUpdate session: WalletConnectSwift.Session) {
-		self.session = session
-	}
-
-	func client(_: WalletConnectSwift.Client, didDisconnect _: WalletConnectSwift.Session) {
-		session = nil
+	func sign(_: Data) async throws -> Data {
+		Data("hi".utf8)
 	}
 }
