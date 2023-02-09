@@ -18,7 +18,7 @@ final class DBConversationTests: XCTestCase {
 	func testCanSaveAConversation() async throws {
 		let date = Date()
 
-		var conversation = DB.Conversation(topic: "m-12345678901234567890", peerAddress: "0xffffffffffffffffffffffffffffffffffffff", createdAt: date)
+		var conversation = DB.Conversation(peerAddress: "0xffffffffffffffffffffffffffffffffffffff", createdAt: date)
 
 		try conversation.save()
 		guard let id = conversation.id else {
@@ -31,7 +31,6 @@ final class DBConversationTests: XCTestCase {
 			return
 		}
 
-		XCTAssertEqual("m-12345678901234567890", loadedConversation.topic)
 		XCTAssertEqual("0xffffffffffffffffffffffffffffffffffffff", loadedConversation.peerAddress)
 		XCTAssertEqual(date.formatted(), loadedConversation.createdAt.formatted())
 	}

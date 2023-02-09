@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import SwiftUI
 import XMTP
 
 struct ConversationWithLastMessage: Codable, FetchableRecord {
@@ -56,7 +57,9 @@ class ConversationLoader: ObservableObject {
 		}
 
 		await MainActor.run {
-			self.conversations = conversations
+			withAnimation {
+				self.conversations = conversations
+			}
 		}
 	}
 
@@ -97,7 +100,7 @@ class ConversationLoader: ObservableObject {
 						var conversation = conversation
 						try await conversation.loadMostRecentMessage(client: self.client)
 					} catch {
-						print("Error loading most recent message for \(conversation.topic): \(error)")
+						print("Error loading most recent message for \(conversation.peerAddress): \(error)")
 					}
 				}
 			}

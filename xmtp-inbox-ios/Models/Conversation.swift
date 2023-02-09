@@ -12,96 +12,106 @@ import XMTP
 extension DB {
 	struct Conversation: Codable {
 		enum ConversationError: Error {
-			case conversionError(String)
-		}
-
-		enum Version: Codable {
-			case v1, v2
+			case conversionError(String), noTopic, noID
 		}
 
 		var id: Int?
 		var ens: String?
-		var topic: String
 		var peerAddress: String
 		var createdAt: Date
 		var updatedAt: Date
-		var keyMaterial: Data?
-		var contextData: Data?
-		var version: Version = .v2 // Default to v2
 
 		enum CodingKeys: String, CodingKey {
-			case id, topic, ens, peerAddress, createdAt, updatedAt, keyMaterial, contextData, version
+			case id, ens, peerAddress, createdAt, updatedAt
 		}
 
 		// Can be prefilled
 		var lastMessage: DB.Message?
 
-		init(id: Int? = nil, topic: String, peerAddress: String, createdAt: Date, updatedAt: Date? = nil) {
+		init(id: Int? = nil, peerAddress: String, createdAt: Date, updatedAt: Date? = nil) {
 			self.id = id
-			self.topic = topic
 			self.peerAddress = peerAddress
 			self.createdAt = createdAt
 			self.updatedAt = updatedAt ?? createdAt
 		}
 
-		static func find(_ predicate: SQLSpecificExpressible) -> DB.Conversation? {
+		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation) async throws -> DB.Conversation {
 			do {
-				return try DB.shared.queue.read { db in
-					let result = try DB.Conversation.filter(predicate).fetchOne(db)
-					print("Searching for \(predicate): \(result)")
-					return result
+				if let conversation = DB.Conversation.find(Column("peerAddress") == xmtpConversation.peerAddress) {
+					try conversation.createTopic(from: xmtpConversation)
+
+					return conversation
 				}
+
+				var conversation = DB.Conversation(
+					peerAddress: xmtpConversation.peerAddress,
+					createdAt: xmtpConversation.createdAt
+				)
+
+				try conversation.save()
+				try conversation.createTopic(from: xmtpConversation)
+
+				return conversation
 			} catch {
-				print("Error finding \(predicate) : \(error)")
-				return nil
+				print("ERROR Conversation.from \(error)")
+				throw error
 			}
 		}
 
-		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation) async throws -> DB.Conversation {
-			if let conversation = DB.Conversation.find(Column("topic") == xmtpConversation.topic) {
-				return conversation
+		@discardableResult func createTopic(from xmtpConversation: XMTP.Conversation) throws -> ConversationTopic {
+			if let topic = DB.ConversationTopic.find(Column("topic") == xmtpConversation.topic) {
+				return topic
 			}
 
-			let all = try await DB.shared.queue.read { db in
-				try DB.Conversation.all().fetchAll(db)
+			guard let id else {
+				throw ConversationError.noID
 			}
-			print("ALL CONVOS: \(all)")
 
-			print("Did not find convo for \(xmtpConversation.topic), maknig new one")
-
-			var conversation = DB.Conversation(
-				topic: xmtpConversation.topic,
-				peerAddress: xmtpConversation.peerAddress,
-				createdAt: xmtpConversation.createdAt
-			)
+			var conversationTopic = DB.ConversationTopic(conversationID: id, topic: xmtpConversation.topic, peerAddress: xmtpConversation.peerAddress, createdAt: xmtpConversation.createdAt)
 
 			if case let .v2(conversationV2) = xmtpConversation {
-				conversation.version = Version.v2
-				conversation.keyMaterial = conversationV2.keyMaterial
-				conversation.contextData = try conversationV2.context.serializedData()
+				conversationTopic.version = .v2
+				conversationTopic.keyMaterial = conversationV2.keyMaterial
+				conversationTopic.contextData = try conversationV2.context.serializedData()
 			} else {
-				conversation.version = Version.v1
+				conversationTopic.version = .v1
 			}
-			print("trying to save \(conversation)")
 
-			try conversation.save()
+			try conversationTopic.save()
 
-			print("saved \(conversation.id)")
-
-			return conversation
+			return conversationTopic
 		}
 
 		var title: String {
 			ens ?? peerAddress.truncatedAddress()
 		}
 
-		mutating func loadMostRecentMessage(client: Client) async throws {
-			guard let lastMessageXMTP = try await toXMTP(client: client).messages(limit: 1).first else {
-				return
+		func messages(client: Client) async throws -> [DecodedMessage] {
+			var messages: [DecodedMessage] = []
+
+			for topic in topics() {
+				messages.append(contentsOf: try await topic.toXMTP(client: client).messages())
 			}
 
-			var lastMessage = try DB.Message.from(lastMessageXMTP, conversation: self)
-			try lastMessage.save()
+			return messages
+		}
+
+		mutating func loadMostRecentMessage(client: Client) async throws {
+			for topic in topics() {
+				guard let lastMessageXMTP = try await topic.toXMTP(client: client).messages(limit: 1).first else {
+					return
+				}
+
+				try DB.Message.from(lastMessageXMTP, conversation: self, topic: topic)
+			}
+
+			let lastMessage = try DB.read { db in
+				try DB.Message.filter(Column("conversationID") == id).order(Column("createdAt").desc).fetchOne(db)
+			}
+
+			guard let lastMessage else {
+				return
+			}
 
 			updatedAt = lastMessage.createdAt
 			try save()
@@ -109,31 +119,22 @@ extension DB {
 			self.lastMessage = lastMessage
 		}
 
-		func toXMTP(client: Client) throws -> XMTP.Conversation {
-			switch version {
-			case .v1:
-				return XMTP.Conversation.v1(
-					XMTP.ConversationV1(
-						client: client,
-						peerAddress: peerAddress,
-						sentAt: createdAt
-					)
-				)
-			case .v2:
-				guard let contextData, let keyMaterial else {
-					throw ConversationError.conversionError("missing v2 fields")
-				}
+		func send(text: String, client: Client, topic: ConversationTopic? = nil) async throws {
+			guard let topic = topic ?? topics().last else {
+				throw ConversationError.noTopic
+			}
 
-				let context = try InvitationV1.Context(serializedData: contextData)
-				return XMTP.Conversation.v2(
-					XMTP.ConversationV2(
-						topic: topic,
-						keyMaterial: keyMaterial,
-						context: context,
-						peerAddress: peerAddress,
-						client: client
-					)
-				)
+			try await topic.toXMTP(client: client).send(text: text)
+		}
+
+		func topics() -> [ConversationTopic] {
+			do {
+				return try DB.read { db in
+					try DB.ConversationTopic.filter(Column("conversationID") == id).fetchAll(db)
+				}
+			} catch {
+				print("Error loading topics for conversation: \(self) \(error)")
+				return []
 			}
 		}
 	}
@@ -143,14 +144,10 @@ extension DB.Conversation: Model {
 	static func createTable(db: GRDB.Database) throws {
 		try db.create(table: "conversation", ifNotExists: true) { t in
 			t.autoIncrementedPrimaryKey("id")
-			t.column("topic", .text).notNull().unique().indexed()
 			t.column("ens", .text)
 			t.column("peerAddress", .text).notNull()
 			t.column("createdAt", .date).notNull()
 			t.column("updatedAt", .date).notNull()
-			t.column("version", .blob).notNull()
-			t.column("keyMaterial", .blob)
-			t.column("contextData", .blob)
 		}
 	}
 

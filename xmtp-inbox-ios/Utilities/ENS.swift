@@ -36,8 +36,6 @@ class ENS: ObservableObject {
 			}
 		}
 
-		print("addresses with ENS: \(addressesWithENS)")
-
 		return addressesWithENS
 	}
 

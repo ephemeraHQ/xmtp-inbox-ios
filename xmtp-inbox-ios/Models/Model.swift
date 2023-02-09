@@ -62,8 +62,12 @@ extension Model {
 	}
 
 	mutating func save() throws {
-		try DB.shared.queue.write { db in
-			try insert(db, onConflict: .replace)
+		do {
+			try DB.shared.queue.write { db in
+				try insert(db, onConflict: .replace)
+			}
+		} catch {
+			print("Error saving \(self): \(error)")
 		}
 	}
 
