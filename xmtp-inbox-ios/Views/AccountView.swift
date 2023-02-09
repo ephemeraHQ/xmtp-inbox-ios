@@ -144,6 +144,12 @@ struct AccountView: View {
 					}
 					.frame(maxWidth: .infinity)
 					.listRowBackground(Color.backgroundPrimary)
+
+					#if DEBUG
+						NavigationLink(destination: SQLDebuggerView()) {
+							Text("SQL Debugger")
+						}
+					#endif
 				}
 				.scrollContentBackground(.hidden)
 				.background(Color.backgroundPrimary)

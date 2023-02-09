@@ -35,6 +35,10 @@ extension DB {
 				throw Conversation.ConversationError.conversionError("no conversation ID")
 			}
 
+			if xmtpMessage.id == "" {
+				throw DBError.badData("Missing XMTP ID")
+			}
+
 			var message = DB.Message(
 				xmtpID: xmtpMessage.id,
 				body: try xmtpMessage.content(),
