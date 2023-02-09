@@ -24,6 +24,7 @@ struct HomeView: View {
 			ZStack {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				ConversationListView(client: client)
+                #if DEBUG
                 VStack {
                     Spacer()
                     HStack {
@@ -32,6 +33,7 @@ struct HomeView: View {
                             .padding(24)
                     }
                 }
+                #endif
 			}
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationBarItems(leading: HapticButton {
