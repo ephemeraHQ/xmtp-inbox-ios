@@ -31,6 +31,7 @@
 		6A4613192982080E00346D68 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4613182982080E00346D68 /* AlertExtensions.swift */; };
 		6A46131B2982118500346D68 /* ErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46131A2982118500346D68 /* ErrorViewModel.swift */; };
 		6A46132929831BD800346D68 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A46132829831BD800346D68 /* AccountView.swift */; };
+		6A58A3AE29943D82009F62D0 /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A58A3AD29943D82009F62D0 /* FloatingButton.swift */; };
 		6A5DA48A298C03A700CEA7CD /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5DA489298C03A700CEA7CD /* DateExtensions.swift */; };
 		6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA65964297B2A2200E980AD /* WalletConnectSwift */; };
 		6AA65968297B2A7100E980AD /* WalletConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA65967297B2A7100E980AD /* WalletConnection.swift */; };
@@ -111,6 +112,7 @@
 		6A4613182982080E00346D68 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		6A46131A2982118500346D68 /* ErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewModel.swift; sourceTree = "<group>"; };
 		6A46132829831BD800346D68 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		6A58A3AD29943D82009F62D0 /* FloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
 		6A5DA489298C03A700CEA7CD /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		6AA65967297B2A7100E980AD /* WalletConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnection.swift; sourceTree = "<group>"; };
 		6AA65969297B2C4000E980AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				6A46132829831BD800346D68 /* AccountView.swift */,
 				A66339A12989D1FE00477E2E /* QRCodeView.swift */,
 				6ACD972E298AE3F000C6AD66 /* HapticButton.swift */,
+				6A58A3AD29943D82009F62D0 /* FloatingButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -673,6 +676,7 @@
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
 				A677CE9F298CADF000055697 /* ENS.swift in Sources */,
 				6AF033F4295504B70043FB6A /* Print.swift in Sources */,
+				6A58A3AE29943D82009F62D0 /* FloatingButton.swift in Sources */,
 				A677CEA6298CB97100055697 /* MessageLoader.swift in Sources */,
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
 				A68C8A4F298C6CC1003A9A95 /* ConversationLoader.swift in Sources */,
@@ -1078,7 +1082,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = "public-convos";
+				branch = main;
 				kind = branch;
 			};
 		};

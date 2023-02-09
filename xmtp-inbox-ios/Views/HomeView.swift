@@ -24,6 +24,14 @@ struct HomeView: View {
 			ZStack {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				ConversationListView(client: client)
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        FloatingButton(icon: Image("PlusIcon"), action: onNewMessage)
+                            .padding(24)
+                    }
+                }
 			}
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationBarItems(leading: HapticButton {
@@ -51,6 +59,10 @@ struct HomeView: View {
 			AccountView(client: client)
 		}
 	}
+}
+
+func onNewMessage() {
+    // TODO(elise): Add new message modal
 }
 
 struct HomeView_Previews: PreviewProvider {
