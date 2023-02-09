@@ -41,11 +41,13 @@ class ConversationLoader: ObservableObject {
 		let conversations = try await DB.shared.queue.read { db in
 			try DB.Conversation
 				.including(optional: DB.Conversation.lastMessage.forKey("lastMessage"))
+				.order(Column("updatedAt").desc)
+				.group(Column("id"))
 				.asRequest(of: ConversationWithLastMessage.self)
 				.fetchAll(db)
-		}.map { result in
-			var conversation = result.conversation
-			conversation.lastMessage = result.lastMessage
+		}.map {
+			var conversation = $0.conversation
+			conversation.lastMessage = $0.lastMessage
 			return conversation
 		}
 
@@ -64,11 +66,16 @@ class ConversationLoader: ObservableObject {
 
 		let conversations = await conversations
 		let addresses = conversations.map(\.peerAddress)
-		let ensResults = try await ENS.shared.ens(addresses: addresses)
-		for (i, conversation) in conversations.enumerated() {
-			var conversation = conversation
-			conversation.ens = ensResults[i]
-			try conversation.save()
+		do {
+			let ensResults = try await ENS.shared.ens(addresses: addresses)
+
+			for (i, conversation) in conversations.enumerated() {
+				var conversation = conversation
+				conversation.ens = ensResults[i]
+				try conversation.save()
+			}
+		} catch {
+			print("Error loading ENS: \(error)")
 		}
 
 		// Reload view now that we have ENS names
