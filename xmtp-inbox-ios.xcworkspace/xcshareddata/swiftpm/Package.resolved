@@ -87,7 +87,7 @@
       "location" : "https://github.com/xmtp/proto",
       "state" : {
         "branch" : "main",
-        "revision" : "2492c07969696a9d16930ed20cd702641cc7cad0"
+        "revision" : "07180005024b320da26ee35f0b47ae9a459043f0"
       }
     },
     {
@@ -96,7 +96,7 @@
       "location" : "https://github.com/GigaBitcoin/secp256k1.swift.git",
       "state" : {
         "branch" : "main",
-        "revision" : "ff0cf699a48df87213c89396c9bd6a6d776db9a5"
+        "revision" : "5a162be81f45d6972c0b30022a4ca3dbd49541ff"
       }
     },
     {
@@ -231,7 +231,7 @@
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
         "branch" : "test-helpers",
-        "revision" : "015966789c79ca181bc1c8c2925d92f778898ca0"
+        "revision" : "fccc4dfc396282cd925fc30e6c6a35220ddba815"
       }
     }
   ],
