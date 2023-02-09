@@ -28,7 +28,7 @@ class MessageLoader: ObservableObject {
 		let messages = try await DB.shared.queue.read { db in
 			try DB.Message
 				.filter(Column("conversationID") == self.conversation.id)
-				.order(Column("createdAt").desc)
+				.order(Column("createdAt").asc)
 				.fetchAll(db)
 		}
 

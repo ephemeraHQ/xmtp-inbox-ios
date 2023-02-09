@@ -41,13 +41,13 @@ class ConversationLoader: ObservableObject {
 		let conversations = try await DB.shared.queue.read { db in
 			try DB.Conversation
 				.including(optional: DB.Conversation.lastMessage.forKey("lastMessage"))
-				.asRequest(of: ConversationWithLastMessage.self)
+				.order(Column("updatedAt").desc)
 				.group(Column("id"))
+				.asRequest(of: ConversationWithLastMessage.self)
 				.fetchAll(db)
-		}.map { result in
-			print("RESULT \(result.conversation.id ?? -1)")
-			var conversation = result.conversation
-			conversation.lastMessage = result.lastMessage
+		}.map {
+			var conversation = $0.conversation
+			conversation.lastMessage = $0.lastMessage
 			return conversation
 		}
 
@@ -69,7 +69,7 @@ class ConversationLoader: ObservableObject {
 		let addresses = conversations.map(\.peerAddress)
 		do {
 			let ensResults = try await ENS.shared.ens(addresses: addresses)
-			
+
 			for (i, conversation) in conversations.enumerated() {
 				var conversation = conversation
 				conversation.ens = ensResults[i]

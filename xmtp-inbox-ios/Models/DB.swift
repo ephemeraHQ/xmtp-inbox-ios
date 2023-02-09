@@ -56,6 +56,13 @@ class DB {
 		}
 	}
 
+	func clear() throws {
+		try queue.write { db in
+			try DB.Conversation.deleteAll(db)
+			try DB.Message.deleteAll(db)
+		}
+	}
+
 	var location: URL {
 		URL.documentsDirectory.appendingPathComponent("db\(mode == .normal ? "" : "-test").sqlite")
 	}
