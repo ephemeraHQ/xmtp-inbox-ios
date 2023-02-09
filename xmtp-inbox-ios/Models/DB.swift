@@ -9,6 +9,13 @@ import Foundation
 import GRDB
 
 class DB {
+	// If we need to totally blow away the DB, increment this
+	static let version = 2
+
+	enum DBError: Error {
+		case badData(String)
+	}
+
 	static let shared = DB()
 
 	enum Mode {
@@ -57,6 +64,6 @@ class DB {
 	}
 
 	var location: URL {
-		URL.documentsDirectory.appendingPathComponent("db\(mode == .normal ? "" : "-test").sqlite")
+		URL.documentsDirectory.appendingPathComponent("db\(mode == .normal ? "" : "-test-v\(DB.version)").sqlite")
 	}
 }
