@@ -78,7 +78,7 @@ class ConversationLoader: ObservableObject {
 			print("Error loading ENS: \(error)")
 		}
 
-//		// Reload view now that we have ENS names
+		// Reload view now that we have ENS names
 		try await fetchLocal()
 	}
 
