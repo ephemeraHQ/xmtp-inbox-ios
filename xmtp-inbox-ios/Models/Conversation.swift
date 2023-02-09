@@ -128,5 +128,5 @@ extension DB.Conversation: Model {
 	}
 
 	// Associations
-	static let lastMessage = hasOne(DB.Message.self, key: "id", using: ForeignKey(["conversationID"])).order(Column("createdAt").desc)
+	static let lastMessage = hasOne(DB.Message.self, key: "id", using: ForeignKey(["conversationID"])).select(AllColumns(), max(Column("createdAt")))
 }

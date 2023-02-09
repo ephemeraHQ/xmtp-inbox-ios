@@ -22,13 +22,25 @@ class MessageLoader: ObservableObject {
 
 	func load() async throws {
 		try await fetchLocal()
+		try await fetchRemote()
+	}
+
+	// TODO: paginate
+	func fetchRemote() async throws {
+		let messages = try await conversation.toXMTP(client: client).messages()
+
+		for message in messages {
+			_ = try DB.Message.from(message, conversation: conversation)
+		}
+
+		try await fetchLocal()
 	}
 
 	func fetchLocal() async throws {
 		let messages = try await DB.shared.queue.read { db in
 			try DB.Message
 				.filter(Column("conversationID") == self.conversation.id)
-				.order(Column("createdAt").desc)
+				.order(Column("createdAt").asc)
 				.fetchAll(db)
 		}
 

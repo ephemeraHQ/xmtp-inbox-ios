@@ -9,6 +9,10 @@ import Foundation
 import GRDB
 
 class DB {
+	enum DBError: Error {
+		case badData(String)
+	}
+
 	static let shared = DB()
 
 	enum Mode {
@@ -53,6 +57,13 @@ class DB {
 		try queue.write { db in
 			try DB.Conversation.createTable(db: db)
 			try DB.Message.createTable(db: db)
+		}
+	}
+
+	func clear() throws {
+		try queue.write { db in
+			try DB.Conversation.deleteAll(db)
+			try DB.Message.deleteAll(db)
 		}
 	}
 

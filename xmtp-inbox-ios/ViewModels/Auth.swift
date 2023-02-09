@@ -20,6 +20,7 @@ class Auth: ObservableObject {
 	func signOut() {
 		do {
 			try Keystore.deleteKeys()
+			try DB.shared.clear()
 			withAnimation {
 				self.status = .signedOut
 			}
