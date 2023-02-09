@@ -30,7 +30,11 @@ class MessageLoader: ObservableObject {
 		let messages = try await conversation.toXMTP(client: client).messages()
 
 		for message in messages {
-			_ = try DB.Message.from(message, conversation: conversation)
+			do {
+				_ = try DB.Message.from(message, conversation: conversation)
+			} catch {
+				print("Error importing message: \(error)")
+			}
 		}
 
 		try await fetchLocal()

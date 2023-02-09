@@ -43,8 +43,9 @@ final class ConversationLoaderTests: XCTestCase {
 
 		try await loader.load()
 		var conversations = await loader.conversations
+		let loadedConversation = conversations[0]
 
-		XCTAssertEqual("1", conversations[0].lastMessage?.body)
+		XCTAssertEqual("1", loadedConversation.lastMessage?.body)
 
 		let thePast = Date().addingTimeInterval(-1000)
 		try await DB.shared.queue.write { db in
@@ -64,5 +65,12 @@ final class ConversationLoaderTests: XCTestCase {
 
 		XCTAssertEqual("2", conversations[0].lastMessage?.body)
 
+		try await loader.load()
+		try await loader.load()
+		try await loader.load()
+
+		conversations = await loader.conversations
+		XCTAssertEqual(loadedConversation.id, conversations[0].id)
+		XCTAssertEqual("2", conversations[0].lastMessage?.body)
 	}
 }

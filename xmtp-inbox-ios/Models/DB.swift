@@ -57,12 +57,14 @@ class DB {
 		try queue.write { db in
 			try DB.Conversation.createTable(db: db)
 			try DB.Message.createTable(db: db)
+			try DB.Conversation.createTable(db: db)
 		}
 	}
 
 	func clear() throws {
 		try queue.write { db in
 			try DB.Conversation.deleteAll(db)
+			try DB.ConversationTopic.deleteAll(db)
 			try DB.Message.deleteAll(db)
 		}
 	}

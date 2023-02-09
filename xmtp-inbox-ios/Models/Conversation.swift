@@ -44,8 +44,32 @@ extension DB {
 			self.updatedAt = updatedAt ?? createdAt
 		}
 
+		static func find(_ predicate: SQLSpecificExpressible) -> DB.Conversation? {
+			do {
+				return try DB.shared.queue.read { db in
+					let result = try DB.Conversation.filter(predicate).fetchOne(db)
+					print("Searching for \(predicate): \(result)")
+					return result
+				}
+			} catch {
+				print("Error finding \(predicate) : \(error)")
+				return nil
+			}
+		}
+
 		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation) async throws -> DB.Conversation {
-			var conversation = DB.Conversation.find(Column("topic") == xmtpConversation.topic) ?? DB.Conversation(
+			if let conversation = DB.Conversation.find(Column("topic") == xmtpConversation.topic) {
+				return conversation
+			}
+
+			let all = try await DB.shared.queue.read { db in
+				try DB.Conversation.all().fetchAll(db)
+			}
+			print("ALL CONVOS: \(all)")
+
+			print("Did not find convo for \(xmtpConversation.topic), maknig new one")
+
+			var conversation = DB.Conversation(
 				topic: xmtpConversation.topic,
 				peerAddress: xmtpConversation.peerAddress,
 				createdAt: xmtpConversation.createdAt
@@ -58,8 +82,11 @@ extension DB {
 			} else {
 				conversation.version = Version.v1
 			}
+			print("trying to save \(conversation)")
 
 			try conversation.save()
+
+			print("saved \(conversation.id)")
 
 			return conversation
 		}
@@ -118,7 +145,7 @@ extension DB.Conversation: Model {
 			t.autoIncrementedPrimaryKey("id")
 			t.column("topic", .text).notNull().unique().indexed()
 			t.column("ens", .text)
-			t.column("peerAddress", .text).notNull().unique()
+			t.column("peerAddress", .text).notNull()
 			t.column("createdAt", .date).notNull()
 			t.column("updatedAt", .date).notNull()
 			t.column("version", .blob).notNull()

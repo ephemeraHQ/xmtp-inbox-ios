@@ -27,6 +27,8 @@ extension DB {
 		}
 
 		static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation) throws -> DB.Message {
+			print("attempting to import xmtpMessage: \(xmtpMessage)")
+
 			if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
 				return existing
 			}
@@ -38,6 +40,8 @@ extension DB {
 			if xmtpMessage.id == "" {
 				throw DBError.badData("Missing XMTP ID")
 			}
+
+			print("Got a message: \(try xmtpMessage)")
 
 			var message = DB.Message(
 				xmtpID: xmtpMessage.id,
