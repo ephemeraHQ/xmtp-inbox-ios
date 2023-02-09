@@ -9,6 +9,10 @@ import Foundation
 import GRDB
 
 class DB {
+	enum DBError: Error {
+		case badData(String)
+	}
+
 	static let shared = DB()
 
 	enum Mode {

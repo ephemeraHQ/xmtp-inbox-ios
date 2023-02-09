@@ -58,7 +58,6 @@ class ConversationLoader: ObservableObject {
 
 	func fetchRemote() async throws {
 		for conversation in try await client.conversations.list() {
-			print("FOUND A CONVO \(conversation)")
 			try await DB.Conversation.from(conversation)
 		}
 
