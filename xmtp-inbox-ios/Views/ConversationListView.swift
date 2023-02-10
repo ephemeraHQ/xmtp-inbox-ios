@@ -81,8 +81,8 @@ struct ConversationListView: View {
 			AlertToast.error(errorViewModel.errorMessage)
 		}
         .sheet(isPresented: $isShowingNewMessage) {
-            NewMessageView(client: client) { conversation in
-                conversationLoader.conversations.insert(conversation, at: 0)
+            NewConversationView(client: client) { conversation in
+                conversationLoader.insertConversation(conversation, at: conversationLoader.conversations.endIndex)
                 coordinator.path.append(conversation)
             }
         }
@@ -133,9 +133,9 @@ struct ConversationListView: View {
 				await MainActor.run {
 					withAnimation {
 						if newConversation.lastMessage == nil {
-							conversationLoader.conversations.insert(newConversation, at: conversationLoader.conversations.endIndex)
+							conversationLoader.insertConversation(newConversation, at: conversationLoader.conversations.endIndex)
 						} else {
-							conversationLoader.conversations.insert(newConversation, at: 0)
+							conversationLoader.insertConversation(newConversation, at: 0)
 						}
 						self.status = .success
 					}
