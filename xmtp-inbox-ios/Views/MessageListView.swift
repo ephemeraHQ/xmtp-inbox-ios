@@ -53,12 +53,9 @@ struct MessageListView: View {
 	func streamMessages() async {
 		do {
 			for topic in conversation.topics() {
-				print("Subscribing to topic: \(topic)")
 				Task {
 					for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
 						let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
-
-						print("Got a streamed message in \(xmtpMessage)")
 
 						await MainActor.run {
 							messageLoader.messages.append(message)

@@ -20,7 +20,7 @@ enum Keystore {
 	private static let addressKey = "KEY_ADDRESS"
 
 	static func address() -> String? {
-		return UserDefaults.standard.string(forKey: addressKey)
+		return AppGroup.defaults.string(forKey: addressKey)
 	}
 
 	private static func accountName() -> String? {
@@ -31,26 +31,13 @@ enum Keystore {
 	}
 
 	static func saveKeys(address: String, keys: PrivateKeyBundleV1) throws {
-		do {
-			try deleteKeys()
-		} catch {
-			// It's ok, there's no keys to delete
+		AppGroup.defaults.set(address, forKey: addressKey)
+
+		guard let accountName = accountName() else {
+			return
 		}
 
-		UserDefaults.standard.set(address, forKey: addressKey)
-
-		let keysData = try keys.serializedData()
-		let query: [String: Any] = [
-			kSecClass as String: kSecClassGenericPassword,
-			kSecAttrAccount as String: accountName() ?? "",
-			kSecValueData as String: keysData,
-			kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
-		]
-
-		let status = SecItemAdd(query as CFDictionary, nil)
-		guard status == noErr else {
-			throw KeystoreError.saveError("Unable to store item: \(status.description)")
-		}
+		AppGroup.keychain[data: accountName] = try keys.serializedData()
 	}
 
 	static func readKeys() throws -> PrivateKeyBundleV1? {
@@ -58,22 +45,10 @@ enum Keystore {
 			return nil
 		}
 
-		let query: [String: Any] = [
-			kSecClass as String: kSecClassGenericPassword,
-			kSecAttrAccount as String: accountName,
-			kSecMatchLimit as String: kSecMatchLimitOne,
-			kSecReturnAttributes as String: true,
-			kSecReturnData as String: true,
-		]
-
-		var item: CFTypeRef?
-		if SecItemCopyMatching(query as CFDictionary, &item) == noErr,
-		   let existingItem = item as? [String: Any],
-		   let keysData = existingItem[kSecValueData as String] as? Data
-		{
+		if let keysData = try AppGroup.keychain.getData(accountName) {
 			return try PrivateKeyBundleV1(serializedData: keysData)
 		} else {
-			throw KeystoreError.readError("Keychain read failed")
+			return nil
 		}
 	}
 
@@ -82,15 +57,7 @@ enum Keystore {
 			return
 		}
 
-		let query: [String: Any] = [
-			kSecClass as String: kSecClassGenericPassword,
-			kSecAttrAccount as String: accountName,
-		]
-
-		let status = SecItemDelete(query as CFDictionary)
-		guard status == noErr else {
-			throw KeystoreError.deleteError("Unable to delete item: \(status.description)")
-		}
-		UserDefaults.standard.removeObject(forKey: addressKey)
+		try AppGroup.keychain.remove(accountName)
+		AppGroup.defaults.removeObject(forKey: addressKey)
 	}
 }

@@ -23,6 +23,13 @@ struct HomeView: View {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				ConversationListView(client: client)
 			}
+			.task {
+				do {
+					try await XMTPPush.shared.request()
+				} catch {
+					print("Error request push notification access")
+				}
+			}
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationBarItems(leading: HapticButton {
 				isShowingAccount.toggle()
