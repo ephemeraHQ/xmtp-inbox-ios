@@ -56,6 +56,14 @@ class ConversationLoader: ObservableObject {
 			return conversation
 		}
 
+		let topics = try DB.read { db in
+			try DB.ConversationTopic.all().fetchAll(db)
+		}
+
+		Task {
+			try await XMTPPush.shared.subscribe(topics: topics.map(\.topic))
+		}
+
 		await MainActor.run {
 			withAnimation {
 				self.conversations = conversations
