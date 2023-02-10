@@ -107,14 +107,14 @@ class ConversationLoader: ObservableObject {
 		}
 	}
 
-    @MainActor
-    func insertConversation(_ conversation: DB.Conversation, at: Int) {
-        let existing = conversations.first { convo in
-            return convo.peerAddress == conversation.peerAddress
-        }
-        guard existing == nil else {
-            return
-        }
-        conversations.insert(conversation, at: at)
-    }
+	@MainActor
+	func insertConversation(_ conversation: DB.Conversation, at: Int) {
+		let existing = conversations.first { convo in
+			convo.peerAddress == conversation.peerAddress
+		}
+		guard existing == nil else {
+			return
+		}
+		conversations.insert(conversation, at: at)
+	}
 }

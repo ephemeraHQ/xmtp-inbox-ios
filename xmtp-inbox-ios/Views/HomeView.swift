@@ -18,7 +18,7 @@ struct HomeView: View {
 	@StateObject var environmentCoordinator = EnvironmentCoordinator()
 
 	var body: some View {
-        NavigationStack(path: $environmentCoordinator.path) {
+		NavigationStack(path: $environmentCoordinator.path) {
 			ZStack {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				ConversationListView(client: client)

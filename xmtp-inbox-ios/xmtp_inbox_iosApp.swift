@@ -11,9 +11,9 @@ import XMTP
 class AppDelegate: NSObject, UIApplicationDelegate {
 	func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		#if DEBUG
-		XMTPPush.shared.setPushServer("https://notifications.dev.xmtp.network")
+			XMTPPush.shared.setPushServer("https://notifications.dev.xmtp.network")
 		#else
-		XMTPPush.shared.setPushServer("https://notifications.production.xmtp.network")
+			XMTPPush.shared.setPushServer("https://notifications.production.xmtp.network")
 		#endif
 
 		return true

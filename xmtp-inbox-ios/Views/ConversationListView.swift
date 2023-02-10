@@ -18,9 +18,9 @@ struct ConversationListView: View {
 
 	@State private var mostRecentMessages = [String: DecodedMessage]()
 	@State private var status: LoadingStatus = .success
-    @State var isShowingNewMessage = false
+	@State var isShowingNewMessage = false
 
-    @EnvironmentObject var coordinator: EnvironmentCoordinator
+	@EnvironmentObject var coordinator: EnvironmentCoordinator
 	@StateObject private var errorViewModel = ErrorViewModel()
 	@StateObject private var conversationLoader: ConversationLoader
 
@@ -57,20 +57,20 @@ struct ConversationListView: View {
 					await loadConversations()
 				}
 			}
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    FloatingButton(icon: Image("PlusIcon")) {
-                        isShowingNewMessage.toggle()
-                    }
-                    .padding(24)
-                }
-            }
+			VStack {
+				Spacer()
+				HStack {
+					Spacer()
+					FloatingButton(icon: Image("PlusIcon")) {
+						isShowingNewMessage.toggle()
+					}
+					.padding(24)
+				}
+			}
 		}
-        .navigationDestination(for: DB.Conversation.self) { conversation in
-            ConversationDetailView(client: client, conversation: conversation)
-        }
+		.navigationDestination(for: DB.Conversation.self) { conversation in
+			ConversationDetailView(client: client, conversation: conversation)
+		}
 		.task {
 			await loadConversations()
 		}
@@ -80,12 +80,12 @@ struct ConversationListView: View {
 		.toast(isPresenting: $errorViewModel.isShowing) {
 			AlertToast.error(errorViewModel.errorMessage)
 		}
-        .sheet(isPresented: $isShowingNewMessage) {
-            NewConversationView(client: client) { conversation in
-                conversationLoader.insertConversation(conversation, at: conversationLoader.conversations.endIndex)
-                coordinator.path.append(conversation)
-            }
-        }
+		.sheet(isPresented: $isShowingNewMessage) {
+			NewConversationView(client: client) { conversation in
+				conversationLoader.insertConversation(conversation, at: conversationLoader.conversations.endIndex)
+				coordinator.path.append(conversation)
+			}
+		}
 	}
 
 	func loadConversations() async {
