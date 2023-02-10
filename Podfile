@@ -9,6 +9,10 @@ target 'xmtp-inbox-ios' do
 	pod 'GRDB.swift/SQLCipher'
 	pod 'SQLCipher', '~> 4.0'
 
+	target 'NotificationExtension' do
+		inherit! :search_paths
+	end
+
   target 'xmtp-inbox-iosTests' do
     inherit! :search_paths
     # Pods for testing

@@ -51,6 +51,10 @@ extension DB {
 				try conversation.save()
 				try conversation.createTopic(from: xmtpConversation)
 
+				Task {
+					try await XMTPPush.shared.subscribe(topics: [xmtpConversation.topic])
+				}
+
 				return conversation
 			} catch {
 				print("ERROR Conversation.from \(error)")

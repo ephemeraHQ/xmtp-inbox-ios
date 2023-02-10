@@ -10,7 +10,7 @@ import GRDB
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = 3
+	static let version = 4
 
 	enum DBError: Error {
 		case badData(String)
@@ -81,6 +81,6 @@ class DB {
 	}
 
 	var location: URL {
-		URL.documentsDirectory.appendingPathComponent("db\(mode == .normal ? "" : "-test-v\(DB.version)")-\(Constants.xmtpEnv).sqlite")
+		AppGroup.containerURL.appendingPathComponent("db\(mode == .normal ? "" : "-test-v\(DB.version)")-\(Constants.xmtpEnv).sqlite")
 	}
 }

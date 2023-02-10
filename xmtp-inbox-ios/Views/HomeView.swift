@@ -35,6 +35,13 @@ struct HomeView: View {
 					}
 				#endif
 			}
+			.task {
+				do {
+					try await XMTPPush.shared.request()
+				} catch {
+					print("Error request push notification access")
+				}
+			}
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationBarItems(leading: HapticButton {
 				isShowingAccount.toggle()
