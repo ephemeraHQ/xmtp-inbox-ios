@@ -11,8 +11,10 @@ import XMTP
 struct Constants {
 	#if DEBUG
 		static let xmtpEnv: XMTPEnvironment = .dev
+		static let xmtpPush = "https://notifications.dev.xmtp.network"
 	#else
 		static let xmtpEnv: XMTPEnvironment = .production
+		static let xmtpPush = "https://notifications.production.xmtp.network"
 	#endif
 
 	private static let infuraKey = Bundle.main.infoDictionary?["INFURA_KEY"] as? String ?? ""
