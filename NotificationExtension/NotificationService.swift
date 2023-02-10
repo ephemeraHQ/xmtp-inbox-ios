@@ -32,9 +32,7 @@ class NotificationService: UNNotificationServiceExtension {
 				return
 			}
 
-			// swiftlint:disable no_optional_try
 			guard let keys = try Keystore.readKeys() else {
-				print("No keys found")
 				return
 			}
 
