@@ -60,8 +60,10 @@ class ConversationLoader: ObservableObject {
 			try DB.ConversationTopic.all().fetchAll(db)
 		}
 
-		Task {
-			try await XMTPPush.shared.subscribe(topics: topics.map(\.topic))
+		if !topics.isEmpty {
+			Task {
+				try await XMTPPush.shared.subscribe(topics: topics.map(\.topic))
+			}
 		}
 
 		await MainActor.run {
