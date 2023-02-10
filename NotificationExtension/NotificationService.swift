@@ -53,8 +53,6 @@ class NotificationService: UNNotificationServiceExtension {
 
 				contentHandler(bestAttemptContent)
 			}
-
-			// swiftlint:enable no_optional_try
 		} catch {
 			print("Error receiving notification: \(error)")
 		}
