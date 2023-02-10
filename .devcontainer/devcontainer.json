@@ -1,0 +1,5 @@
+// Just to make it easier to run cocoapods
+{
+	"name": "Ruby",
+	"image": "mcr.microsoft.com/devcontainers/ruby:0-3-bullseye"
+}
