@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import SwiftUI
 import XMTP
 
 struct ConversationWithLastMessage: Codable, FetchableRecord {
@@ -24,17 +25,21 @@ class ConversationLoader: ObservableObject {
 	}
 
 	func load() async throws {
-		// Load stuff we already have in the DB...
-		try await fetchLocal()
+		do {
+			// Load stuff we already have in the DB...
+			try await fetchLocal()
 
-		// ...then fetch from the network...
-		try await fetchRemote()
+			// ...then fetch from the network...
+			try await fetchRemote()
 
-		// ...then refresh most recent messages...
-		try await fetchRecentMessages()
+			// ...then refresh most recent messages...
+			try await fetchRecentMessages()
 
-		// Reload what we got from the db
-		try await fetchLocal()
+			// Reload what we got from the db
+			try await fetchLocal()
+		} catch {
+			print("Error in ConversationLoader.load(): \(error)")
+		}
 	}
 
 	func fetchLocal() async throws {
@@ -52,7 +57,9 @@ class ConversationLoader: ObservableObject {
 		}
 
 		await MainActor.run {
-			self.conversations = conversations
+			withAnimation {
+				self.conversations = conversations
+			}
 		}
 	}
 
@@ -69,10 +76,13 @@ class ConversationLoader: ObservableObject {
 		do {
 			let ensResults = try await ENS.shared.ens(addresses: addresses)
 
-			for (i, conversation) in conversations.enumerated() {
+			for conversation in conversations {
 				var conversation = conversation
-				conversation.ens = ensResults[i]
-				try conversation.save()
+
+				if let result = ensResults[conversation.peerAddress.lowercased()], let result {
+					conversation.ens = result
+					try conversation.save()
+				}
 			}
 		} catch {
 			print("Error loading ENS: \(error)")
@@ -90,7 +100,7 @@ class ConversationLoader: ObservableObject {
 						var conversation = conversation
 						try await conversation.loadMostRecentMessage(client: self.client)
 					} catch {
-						print("Error loading most recent message for \(conversation.topic): \(error)")
+						print("Error loading most recent message for \(conversation.peerAddress): \(error)")
 					}
 				}
 			}

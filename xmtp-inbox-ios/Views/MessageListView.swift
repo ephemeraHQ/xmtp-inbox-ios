@@ -52,13 +52,21 @@ struct MessageListView: View {
 
 	func streamMessages() async {
 		do {
-			for try await message in try conversation.toXMTP(client: client).streamMessages() {
-				let message = try DB.Message.from(message, conversation: conversation)
+			for topic in conversation.topics() {
+				print("Subscribing to topic: \(topic)")
+				Task {
+					for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
+						let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
 
-				await MainActor.run {
-					messageLoader.messages.append(message)
+						print("Got a streamed message in \(xmtpMessage)")
+
+						await MainActor.run {
+							messageLoader.messages.append(message)
+						}
+					}
 				}
 			}
+
 		} catch {
 			await MainActor.run {
 				self.errorViewModel.showError("Error streaming messages: \(error)")
@@ -68,8 +76,10 @@ struct MessageListView: View {
 
 	func loadMessages() async {
 		do {
+			print("loading messages!")
 			try await messageLoader.load()
 		} catch {
+			print("ERROR LOADING MESSAGSE: \(error)")
 			await MainActor.run {
 				self.errorViewModel.showError("Error loading messages: \(error)")
 			}

@@ -10,13 +10,17 @@ import GRDB
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = 2
+	static let version = 3
 
 	enum DBError: Error {
 		case badData(String)
 	}
 
 	static let shared = DB()
+
+	static func read<T>(perform: (Database) throws -> T) throws -> T {
+		try shared.queue.read(perform)
+	}
 
 	enum Mode {
 		case normal, test
@@ -38,7 +42,11 @@ class DB {
 
 		if reset {
 			// swiftlint:disable no_optional_try
-			try? FileManager.default.removeItem(at: location)
+			do {
+				try FileManager.default.removeItem(at: location)
+			} catch {
+				print("Error removing db at \(location)")
+			}
 			// swiftlint:enable no_optional_try
 		}
 
@@ -46,7 +54,7 @@ class DB {
 			try db.usePassphrase(passphrase)
 
 			#if DEBUG
-				db.trace { print("SQL: \($0)") }
+//				db.trace { print("SQL: \($0)") }
 				self.config.publicStatementArguments = true
 			#endif
 		}
@@ -59,18 +67,20 @@ class DB {
 	func createTables() throws {
 		try queue.write { db in
 			try DB.Conversation.createTable(db: db)
+			try DB.ConversationTopic.createTable(db: db)
 			try DB.Message.createTable(db: db)
 		}
 	}
 
 	func clear() throws {
 		try queue.write { db in
+			try DB.ConversationTopic.deleteAll(db)
 			try DB.Conversation.deleteAll(db)
 			try DB.Message.deleteAll(db)
 		}
 	}
 
 	var location: URL {
-		URL.documentsDirectory.appendingPathComponent("db\(mode == .normal ? "" : "-test-v\(DB.version)").sqlite")
+		URL.documentsDirectory.appendingPathComponent("db\(mode == .normal ? "" : "-test-v\(DB.version)")-\(Constants.xmtpEnv).sqlite")
 	}
 }

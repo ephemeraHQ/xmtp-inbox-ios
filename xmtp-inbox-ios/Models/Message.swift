@@ -14,24 +14,26 @@ extension DB {
 		var xmtpID: String
 		var body: String
 		var conversationID: Int
+		var conversationTopicID: Int
 		var senderAddress: String
 		var createdAt: Date
 
-		init(id: Int? = nil, xmtpID: String, body: String, conversationID: Int, senderAddress: String, createdAt: Date) {
+		init(id: Int? = nil, xmtpID: String, body: String, conversationID: Int, conversationTopicID: Int, senderAddress: String, createdAt: Date) {
 			self.id = id
 			self.xmtpID = xmtpID
 			self.body = body
 			self.conversationID = conversationID
+			self.conversationTopicID = conversationTopicID
 			self.senderAddress = senderAddress
 			self.createdAt = createdAt
 		}
 
-		static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation) throws -> DB.Message {
+		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic) throws -> DB.Message {
 			if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
 				return existing
 			}
 
-			guard let conversationID = conversation.id else {
+			guard let conversationID = conversation.id, let topicID = topic.id else {
 				throw Conversation.ConversationError.conversionError("no conversation ID")
 			}
 
@@ -43,6 +45,7 @@ extension DB {
 				xmtpID: xmtpMessage.id,
 				body: try xmtpMessage.content(),
 				conversationID: conversationID,
+				conversationTopicID: topicID,
 				senderAddress: xmtpMessage.senderAddress,
 				createdAt: xmtpMessage.sent
 			)
@@ -61,6 +64,7 @@ extension DB.Message: Model {
 			t.column("xmtpID", .text).notNull().indexed()
 			t.column("body", .text).notNull()
 			t.column("conversationID", .integer).notNull().indexed()
+			t.column("conversationTopicID", .integer).notNull().indexed()
 			t.column("senderAddress", .text).notNull()
 			t.column("createdAt", .date)
 		}
@@ -69,6 +73,6 @@ extension DB.Message: Model {
 
 extension DB.Message {
 	static var preview: DB.Message {
-		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "hello there", conversationID: 1, senderAddress: "0x000000000", createdAt: Date())
+		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "hello there", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date())
 	}
 }

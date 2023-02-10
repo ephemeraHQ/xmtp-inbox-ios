@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import SwiftUI
 import XMTP
 
 class MessageLoader: ObservableObject {
@@ -27,10 +28,19 @@ class MessageLoader: ObservableObject {
 
 	// TODO: paginate
 	func fetchRemote() async throws {
-		let messages = try await conversation.toXMTP(client: client).messages()
-
-		for message in messages {
-			_ = try DB.Message.from(message, conversation: conversation)
+		for topic in conversation.topics() {
+			do {
+				let messages = try await topic.toXMTP(client: client).messages()
+				for message in messages {
+					do {
+						_ = try DB.Message.from(message, conversation: conversation, topic: topic)
+					} catch {
+						print("Error importing message: \(error)")
+					}
+				}
+			} catch {
+				print("Error loading messages for convo topic \(topic)")
+			}
 		}
 
 		try await fetchLocal()
@@ -45,7 +55,9 @@ class MessageLoader: ObservableObject {
 		}
 
 		await MainActor.run {
-			self.messages = messages
+			withAnimation {
+				self.messages = messages
+			}
 		}
 	}
 }

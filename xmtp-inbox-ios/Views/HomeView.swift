@@ -24,16 +24,16 @@ struct HomeView: View {
 			ZStack {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				ConversationListView(client: client)
-                #if DEBUG
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        FloatingButton(icon: Image("PlusIcon"), action: onNewMessage)
-                            .padding(24)
-                    }
-                }
-                #endif
+				#if DEBUG
+					VStack {
+						Spacer()
+						HStack {
+							Spacer()
+							FloatingButton(icon: Image("PlusIcon"), action: onNewMessage)
+								.padding(24)
+						}
+					}
+				#endif
 			}
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationBarItems(leading: HapticButton {
@@ -64,7 +64,7 @@ struct HomeView: View {
 }
 
 func onNewMessage() {
-    // TODO(elise): Add new message modal
+	// TODO(elise): Add new message modal
 }
 
 struct HomeView_Previews: PreviewProvider {

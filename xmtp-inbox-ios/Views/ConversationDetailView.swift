@@ -36,7 +36,7 @@ struct ConversationDetailView: View {
 	func sendMessage(text: String) async {
 		do {
 			// TODO(elise): Optimistic upload / undo
-			try await conversation.toXMTP(client: client).send(text: text)
+			try await conversation.send(text: text, client: client)
 		} catch {
 			await MainActor.run {
 				self.errorViewModel.showError("Error sending message: \(error)")

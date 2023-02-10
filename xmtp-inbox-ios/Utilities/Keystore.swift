@@ -31,7 +31,11 @@ enum Keystore {
 	}
 
 	static func saveKeys(address: String, keys: PrivateKeyBundleV1) throws {
-		try deleteKeys()
+		do {
+			try deleteKeys()
+		} catch {
+			// It's ok, there's no keys to delete
+		}
 
 		UserDefaults.standard.set(address, forKey: addressKey)
 
