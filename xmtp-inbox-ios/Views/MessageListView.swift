@@ -73,6 +73,7 @@ struct MessageListView: View {
 
 	func loadMessages() async {
 		do {
+			print("loading messages!")
 			try await messageLoader.load()
 		} catch {
 			print("ERROR LOADING MESSAGSE: \(error)")
