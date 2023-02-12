@@ -15,16 +15,20 @@ struct ConversationDetailView: View {
 
 	@State private var errorViewModel = ErrorViewModel()
 
+	// For interactive keyboard dismiss
+	@State private var offset = CGFloat()
+
 	var body: some View {
-		ZStack {
-			Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-			VStack {
-				MessageListView(client: client, conversation: conversation)
-				MessageComposerView(onSend: sendMessage(text:))
-					.padding(.horizontal, 8)
-					.padding(.bottom, 8)
-			}
+		VStack {
+			MessageListView(client: client, conversation: conversation)
+				.frame(maxHeight: .infinity)
+				.backgroundStyle(.blue)
+			MessageComposerView(offset: $offset, onSend: sendMessage(text:))
+				.padding(.horizontal)
+				.padding(.bottom)
 		}
+		.padding(.bottom, -offset) // For interactive keyboard dismiss
+		.background(.clear)
 		.navigationTitle(conversation.title)
 		.navigationBarTitleDisplayMode(.inline)
 		.toolbarBackground(.visible, for: .navigationBar)

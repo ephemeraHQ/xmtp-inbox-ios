@@ -55,9 +55,7 @@ class MessageLoader: ObservableObject {
 		}
 
 		await MainActor.run {
-			withAnimation {
-				self.messages = messages
-			}
+			self.messages = messages
 		}
 	}
 }

@@ -84,6 +84,7 @@
 		A69C92752994286C00E49F9B /* XMTP in Frameworks */ = {isa = PBXBuildFile; productRef = A69C92742994286C00E49F9B /* XMTP */; };
 		A69C928129942DD300E49F9B /* XMTPTestHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = A69C928029942DD300E49F9B /* XMTPTestHelpers */; };
 		A6A5AB7A29941DC6004F5006 /* ConversationLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */; };
+		A6C18C37299993EE001E00CA /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = A6C18C36299993EE001E00CA /* Introspect */; };
 		C0FC8F7534D053D77C7844DE /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 317FFBF07954FD4F1A3422AD /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework */; };
 		CF1B45F2A383A42721D7B5B6 /* Pods_xmtp_inbox_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAB8C6461BBE02BE6BF8821 /* Pods_xmtp_inbox_iosTests.framework */; };
 		F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D16EA21E60F9FF562F6B944D /* Pods_xmtp_inbox_ios.framework */; };
@@ -222,6 +223,7 @@
 				6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */,
 				6A4613112981F96300346D68 /* AlertToast in Frameworks */,
 				6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */,
+				A6C18C37299993EE001E00CA /* Introspect in Frameworks */,
 				F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 				7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 			);
@@ -508,6 +510,7 @@
 				6A4613102981F96300346D68 /* AlertToast */,
 				A69C92742994286C00E49F9B /* XMTP */,
 				A68BCB312995C4EE001159B8 /* KeychainAccess */,
+				A6C18C36299993EE001E00CA /* Introspect */,
 			);
 			productName = "xmtp-inbox-ios";
 			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
@@ -620,6 +623,7 @@
 				6A46130F2981F96300346D68 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				A69C92732994286C00E49F9B /* XCRemoteSwiftPackageReference "xmtp-ios" */,
 				A68BCB302995C4EE001159B8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				A6C18C35299993EE001E00CA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
 			projectDirPath = "";
@@ -1389,8 +1393,16 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = "test-helpers";
+				branch = "fix-message-ids-when-streaming";
 				kind = branch;
+			};
+		};
+		A6C18C35299993EE001E00CA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1445,6 +1457,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A69C92732994286C00E49F9B /* XCRemoteSwiftPackageReference "xmtp-ios" */;
 			productName = XMTPTestHelpers;
+		};
+		A6C18C36299993EE001E00CA /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6C18C35299993EE001E00CA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
