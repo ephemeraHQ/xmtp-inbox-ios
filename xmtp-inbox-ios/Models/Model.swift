@@ -7,7 +7,7 @@
 
 import GRDB
 
-protocol Model: Identifiable, Codable, MutablePersistableRecord, FetchableRecord {
+protocol Model: Identifiable, Codable, Hashable, MutablePersistableRecord, FetchableRecord {
 	static func createTable(db: GRDB.Database) throws
 
 	// We've always got a DB ID

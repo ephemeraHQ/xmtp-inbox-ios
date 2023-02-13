@@ -28,3 +28,10 @@
 "cancel" = "Cancel";
 "privacy" = "Privacy";
 "support" = "Support";
+
+// New message
+"new-message" = "New message";
+"new-message-prompt" = "Enter a wallet address";
+"valid-ethereum-address" = "Valid Ethereum address";
+"invalid-ethereum-address" = "Invalid Ethereum address";
+"not-on-network-error" = "Recipient is not on the XMTP network";
