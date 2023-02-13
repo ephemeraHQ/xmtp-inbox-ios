@@ -16,8 +16,14 @@ struct Auth {
 
 	var status: AuthStatus = .loadingKeys {
 		didSet {
-			if case .connected = status {
+			if case let .connected(client) = status {
 				self.isShowingQRCode = false
+
+				do {
+					try DB.prepare(client: client)
+				} catch {
+					print("Error preparing DB: \(error)")
+				}
 			}
 		}
 	}
@@ -27,7 +33,7 @@ struct Auth {
 	static func signOut() {
 		do {
 			try Keystore.deleteKeys()
-			try DB.shared.clear()
+			try DB.clear()
 		} catch {
 			print("Error signing out: \(error)")
 		}

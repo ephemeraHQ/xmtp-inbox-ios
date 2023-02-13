@@ -90,6 +90,8 @@
 		A69C928129942DD300E49F9B /* XMTPTestHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = A69C928029942DD300E49F9B /* XMTPTestHelpers */; };
 		A6A5AB7A29941DC6004F5006 /* ConversationLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */; };
 		A6C18C37299993EE001E00CA /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = A6C18C36299993EE001E00CA /* Introspect */; };
+		A6FCA31B299AECCF00EFB39D /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */; };
+		A6FCA31C299AECCF00EFB39D /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */; };
 		C0FC8F7534D053D77C7844DE /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 317FFBF07954FD4F1A3422AD /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework */; };
 		CF1B45F2A383A42721D7B5B6 /* Pods_xmtp_inbox_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAB8C6461BBE02BE6BF8821 /* Pods_xmtp_inbox_iosTests.framework */; };
 		F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D16EA21E60F9FF562F6B944D /* Pods_xmtp_inbox_ios.framework */; };
@@ -214,6 +216,8 @@
 		A68C8A4E298C6CC1003A9A95 /* ConversationLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoader.swift; sourceTree = "<group>"; };
 		A68C8A52298C8BED003A9A95 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoaderTests.swift; sourceTree = "<group>"; };
+		A6FCA318299AEC9900EFB39D /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
+		A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		C99AE74FEC77F3029E8F36C6 /* Pods-xmtp-inbox-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-iosTests/Pods-xmtp-inbox-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D16EA21E60F9FF562F6B944D /* Pods_xmtp_inbox_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_xmtp_inbox_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2668044F5BCBB4A1437CAED /* Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.debug.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -270,6 +274,7 @@
 		00563CB5017E78B50A0F8DD8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A6FCA318299AEC9900EFB39D /* CryptoKit.framework */,
 				A68BCB232995C256001159B8 /* Pods_xmtp_inbox_ios.framework */,
 				A68BCB212995C1C0001159B8 /* SQLCipher.framework */,
 				A68BCB1F2995C1BE001159B8 /* GRDB.framework */,
@@ -394,6 +399,7 @@
 				6AE264F22975FD270055250A /* StringExtensions.swift */,
 				6A4613182982080E00346D68 /* AlertExtensions.swift */,
 				6A5DA489298C03A700CEA7CD /* DateExtensions.swift */,
+				A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -855,6 +861,7 @@
 				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
 				6ACD972F298AE3F000C6AD66 /* HapticButton.swift in Sources */,
+				A6FCA31B299AECCF00EFB39D /* DataExtensions.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
 				A677CE9F298CADF000055697 /* ENS.swift in Sources */,
 				6AF033F4295504B70043FB6A /* Print.swift in Sources */,
@@ -912,6 +919,7 @@
 				A61B44FC299AB88300F2CBEA /* Auth.swift in Sources */,
 				A68BCB2C2995C2E4001159B8 /* ViewExtensions.swift in Sources */,
 				A68BCB2D2995C2E4001159B8 /* FontExtensions.swift in Sources */,
+				A6FCA31C299AECCF00EFB39D /* DataExtensions.swift in Sources */,
 				A61B44FB299AB7E800F2CBEA /* XMTPEnvironmentManager.swift in Sources */,
 				A68BCB0D2995C02F001159B8 /* AppGroup.swift in Sources */,
 				A68BCB172995C107001159B8 /* DB.swift in Sources */,

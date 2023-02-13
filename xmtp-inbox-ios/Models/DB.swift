@@ -7,19 +7,40 @@
 
 import Foundation
 import GRDB
+import XMTP
+import CryptoSwift
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = 4
+	static let version = 5
 
 	enum DBError: Error {
 		case badData(String)
 	}
 
-	static let shared = DB()
+	private static let shared = DB()
+
+	static func prepare(client: XMTP.Client) throws {
+		let dbVersion = AppGroup.defaults.integer(forKey: "dbVersion")
+
+		let passphraseData = try client.privateKeyBundle.serializedData()
+		let passphrase = passphraseData.toHex
+
+		try DB.shared.prepare(passphrase: passphrase, reset: dbVersion != DB.version)
+
+		AppGroup.defaults.set(DB.version, forKey: "dbVersion")
+	}
 
 	static func read<T>(perform: (Database) throws -> T) throws -> T {
 		try shared.queue.read(perform)
+	}
+
+	static func write<T>(perform: (Database) throws -> T) throws -> T {
+		try shared.queue.write(perform)
+	}
+
+	static func clear() throws {
+		try shared.clear()
 	}
 
 	enum Mode {

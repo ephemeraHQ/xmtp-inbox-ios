@@ -72,7 +72,7 @@ class MessageLoader: ObservableObject {
 	}
 
 	func fetchLocal() async throws {
-		let messages = try await DB.shared.queue.read { db in
+		let messages = try await DB.read { db in
 			try DB.Message
 				.filter(Column("conversationID") == self.conversation.id)
 				.order(Column("createdAt").asc)

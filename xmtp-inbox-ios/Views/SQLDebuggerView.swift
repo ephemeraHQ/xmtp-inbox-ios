@@ -21,7 +21,7 @@ struct SQLDebuggerView: View {
 				.lineLimit(4, reservesSpace: true)
 			Button("Run") {
 				do {
-					let results = try DB.shared.queue.read { db in
+					let results = try DB.read { db in
 						try Row.fetchAll(db, sql: sql)
 					}
 

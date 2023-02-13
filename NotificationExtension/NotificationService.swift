@@ -26,17 +26,17 @@ class NotificationService: UNNotificationServiceExtension {
 				return
 			}
 
-			try DB.shared.prepare(passphrase: "make this real", reset: false)
-
-			guard let conversationTopic = DB.ConversationTopic.find(Column("topic") == topic) else {
-				return
-			}
-
 			guard let keys = try Keystore.readKeys() else {
 				return
 			}
 
 			let client = try Client.from(v1Bundle: keys)
+
+			try DB.prepare(client: client)
+
+			guard let conversationTopic = DB.ConversationTopic.find(Column("topic") == topic) else {
+				return
+			}
 
 			let envelope = XMTP.Envelope.with { envelope in
 				envelope.message = encryptedMessageData
@@ -47,9 +47,10 @@ class NotificationService: UNNotificationServiceExtension {
 				let decodedMessage = try conversationTopic.toXMTP(client: client).decode(envelope)
 
 				if let conversation = DB.Conversation.find(id: conversationTopic.conversationID) {
-					bestAttemptContent.title = "New message from \(conversation.title)"
+					bestAttemptContent.title = conversation.title
 				}
 				bestAttemptContent.body = (try? decodedMessage.content()) ?? "no content"
+				bestAttemptContent.threadIdentifier = conversationTopic.peerAddress
 
 				contentHandler(bestAttemptContent)
 			}
