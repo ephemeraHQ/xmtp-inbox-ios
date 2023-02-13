@@ -80,19 +80,19 @@ struct NewConversationView: View {
 
 	func validateSearch(_ debouncedText: String) {
 		do {
-            try withAnimation {
-                self.error = nil
-                let range = NSRange(location: 0, length: debouncedText.utf16.count)
-                let regex = try NSRegularExpression(pattern: "^0x[a-fA-F0-9]{40}$")
-                if regex.firstMatch(in: debouncedText, options: [], range: range) != nil {
-                    self.searchResults = [debouncedText]
-                } else {
-                    self.searchResults = []
-                    if !debouncedText.isEmpty {
-                        self.error = NSLocalizedString("invalid-ethereum-address", comment: "")
-                    }
-                }
-            }
+			try withAnimation {
+				self.error = nil
+				let range = NSRange(location: 0, length: debouncedText.utf16.count)
+				let regex = try NSRegularExpression(pattern: "^0x[a-fA-F0-9]{40}$")
+				if regex.firstMatch(in: debouncedText, options: [], range: range) != nil {
+					self.searchResults = [debouncedText]
+				} else {
+					self.searchResults = []
+					if !debouncedText.isEmpty {
+						self.error = NSLocalizedString("invalid-ethereum-address", comment: "")
+					}
+				}
+			}
 		} catch {
 			print("Error searching: \(error)")
 		}
@@ -109,15 +109,15 @@ struct NewConversationView: View {
 				}
 			} catch ConversationError.recipientNotOnNetwork {
 				await MainActor.run {
-                    withAnimation {
-                        self.error = NSLocalizedString("not-on-network-error", comment: "")
-                    }
+					withAnimation {
+						self.error = NSLocalizedString("not-on-network-error", comment: "")
+					}
 				}
 			} catch {
 				await MainActor.run {
-                    withAnimation {
-                        self.error = error.localizedDescription
-                    }
+					withAnimation {
+						self.error = error.localizedDescription
+					}
 				}
 			}
 		}
