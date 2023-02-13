@@ -15,7 +15,7 @@ struct Constants {
 
 	static var xmtpPush: String {
 		if XMTPEnvironmentManager.shared.environment == .production {
-			return "https://notifications.production.xmtp.network"
+			return "https://ad423a3ca23f.ngrok.io"
 		} else {
 			return "https://notifications.dev.xmtp.network"
 		}
