@@ -15,5 +15,6 @@ extension Font {
 	static let Body2 = Font.system(size: 15)
 	static let BodyXS = Font.system(size: 13)
 	static let Body1B = Font.system(size: 16, weight: .bold)
+	static let Body2B = Font.system(size: 15, weight: .bold)
 	static let Title2H = Font.system(size: 15, weight: .bold)
 }

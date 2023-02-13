@@ -18,7 +18,9 @@ struct ConversationListView: View {
 
 	@State private var mostRecentMessages = [String: DecodedMessage]()
 	@State private var status: LoadingStatus = .success
+	@State var isShowingNewMessage = false
 
+	@EnvironmentObject var coordinator: EnvironmentCoordinator
 	@StateObject private var errorViewModel = ErrorViewModel()
 	@StateObject private var conversationLoader: ConversationLoader
 
@@ -55,6 +57,19 @@ struct ConversationListView: View {
 					await loadConversations()
 				}
 			}
+			VStack {
+				Spacer()
+				HStack {
+					Spacer()
+					FloatingButton(icon: Image("PlusIcon")) {
+						isShowingNewMessage.toggle()
+					}
+					.padding(24)
+				}
+			}
+		}
+		.navigationDestination(for: DB.Conversation.self) { conversation in
+			ConversationDetailView(client: client, conversation: conversation)
 		}
 		.task {
 			await loadConversations()
@@ -64,6 +79,12 @@ struct ConversationListView: View {
 		}
 		.toast(isPresenting: $errorViewModel.isShowing) {
 			AlertToast.error(errorViewModel.errorMessage)
+		}
+		.sheet(isPresented: $isShowingNewMessage) {
+			NewConversationView(client: client) { conversation in
+				conversationLoader.insertConversation(conversation, at: conversationLoader.conversations.endIndex)
+				coordinator.path.append(conversation)
+			}
 		}
 	}
 
@@ -112,9 +133,9 @@ struct ConversationListView: View {
 				await MainActor.run {
 					withAnimation {
 						if newConversation.lastMessage == nil {
-							conversationLoader.conversations.insert(newConversation, at: conversationLoader.conversations.endIndex)
+							conversationLoader.insertConversation(newConversation, at: conversationLoader.conversations.endIndex)
 						} else {
-							conversationLoader.conversations.insert(newConversation, at: 0)
+							conversationLoader.insertConversation(newConversation, at: 0)
 						}
 						self.status = .success
 					}
