@@ -15,9 +15,10 @@ struct AccountView: View {
 
 	private let privacyUrl = "https://xmtp.org/privacy"
 
-	@EnvironmentObject var auth: Auth
+	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
 
 	@State private var showSignOutAlert = false
+	@State private var isShowingDebug = false
 
 	@Environment(\.dismiss) var dismiss
 
@@ -141,15 +142,15 @@ struct AccountView: View {
 							.font(.Body2)
 							.foregroundColor(Color.textScondary)
 							.listRowSeparator(.hidden)
+							.sheet(isPresented: $isShowingDebug) {
+								DebugView()
+							}
+							.onTapGesture(count: 5) {
+								isShowingDebug.toggle()
+							}
 					}
 					.frame(maxWidth: .infinity)
 					.listRowBackground(Color.backgroundPrimary)
-
-					#if DEBUG
-						NavigationLink(destination: SQLDebuggerView()) {
-							Text("SQL Debugger")
-						}
-					#endif
 				}
 				.scrollContentBackground(.hidden)
 				.background(Color.backgroundPrimary)
@@ -167,7 +168,7 @@ struct AccountView: View {
 			.alert("disconnect-cta", isPresented: $showSignOutAlert) {
 				Button("cancel", role: .cancel) {}
 				Button("disconnect", role: .destructive) {
-					auth.signOut()
+					environmentCoordinator.auth.signOut()
 				}
 			}
 		}

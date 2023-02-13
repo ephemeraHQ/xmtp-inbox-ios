@@ -19,6 +19,31 @@ class MessageLoader: ObservableObject {
 	init(client: XMTP.Client, conversation: DB.Conversation) {
 		self.client = client
 		self.conversation = conversation
+
+		Task {
+			await streamMessages()
+		}
+	}
+
+	func streamMessages() async {
+		print("Stream messages called")
+		for topic in conversation.topics() {
+			Task {
+				print("Listening on \(topic)")
+				for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
+					print("new xmtp message \(xmtpMessage)")
+					do {
+						let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
+						print("got a message \(message)")
+						await MainActor.run {
+							messages.append(message)
+						}
+					} catch {
+						print("Error with message: \(error)")
+					}
+				}
+			}
+		}
 	}
 
 	func load() async throws {

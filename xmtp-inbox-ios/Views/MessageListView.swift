@@ -14,27 +14,26 @@ import XMTP
 class MessageTableViewCell: UITableViewCell {}
 
 class MessageObserver: TransactionObserver {
-	func databaseDidChange(with _: GRDB.DatabaseEvent) {
-		callback()
-	}
-
 	var callback: () -> Void
 
 	init(callback: @escaping () -> Void) {
 		self.callback = callback
 	}
 
-	func databaseDidCommit(_: GRDB.Database) {
+	func databaseDidCommit(_: GRDB.Database) {}
+
+	func databaseDidRollback(_: GRDB.Database) {}
+
+	func databaseDidChange(with _: GRDB.DatabaseEvent) {
 		callback()
 	}
 
-	func databaseDidRollback(_: GRDB.Database) {
-		print("rollback")
-	}
-
 	func observes(eventsOfKind eventKind: DatabaseEventKind) -> Bool {
-		// Only observe changes to the "player" table.
-		eventKind.tableName == "message"
+		if case let .insert(tableName) = eventKind, tableName == "message" {
+			return true
+		} else {
+			return false
+		}
 	}
 }
 
@@ -60,6 +59,23 @@ class MessagesTableViewController: UITableViewController {
 
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: UIResponder.keyboardDidHideNotification, object: nil)
+
+		observer = MessageObserver {
+			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10)) {
+				self.tableView.reloadData()
+				self.scrollToBottom(animated: true)
+			}
+		}
+
+		if let observer {
+			do {
+				try DB.read { db in
+					db.add(transactionObserver: observer)
+				}
+			} catch {
+				print("Error adding observer")
+			}
+		}
 	}
 
 	override var inputAccessoryView: UIView? {
@@ -162,61 +178,6 @@ struct MessageListView: View {
 	// TODO(elise and pat): Paginate list of messages
 	var body: some View {
 		MessagesTableView(loader: messageLoader)
-//		ScrollViewReader { proxy in
-//			List {
-//				ForEach(messageLoader.messages, id: \.xmtpID) { message in
-//					MessageCellView(isFromMe: message.senderAddress == client.address, message: message)
-//						.transition(.scale)
-//						.id(message.xmtpID)
-//						.padding(.horizontal)
-//				}
-//				Spacer()
-//					.onChange(of: messageLoader.messages.count) { _ in
-//						withAnimation {
-//							proxy.scrollTo(messageLoader.messages.last?.xmtpID, anchor: .bottom)
-//						}
-//					}
-//					.onAppear {
-//						withAnimation {
-//							proxy.scrollTo(messageLoader.messages.last?.xmtpID, anchor: .bottom)
-//						}
-//					}
-//			}
-//		}
-//		.listStyle(.plain)
-//			.task {
-//				await loadMessages()
-//			}
-			.task {
-				await streamMessages()
-			}
-	}
-
-	func streamMessages() async {
-		do {
-			for topic in conversation.topics() {
-				Task {
-					for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
-						print("new xmtp message \(xmtpMessage)")
-						do {
-							var message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
-							print("got a message \(message)")
-							await MainActor.run {
-								messageLoader.messages.append(message)
-							}
-						} catch {
-							print("Error with message: \(error)")
-						}
-					}
-				}
-			}
-
-		} catch {
-			print("ERROR STREAMING \(error)")
-			await MainActor.run {
-				self.errorViewModel.showError("Error streaming messages: \(error)")
-			}
-		}
 	}
 
 	func loadMessages() async {

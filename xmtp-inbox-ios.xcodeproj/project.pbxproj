@@ -50,6 +50,10 @@
 		6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */; };
 		6AF033F4295504B70043FB6A /* Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F3295504B70043FB6A /* Print.swift */; };
 		7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A68BCB232995C256001159B8 /* Pods_xmtp_inbox_ios.framework */; };
+		A61B44F8299AAFD200F2CBEA /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F7299AAFD200F2CBEA /* DebugView.swift */; };
+		A61B44FA299AB3D800F2CBEA /* XMTPEnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */; };
+		A61B44FB299AB7E800F2CBEA /* XMTPEnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */; };
+		A61B44FC299AB88300F2CBEA /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4612FE298177B300346D68 /* Auth.swift */; };
 		A6292C31299415E4004B5A27 /* SQLDebuggerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */; };
 		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
@@ -181,6 +185,8 @@
 		7E2FCF1D984B2A694A607529 /* Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8231B72E0F6265F7F4F5CE0C /* Pods_NotificationExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B491ED89471263D2CAFB3CB /* Pods-xmtp-inbox-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios.release.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios/Pods-xmtp-inbox-ios.release.xcconfig"; sourceTree = "<group>"; };
+		A61B44F7299AAFD200F2CBEA /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
+		A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMTPEnvironmentManager.swift; sourceTree = "<group>"; };
 		A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLDebuggerView.swift; sourceTree = "<group>"; };
 		A65544A5298C5AA8005337C3 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
@@ -374,6 +380,7 @@
 				6A58A3AD29943D82009F62D0 /* FloatingButton.swift */,
 				A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */,
 				6A58A3AF29968A85009F62D0 /* NewConversationView.swift */,
+				A61B44F7299AAFD200F2CBEA /* DebugView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -418,6 +425,7 @@
 				A663399F2989D14400477E2E /* QRCode.swift */,
 				A677CE9E298CADF000055697 /* ENS.swift */,
 				A68BCB0B2995C02F001159B8 /* AppGroup.swift */,
+				A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -831,6 +839,7 @@
 				A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */,
 				6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */,
 				6A46132929831BD800346D68 /* AccountView.swift in Sources */,
+				A61B44F8299AAFD200F2CBEA /* DebugView.swift in Sources */,
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
 				A6292C31299415E4004B5A27 /* SQLDebuggerView.swift in Sources */,
 				6AA6596B297B2DB000E980AD /* Account.swift in Sources */,
@@ -839,6 +848,7 @@
 				6A5DA48A298C03A700CEA7CD /* DateExtensions.swift in Sources */,
 				6A46131B2982118500346D68 /* ErrorViewModel.swift in Sources */,
 				6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */,
+				A61B44FA299AB3D800F2CBEA /* XMTPEnvironmentManager.swift in Sources */,
 				6A4613052981836F00346D68 /* MessageListView.swift in Sources */,
 				A68C8A44298C5D97003A9A95 /* DB.swift in Sources */,
 				6A4612FF298177B300346D68 /* Auth.swift in Sources */,
@@ -899,8 +909,10 @@
 				A68BCB022995BF2B001159B8 /* NotificationService.swift in Sources */,
 				A68BCB2A2995C2E4001159B8 /* DateExtensions.swift in Sources */,
 				A68BCB162995C107001159B8 /* ConversationTopic.swift in Sources */,
+				A61B44FC299AB88300F2CBEA /* Auth.swift in Sources */,
 				A68BCB2C2995C2E4001159B8 /* ViewExtensions.swift in Sources */,
 				A68BCB2D2995C2E4001159B8 /* FontExtensions.swift in Sources */,
+				A61B44FB299AB7E800F2CBEA /* XMTPEnvironmentManager.swift in Sources */,
 				A68BCB0D2995C02F001159B8 /* AppGroup.swift in Sources */,
 				A68BCB172995C107001159B8 /* DB.swift in Sources */,
 				A68BCB2E2995C37B001159B8 /* Keystore.swift in Sources */,
