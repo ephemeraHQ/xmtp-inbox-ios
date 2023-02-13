@@ -78,14 +78,6 @@ class MessagesTableViewController: UITableViewController {
 		}
 	}
 
-	override var inputAccessoryView: UIView? {
-		return UIHostingController(rootView: Text("Hi")).view
-	}
-
-	override var canBecomeFirstResponder: Bool {
-		return true
-	}
-
 	@available(*, unavailable)
 	required init?(coder _: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
