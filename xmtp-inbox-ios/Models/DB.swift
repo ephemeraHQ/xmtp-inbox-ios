@@ -8,11 +8,11 @@
 import Foundation
 import GRDB
 import XMTP
-import CryptoSwift
+import CryptoKit
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = 5
+	static let version = 6
 
 	enum DBError: Error {
 		case badData(String)
@@ -24,7 +24,7 @@ class DB {
 		let dbVersion = AppGroup.defaults.integer(forKey: "dbVersion")
 
 		let passphraseData = try client.privateKeyBundle.serializedData()
-		let passphrase = passphraseData.toHex
+		let passphrase = Data(SHA256.hash(data: passphraseData)).toHex
 
 		try DB.shared.prepare(passphrase: passphrase, reset: dbVersion != DB.version)
 
