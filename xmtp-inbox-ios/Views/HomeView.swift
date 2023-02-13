@@ -10,6 +10,7 @@ import XMTP
 
 class EnvironmentCoordinator: ObservableObject {
 	@Published var path = NavigationPath()
+	@Published var auth = Auth()
 }
 
 struct HomeView: View {

@@ -27,6 +27,8 @@ struct NewConversationView: View {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				List {
 					TextField("new-message-prompt", text: $searchText)
+						.autocorrectionDisabled(true)
+						.autocapitalization(.none)
 						.focused($isFocused)
 						.onAppear {
 							self.isFocused = true

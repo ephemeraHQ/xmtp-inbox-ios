@@ -75,7 +75,7 @@ final class ConversationLoaderTests: XCTestCase {
 	}
 
 	func testCreatesOneConversationForMultipleTopicsWithSamePeerAddress() async throws {
-		Auth().signOut()
+		Auth.signOut()
 		try DB.shared.prepare(passphrase: "test", mode: .test, reset: true)
 		let fixtures = await fixtures()
 

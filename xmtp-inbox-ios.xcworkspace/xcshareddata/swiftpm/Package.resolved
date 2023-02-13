@@ -6,7 +6,7 @@
       "location" : "https://github.com/elai950/AlertToast.git",
       "state" : {
         "branch" : "master",
-        "revision" : "638f38f9daf08e17b7caea22d2fcb9c0a418d1b6"
+        "revision" : "b39252eacd159904afd7d718bba0afabb87f2f2f"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/Planetable/ENSKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "5150a8dbc868d0af681c53b20c96f274ffde5ea7"
+        "revision" : "d366b3268c9617c163bd8c48489674e2d62495cd"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/grpc/grpc-swift",
       "state" : {
-        "revision" : "783ed8ddcde07ac0332a5ec4647b665f82e95b78",
-        "version" : "1.14.0"
+        "revision" : "1629de188c25682adc4cb47a80adca1ac90b494d",
+        "version" : "1.13.2"
       }
     },
     {
@@ -96,7 +96,7 @@
       "location" : "https://github.com/xmtp/proto",
       "state" : {
         "branch" : "main",
-        "revision" : "2492c07969696a9d16930ed20cd702641cc7cad0"
+        "revision" : "07180005024b320da26ee35f0b47ae9a459043f0"
       }
     },
     {
@@ -105,7 +105,7 @@
       "location" : "https://github.com/GigaBitcoin/secp256k1.swift.git",
       "state" : {
         "branch" : "main",
-        "revision" : "0961b95366eb5b39c4f3d7d2e7d378e2162dbbed"
+        "revision" : "5a162be81f45d6972c0b30022a4ca3dbd49541ff"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-http2.git",
       "state" : {
-        "revision" : "22757ac305f3d44d2b99ba541193ff1d64e77d00",
-        "version" : "1.24.1"
+        "revision" : "b408ca74bf24d13310da685bc340f149567c4ae2",
+        "version" : "1.24.0"
       }
     },
     {
@@ -187,6 +187,15 @@
       "state" : {
         "revision" : "ab3a58b7209a17d781c0d1dbb3e1ff3da306bae8",
         "version" : "1.20.3"
+      }
+    },
+    {
+      "identity" : "swiftui-introspect",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect",
+      "state" : {
+        "revision" : "f2616860a41f9d9932da412a8978fec79c06fe24",
+        "version" : "0.1.4"
       }
     },
     {
@@ -239,8 +248,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "main",
-        "revision" : "d8eebcff452328fb6444202bcc69fb0cf5db0828"
+        "branch" : "fix-message-ids-when-streaming",
+        "revision" : "46d3ea4815431ffe16a703cd82f24041dd1a066e"
       }
     }
   ],

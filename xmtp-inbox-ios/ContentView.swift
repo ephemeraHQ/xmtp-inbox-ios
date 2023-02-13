@@ -10,7 +10,7 @@ import SwiftUI
 import XMTP
 
 struct ContentView: View {
-	@StateObject private var auth = Auth()
+	@StateObject private var environmentCoordinator = EnvironmentCoordinator()
 
 	@State private var wcUrl: URL?
 
@@ -20,7 +20,7 @@ struct ContentView: View {
 		ZStack {
 			Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 
-			switch auth.status {
+			switch environmentCoordinator.auth.status {
 			case .loadingKeys:
 				ProgressView()
 			case .signedOut, .tryingDemo:
@@ -34,14 +34,14 @@ struct ContentView: View {
 		.toast(isPresenting: $errorViewModel.isShowing) {
 			AlertToast.error(errorViewModel.errorMessage)
 		}
-		.sheet(isPresented: $auth.isShowingQRCode) {
+		.sheet(isPresented: $environmentCoordinator.auth.isShowingQRCode) {
 			if let wcUrl {
 				QRCodeView(data: Data(wcUrl.absoluteString.utf8))
 			} else {
 				Text("Cannot connect to wallet.")
 			}
 		}
-		.environmentObject(auth)
+		.environmentObject(environmentCoordinator)
 		.task {
 			await loadClient()
 		}
@@ -51,18 +51,18 @@ struct ContentView: View {
 		do {
 			guard let keys = try Keystore.readKeys() else {
 				await MainActor.run {
-					self.auth.status = .signedOut
+					environmentCoordinator.auth.status = .signedOut
 				}
 				return
 			}
 			let client = try Client.from(v1Bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
 			await MainActor.run {
-				self.auth.status = .connected(client)
+				environmentCoordinator.auth.status = .connected(client)
 			}
 		} catch {
 			print("Keystore read error: \(error.localizedDescription)")
 			await MainActor.run {
-				self.auth.status = .signedOut
+				environmentCoordinator.auth.status = .signedOut
 			}
 		}
 	}
@@ -71,7 +71,7 @@ struct ContentView: View {
 		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
 
 		// If already connecting, bounce back out to the WalletConnect URL
-		if case .connecting = auth.status {
+		if case .connecting = environmentCoordinator.auth.status {
 			// swiftlint:disable force_unwrapping
 			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
 				UIApplication.shared.open(wcUrl!)
@@ -80,7 +80,7 @@ struct ContentView: View {
 			// swiftlint:enable force_unwrapping
 		}
 
-		auth.status = .connecting
+		environmentCoordinator.auth.status = .connecting
 		Task {
 			do {
 				let account = try Account.create()
@@ -89,7 +89,7 @@ struct ContentView: View {
 				await MainActor.run {
 					self.wcUrl = url
 
-					auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
+					environmentCoordinator.auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
 				}
 				await UIApplication.shared.open(url)
 
@@ -102,7 +102,7 @@ struct ContentView: View {
 
 						await MainActor.run {
 							withAnimation {
-								self.auth.status = .connected(client)
+								environmentCoordinator.auth.status = .connected(client)
 							}
 						}
 						return
@@ -111,12 +111,12 @@ struct ContentView: View {
 					try await Task.sleep(for: .seconds(1))
 				}
 				await MainActor.run {
-					self.auth.status = .signedOut
+					environmentCoordinator.auth.status = .signedOut
 					self.errorViewModel.showError("Timed out waiting to connect (30 seconds)")
 				}
 			} catch {
 				await MainActor.run {
-					self.auth.status = .signedOut
+					environmentCoordinator.auth.status = .signedOut
 					self.errorViewModel.showError("Error connecting: \(error)")
 				}
 			}
@@ -125,7 +125,7 @@ struct ContentView: View {
 
 	func onTryDemo() {
 		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-		auth.status = .tryingDemo
+		environmentCoordinator.auth.status = .tryingDemo
 		Task {
 			do {
 				let account = try PrivateKey.generate()
@@ -135,12 +135,12 @@ struct ContentView: View {
 
 				await MainActor.run {
 					withAnimation {
-						self.auth.status = .connected(client)
+						environmentCoordinator.auth.status = .connected(client)
 					}
 				}
 			} catch {
 				await MainActor.run {
-					self.auth.status = .signedOut
+					environmentCoordinator.auth.status = .signedOut
 					self.errorViewModel.showError("Error generating random wallet: \(error)")
 				}
 			}
