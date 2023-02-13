@@ -20,13 +20,18 @@ class DB {
 
 	private static let shared = DB()
 
-	static func prepare(client: XMTP.Client) throws {
+	static func prepareTest(client: XMTP.Client) throws {
+		shared.mode = .test
+		try prepare(client: client, reset: true)
+	}
+
+	static func prepare(client: XMTP.Client, reset: Bool = false) throws {
 		let dbVersion = AppGroup.defaults.integer(forKey: "dbVersion")
 
 		let passphraseData = try client.privateKeyBundle.serializedData()
 		let passphrase = Data(SHA256.hash(data: passphraseData)).toHex
 
-		try DB.shared.prepare(passphrase: passphrase, reset: dbVersion != DB.version)
+		try shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
 
 		AppGroup.defaults.set(DB.version, forKey: "dbVersion")
 	}
@@ -62,13 +67,11 @@ class DB {
 		self.mode = mode
 
 		if reset {
-			// swiftlint:disable no_optional_try
 			do {
 				try FileManager.default.removeItem(at: location)
 			} catch {
 				print("Error removing db at \(location)")
 			}
-			// swiftlint:enable no_optional_try
 		}
 
 		config.prepareDatabase { db in
