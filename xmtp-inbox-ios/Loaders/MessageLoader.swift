@@ -14,11 +14,20 @@ class MessageLoader: ObservableObject {
 	var client: XMTP.Client
 	var conversation: DB.Conversation
 
+	let fetchLimit = 10
+
+	@MainActor @Published var mostRecentMessageID = ""
 	@MainActor @Published var messages: [DB.Message] = []
 
 	init(client: XMTP.Client, conversation: DB.Conversation) {
 		self.client = client
 		self.conversation = conversation
+
+		do {
+			try fetchLocal()
+		} catch {
+			print("Error fetching local messages: \(error)")
+		}
 
 		Task {
 			await streamMessages()
@@ -26,17 +35,14 @@ class MessageLoader: ObservableObject {
 	}
 
 	func streamMessages() async {
-		print("Stream messages called")
 		for topic in conversation.topics() {
 			Task {
-				print("Listening on \(topic)")
 				for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
-					print("new xmtp message \(xmtpMessage)")
 					do {
 						let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
-						print("got a message \(message)")
 						await MainActor.run {
 							messages.append(message)
+							mostRecentMessageID = message.xmtpID
 						}
 					} catch {
 						print("Error with message: \(error)")
@@ -47,15 +53,14 @@ class MessageLoader: ObservableObject {
 	}
 
 	func load() async throws {
-		try await fetchLocal()
+		try fetchLocal()
 		try await fetchRemote()
 	}
 
-	// TODO: paginate
 	func fetchRemote() async throws {
 		for topic in conversation.topics() {
 			do {
-				let messages = try await topic.toXMTP(client: client).messages()
+				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit)
 				for message in messages {
 					do {
 						_ = try DB.Message.from(message, conversation: conversation, topic: topic)
@@ -68,19 +73,43 @@ class MessageLoader: ObservableObject {
 			}
 		}
 
-		try await fetchLocal()
+		try fetchLocal()
 	}
 
-	func fetchLocal() async throws {
-		let messages = try await DB.shared.queue.read { db in
+	func fetchEarlier() async throws {
+		let before = await MainActor.run { messages.first?.createdAt }
+
+		for topic in conversation.topics() {
+			do {
+				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit, before: before)
+				for message in messages {
+					do {
+						_ = try DB.Message.from(message, conversation: conversation, topic: topic)
+					} catch {
+						print("Error importing message: \(error)")
+					}
+				}
+			} catch {
+				print("Error loading messages for convo topic \(topic)")
+			}
+		}
+
+		try fetchLocal()
+	}
+
+	func fetchLocal() throws {
+		let messages = try DB.shared.queue.read { db in
 			try DB.Message
 				.filter(Column("conversationID") == self.conversation.id)
 				.order(Column("createdAt").asc)
 				.fetchAll(db)
 		}
 
-		await MainActor.run {
-			self.messages = messages
+		Task(priority: .userInitiated) {
+			await MainActor.run {
+				self.messages = messages
+				self.mostRecentMessageID = messages.last?.xmtpID ?? ""
+			}
 		}
 	}
 }

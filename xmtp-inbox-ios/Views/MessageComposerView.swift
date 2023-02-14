@@ -30,8 +30,6 @@ struct MessageComposerView: View {
 	var accessoryView: UIView?
 
 	@State private var text: String = ""
-	@State private var isSending = false
-
 	@State private var originalOffset = CGFloat()
 	@Binding var offset: CGFloat
 	@StateObject private var keyboardObserver = KeyboardObserver()
@@ -82,7 +80,6 @@ struct MessageComposerView: View {
 		}
 		.padding(.horizontal, 8)
 		.overlay(RoundedCorner(radius: 16, corners: [.topLeft, .topRight, .bottomLeft]).stroke(Color.actionPrimary, lineWidth: 2))
-		.disabled(isSending)
 	}
 
 	func send() {
@@ -90,13 +87,10 @@ struct MessageComposerView: View {
 			return
 		}
 
-		isSending = true
 		Task {
 			await onSend(text)
 			await MainActor.run {
 				self.text = ""
-				self.isSending = false
-//				self.isFocused = true
 			}
 		}
 	}
