@@ -8,11 +8,15 @@
 import Foundation
 import XCTest
 import XMTP
+import XMTPTestHelpers
 @testable import xmtp_inbox_ios
 
 final class DBConversationTests: XCTestCase {
+	var fixtures: XMTPTestHelpers.Fixtures!
+
 	override func setUp() async throws {
-		try DB.shared.prepare(passphrase: "test", mode: .test, reset: true)
+		self.fixtures = await fixtures()
+		try DB.prepareTest(client: self.fixtures.aliceClient)
 	}
 
 	func testCanSaveAConversation() async throws {

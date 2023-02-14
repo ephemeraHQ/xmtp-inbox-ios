@@ -17,7 +17,7 @@ protocol Model: Identifiable, Codable, Hashable, MutablePersistableRecord, Fetch
 extension Model {
 	static func list() -> [Self] {
 		do {
-			return try DB.shared.queue.read { db in
+			return try DB.read { db in
 				try fetchAll(db)
 			}
 		} catch {
@@ -28,7 +28,7 @@ extension Model {
 
 	static func list(order: SQLOrderingTerm) -> [Self] {
 		do {
-			return try DB.shared.queue.read { db in
+			return try DB.read { db in
 				try self
 					.order([order])
 					.fetchAll(db)
@@ -41,7 +41,7 @@ extension Model {
 
 	static func find(id: Int) -> Self? {
 		do {
-			return try DB.shared.queue.read { db in
+			return try DB.read { db in
 				try find(db, key: id)
 			}
 		} catch {
@@ -52,7 +52,7 @@ extension Model {
 
 	static func find(_ predicate: SQLSpecificExpressible) -> Self? {
 		do {
-			return try DB.shared.queue.read { db in
+			return try DB.read { db in
 				try filter(predicate).fetchOne(db)
 			}
 		} catch {
@@ -63,7 +63,7 @@ extension Model {
 
 	mutating func save() throws {
 		do {
-			try DB.shared.queue.write { db in
+			try DB.write { db in
 				try insert(db, onConflict: .replace)
 			}
 		} catch {

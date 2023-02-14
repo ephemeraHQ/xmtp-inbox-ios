@@ -8,16 +8,18 @@
 import GRDB
 import XCTest
 import XMTP
-@testable import xmtp_inbox_ios
 import XMTPTestHelpers
+@testable import xmtp_inbox_ios
 
 final class ConversationLoaderTests: XCTestCase {
+	var fixtures: XMTPTestHelpers.Fixtures!
+
 	override func setUp() async throws {
-		try DB.shared.prepare(passphrase: "test", mode: .test, reset: true)
+		self.fixtures = await fixtures()
+		try DB.prepareTest(client: fixtures.aliceClient)
 	}
 
 	func testGetsConversations() async throws {
-		let fixtures = await fixtures()
 		let loader = ConversationLoader(client: fixtures.aliceClient)
 
 		var conversations = await loader.conversations
@@ -35,7 +37,6 @@ final class ConversationLoaderTests: XCTestCase {
 	}
 
 	func testGetsMostRecentMessage() async throws {
-		let fixtures = await fixtures()
 		let loader = ConversationLoader(client: fixtures.aliceClient)
 
 		let conversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
@@ -48,7 +49,7 @@ final class ConversationLoaderTests: XCTestCase {
 		XCTAssertEqual("1", loadedConversation.lastMessage?.body)
 
 		let thePast = Date().addingTimeInterval(-1000)
-		try await DB.shared.queue.write { db in
+		try await DB.write { db in
 			try db.execute(sql: "UPDATE message SET createdAt = ?", arguments: [thePast])
 		}
 
@@ -57,7 +58,7 @@ final class ConversationLoaderTests: XCTestCase {
 		try await loader.load()
 		conversations = await loader.conversations
 
-		let messages = try await DB.shared.queue.read { db in
+		let messages = try DB.read { db in
 			try DB.Message.order(Column("createdAt").desc).fetchAll(db)
 		}
 
@@ -75,9 +76,7 @@ final class ConversationLoaderTests: XCTestCase {
 	}
 
 	func testCreatesOneConversationForMultipleTopicsWithSamePeerAddress() async throws {
-		Auth.signOut()
-		try DB.shared.prepare(passphrase: "test", mode: .test, reset: true)
-		let fixtures = await fixtures()
+		try DB.prepare(client: fixtures.aliceClient, reset: true)
 
 		let aliceConversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
 		let bobConversation = try await fixtures.bobClient.conversations.newConversation(with: fixtures.aliceClient.address)

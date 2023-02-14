@@ -43,7 +43,7 @@ class ConversationLoader: ObservableObject {
 	}
 
 	func fetchLocal() async throws {
-		let conversations = try await DB.shared.queue.read { db in
+		let conversations = try await DB.read { db in
 			try DB.Conversation
 				.including(optional: DB.Conversation.lastMessage.forKey("lastMessage"))
 				.order(Column("updatedAt").desc)
