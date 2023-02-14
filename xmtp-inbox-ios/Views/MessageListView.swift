@@ -41,6 +41,7 @@ class MessagesTableViewController: UITableViewController {
 	var loader: MessageLoader
 	var cancellables = [AnyCancellable]()
 	var observer: TransactionObserver?
+	var isPinnedToBottom = true
 
 	init(loader: MessageLoader) {
 		self.loader = loader
@@ -145,6 +146,10 @@ class MessagesTableViewController: UITableViewController {
 		}
 	}
 
+	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+		self.isPinnedToBottom = indexPath.row + 1 == loader.messages.count
+	}
+
 	override func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return loader.messages.count
 	}
@@ -162,7 +167,11 @@ class MessagesTableViewController: UITableViewController {
 		return newCell
 	}
 
-	func scrollToBottom(animated: Bool = true) {
+	func scrollToBottom(animated: Bool = true, force: Bool = false) {
+		if !isPinnedToBottom && !force {
+			return
+		}
+
 		DispatchQueue.main.async { [self] in
 			if loader.messages.isEmpty {
 				return
