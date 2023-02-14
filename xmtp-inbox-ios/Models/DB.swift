@@ -5,10 +5,10 @@
 //  Created by Pat Nakajima on 2/2/23.
 //
 
+import CryptoKit
 import Foundation
 import GRDB
 import XMTP
-import CryptoKit
 
 class DB {
 	// If we need to totally blow away the DB, increment this

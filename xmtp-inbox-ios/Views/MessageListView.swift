@@ -21,11 +21,11 @@ class MessageObserver: TransactionObserver {
 	}
 
 	func databaseDidCommit(_: GRDB.Database) {}
-
 	func databaseDidRollback(_: GRDB.Database) {}
 
 	func databaseDidChange(with _: GRDB.DatabaseEvent) {
 		callback()
+		stopObservingDatabaseChangesUntilNextTransaction()
 	}
 
 	func observes(eventsOfKind eventKind: DatabaseEventKind) -> Bool {
@@ -41,6 +41,7 @@ class MessagesTableViewController: UITableViewController {
 	var loader: MessageLoader
 	var cancellables = [AnyCancellable]()
 	var observer: TransactionObserver?
+	var isPinnedToBottom = true
 
 	init(loader: MessageLoader) {
 		self.loader = loader
@@ -57,13 +58,20 @@ class MessagesTableViewController: UITableViewController {
 		tableView.separatorStyle = .none
 		tableView.keyboardDismissMode = .interactive
 
+		tableView.refreshControl = UIRefreshControl()
+		tableView.refreshControl?.addTarget(self, action: #selector(loadEarlier), for: .valueChanged)
+
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: UIResponder.keyboardDidHideNotification, object: nil)
 
+		initDBObserver()
+		initScrollToBottomObserver()
+	}
+
+	func initDBObserver() {
 		observer = MessageObserver {
-			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10)) {
-				self.tableView.reloadData()
-				self.scrollToBottom(animated: true)
+			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
+				self?.tableView.reloadData()
 			}
 		}
 
@@ -78,13 +86,43 @@ class MessagesTableViewController: UITableViewController {
 		}
 	}
 
+	deinit {
+		for cancellable in cancellables {
+			cancellable.cancel()
+		}
+	}
+
+	func initScrollToBottomObserver() {
+		loader.$mostRecentMessageID.removeDuplicates().sink { [weak self] _ in
+			self?.scrollToBottom(animated: true)
+		}.store(in: &cancellables)
+	}
+
 	@available(*, unavailable)
 	required init?(coder _: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 
+	@objc private func loadEarlier() {
+		Task {
+			do {
+				try await loader.fetchEarlier()
+			} catch {
+				print("Error fetching earlier  \(error)")
+			}
+
+			await MainActor.run {
+				tableView.refreshControl?.endRefreshing()
+			}
+		}
+	}
+
 	@objc private func keyboardWasShown(notification _: NSNotification) {
 		scrollToBottom(animated: true)
+	}
+
+	override func viewWillAppear(_: Bool) {
+		scrollToBottom(animated: false)
 	}
 
 	override func viewDidAppear(_: Bool) {
@@ -93,7 +131,6 @@ class MessagesTableViewController: UITableViewController {
 				try await loader.load()
 				await MainActor.run {
 					tableView.reloadData()
-					scrollToBottom(animated: false)
 				}
 			} catch {
 				print("Error loading messages: \(error)")
@@ -101,8 +138,20 @@ class MessagesTableViewController: UITableViewController {
 		}
 	}
 
+	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		if scrollView.contentOffset.y == 0 {
+			tableView.refreshControl?.beginRefreshing()
+
+			loadEarlier()
+		}
+	}
+
+	override func tableView(_: UITableView, willDisplay _: UITableViewCell, forRowAt indexPath: IndexPath) {
+		isPinnedToBottom = indexPath.row + 1 == loader.messages.count
+	}
+
 	override func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-		loader.messages.count
+		return loader.messages.count
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -118,12 +167,22 @@ class MessagesTableViewController: UITableViewController {
 		return newCell
 	}
 
-	func scrollToBottom(animated: Bool = true) {
-		if loader.messages.isEmpty {
+	func scrollToBottom(animated: Bool = true, force: Bool = false) {
+		if !isPinnedToBottom && !force {
 			return
 		}
 
-		tableView.scrollToRow(at: IndexPath(row: loader.messages.count - 1, section: 0), at: .bottom, animated: animated)
+		DispatchQueue.main.async { [self] in
+			if loader.messages.isEmpty {
+				return
+			}
+
+			tableView.reloadData()
+
+			if let path = tableView.presentationIndexPath(forDataSourceIndexPath: IndexPath(row: loader.messages.count - 1, section: 0)) {
+				tableView.scrollToRow(at: path, at: .bottom, animated: animated)
+			}
+		}
 	}
 }
 
@@ -149,7 +208,6 @@ struct MessagesTableView: UIViewControllerRepresentable {
 	}
 
 	func updateUIViewController(_: MessagesTableViewController, context _: Context) {
-		print("hi updateuiview")
 		// nothin yet
 	}
 }
