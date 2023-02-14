@@ -62,7 +62,7 @@
 		A677CEA6298CB97100055697 /* MessageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A677CEA5298CB97100055697 /* MessageLoader.swift */; };
 		A68BCAF729959374001159B8 /* ConversationTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68BCAF629959374001159B8 /* ConversationTopic.swift */; };
 		A68BCB022995BF2B001159B8 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68BCB012995BF2B001159B8 /* NotificationService.swift */; };
-		A68BCB062995BF2B001159B8 /* NotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A68BCAFF2995BF2A001159B8 /* NotificationExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A68BCB062995BF2B001159B8 /* NotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A68BCAFF2995BF2A001159B8 /* NotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A68BCB0C2995C02F001159B8 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68BCB0B2995C02F001159B8 /* AppGroup.swift */; };
 		A68BCB0D2995C02F001159B8 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68BCB0B2995C02F001159B8 /* AppGroup.swift */; };
 		A68BCB132995C107001159B8 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68C8A45298C61C6003A9A95 /* Model.swift */; };
@@ -944,7 +944,6 @@
 		};
 		A68BCB052995BF2B001159B8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			platformFilter = ios;
 			target = A68BCAFE2995BF2A001159B8 /* NotificationExtension */;
 			targetProxy = A68BCB042995BF2B001159B8 /* PBXContainerItemProxy */;
 		};
@@ -1265,6 +1264,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FY4NZR34Z3;
@@ -1283,6 +1283,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1296,6 +1297,7 @@
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FY4NZR34Z3;
@@ -1314,6 +1316,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
