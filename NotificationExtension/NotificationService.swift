@@ -46,6 +46,12 @@ class NotificationService: UNNotificationServiceExtension {
 			if let bestAttemptContent = bestAttemptContent {
 				let decodedMessage = try conversationTopic.toXMTP(client: client).decode(envelope)
 
+				// Don't notify when we're the sender
+				if decodedMessage.senderAddress == client.address {
+					contentHandler(UNNotificationContent())
+					return
+				}
+
 				if let conversation = DB.Conversation.find(id: conversationTopic.conversationID) {
 					bestAttemptContent.title = conversation.title
 				}
