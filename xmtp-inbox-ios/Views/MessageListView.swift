@@ -121,7 +121,7 @@ class MessagesTableViewController: UITableViewController {
 		scrollToBottom(animated: true)
 	}
 
-	override func viewWillAppear(_ animated: Bool) {
+	override func viewWillAppear(_: Bool) {
 		scrollToBottom(animated: false)
 	}
 
@@ -146,11 +146,11 @@ class MessagesTableViewController: UITableViewController {
 		}
 	}
 
-	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		self.isPinnedToBottom = indexPath.row + 1 == loader.messages.count
+	override func tableView(_: UITableView, willDisplay _: UITableViewCell, forRowAt indexPath: IndexPath) {
+		isPinnedToBottom = indexPath.row + 1 == loader.messages.count
 	}
 
-	override func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
+	override func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
 		return loader.messages.count
 	}
 
@@ -178,7 +178,7 @@ class MessagesTableViewController: UITableViewController {
 			}
 
 			tableView.reloadData()
-			
+
 			if let path = tableView.presentationIndexPath(forDataSourceIndexPath: IndexPath(row: loader.messages.count - 1, section: 0)) {
 				tableView.scrollToRow(at: path, at: .bottom, animated: animated)
 			}
