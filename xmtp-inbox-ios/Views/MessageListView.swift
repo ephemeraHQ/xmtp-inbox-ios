@@ -70,7 +70,6 @@ class MessagesTableViewController: UITableViewController {
 	func initDBObserver() {
 		observer = MessageObserver {
 			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
-				print("change happened")
 				self?.tableView.reloadData()
 			}
 		}
