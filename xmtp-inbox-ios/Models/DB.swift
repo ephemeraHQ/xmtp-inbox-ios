@@ -7,19 +7,45 @@
 
 import Foundation
 import GRDB
+import XMTP
+import CryptoKit
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = 4
+	static let version = 6
 
 	enum DBError: Error {
 		case badData(String)
 	}
 
-	static let shared = DB()
+	private static let shared = DB()
+
+	static func prepareTest(client: XMTP.Client) throws {
+		shared.mode = .test
+		try prepare(client: client, reset: true)
+	}
+
+	static func prepare(client: XMTP.Client, reset: Bool = false) throws {
+		let dbVersion = AppGroup.defaults.integer(forKey: "dbVersion")
+
+		let passphraseData = try client.privateKeyBundle.serializedData()
+		let passphrase = Data(SHA256.hash(data: passphraseData)).toHex
+
+		try shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
+
+		AppGroup.defaults.set(DB.version, forKey: "dbVersion")
+	}
 
 	static func read<T>(perform: (Database) throws -> T) throws -> T {
 		try shared.queue.read(perform)
+	}
+
+	static func write<T>(perform: (Database) throws -> T) throws -> T {
+		try shared.queue.write(perform)
+	}
+
+	static func clear() throws {
+		try shared.clear()
 	}
 
 	enum Mode {
@@ -41,13 +67,11 @@ class DB {
 		self.mode = mode
 
 		if reset {
-			// swiftlint:disable no_optional_try
 			do {
 				try FileManager.default.removeItem(at: location)
 			} catch {
 				print("Error removing db at \(location)")
 			}
-			// swiftlint:enable no_optional_try
 		}
 
 		config.prepareDatabase { db in
