@@ -140,7 +140,6 @@ class MessagesTableViewController: UITableViewController {
 
 	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		if scrollView.contentOffset.y == 0 {
-			print("scroll view did scroll to top")
 			tableView.refreshControl?.beginRefreshing()
 
 			loadEarlier()
