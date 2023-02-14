@@ -40,14 +40,6 @@ struct xmtp_inbox_iosApp: App {
 	var body: some Scene {
 		WindowGroup {
 			ContentView()
-				.onAppear {
-					do {
-						try DB.shared.prepare(passphrase: "make this real", reset: dbVersion != DB.version)
-						self.dbVersion = DB.version
-					} catch {
-						print("Error preparing DB: \(error)")
-					}
-				}
 		}
 	}
 }
