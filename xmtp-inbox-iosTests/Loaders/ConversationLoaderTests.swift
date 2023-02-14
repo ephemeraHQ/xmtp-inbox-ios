@@ -76,8 +76,6 @@ final class ConversationLoaderTests: XCTestCase {
 	}
 
 	func testCreatesOneConversationForMultipleTopicsWithSamePeerAddress() async throws {
-		try DB.prepare(client: fixtures.aliceClient, reset: true)
-
 		let aliceConversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
 		let bobConversation = try await fixtures.bobClient.conversations.newConversation(with: fixtures.aliceClient.address)
 
