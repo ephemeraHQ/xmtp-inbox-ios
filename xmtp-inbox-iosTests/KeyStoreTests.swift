@@ -13,6 +13,7 @@ import XMTP
 
 final class KeystoreTests: XCTestCase {
 	func testNoKeysByDefault() throws {
+		Auth.signOut()
 		XCTAssertEqual(nil, try Keystore.readKeys())
 	}
 
