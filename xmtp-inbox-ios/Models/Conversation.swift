@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import SwiftUI
 import XMTP
 
 extension DB {
@@ -123,9 +124,16 @@ extension DB {
 			self.lastMessage = lastMessage
 		}
 
-		func send(text: String, client: Client, topic: ConversationTopic? = nil) async throws {
+		func send(text: String, attachment: XMTP.Attachment?, client: Client, topic: ConversationTopic? = nil) async throws {
 			guard let topic = topic ?? topics().last else {
 				throw ConversationError.noTopic
+			}
+
+			if let attachment {
+				Task.detached {
+					let attachmentsTopic = try await client.conversations.newConversation(with: peerAddress, context: .init(conversationID: "xmtp.org/attachments"))
+					try await attachmentsTopic.send(content: attachment, options: .init(contentType: XMTP.ContentTypeAttachment))
+				}
 			}
 
 			try await topic.toXMTP(client: client).send(text: text)

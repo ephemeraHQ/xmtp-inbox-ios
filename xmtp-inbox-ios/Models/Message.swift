@@ -17,8 +17,13 @@ extension DB {
 		var conversationTopicID: Int
 		var senderAddress: String
 		var createdAt: Date
+		var attachments: [MessageAttachment]?
 
-		init(id: Int? = nil, xmtpID: String, body: String, conversationID: Int, conversationTopicID: Int, senderAddress: String, createdAt: Date) {
+		enum CodingKeys: String, CodingKey {
+			case id, xmtpID, body, conversationID, conversationTopicID, senderAddress, createdAt
+		}
+
+		init(id: Int? = nil, xmtpID: String, body: String, conversationID: Int, conversationTopicID: Int, senderAddress: String, createdAt: Date, attachments: [MessageAttachment] = []) {
 			self.id = id
 			self.xmtpID = xmtpID
 			self.body = body
@@ -26,10 +31,12 @@ extension DB {
 			self.conversationTopicID = conversationTopicID
 			self.senderAddress = senderAddress
 			self.createdAt = createdAt
+			self.attachments = attachments
 		}
 
 		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic) throws -> DB.Message {
-			if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
+			if var existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id), let messageID = existing.id {
+				existing.attachments = DB.MessageAttachment.where(Column("messageID") == messageID)
 				return existing
 			}
 
@@ -41,9 +48,19 @@ extension DB {
 				throw DBError.badData("Missing XMTP ID")
 			}
 
+			var body: String
+			var attachment: XMTP.Attachment?
+
+			if topic.context?.conversationID == "xmtp.org/attachments" {
+				body = ""
+				attachment = try xmtpMessage.content()
+			} else {
+				body = try xmtpMessage.content()
+			}
+
 			var message = DB.Message(
 				xmtpID: xmtpMessage.id,
-				body: try xmtpMessage.content(),
+				body: body,
 				conversationID: conversationID,
 				conversationTopicID: topicID,
 				senderAddress: xmtpMessage.senderAddress,
@@ -51,6 +68,17 @@ extension DB {
 			)
 
 			try message.save()
+
+			if let attachment, let messageID = message.id {
+				let uuid = UUID()
+				let attachmentDataURL = URL.documentsDirectory.appendingPathComponent(uuid.uuidString)
+
+				var messageAttachment = DB.MessageAttachment(messageID: messageID, mimeType: attachment.mimeType, filename: attachment.filename, uuid: uuid)
+				try messageAttachment.save(data: attachment.data)
+				try messageAttachment.save()
+
+				message.attachments = [messageAttachment]
+			}
 
 			return message
 		}
@@ -69,6 +97,8 @@ extension DB.Message: Model {
 			t.column("createdAt", .date)
 		}
 	}
+
+	static var attachments = hasMany(DB.MessageAttachment.self, key: "messageID")
 }
 
 extension DB.Message {

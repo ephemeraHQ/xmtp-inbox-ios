@@ -19,12 +19,27 @@ struct MessageCellView: View {
 				if isFromMe {
 					Spacer()
 				}
+				content
+				if !isFromMe {
+					Spacer()
+				}
+			}
+		}
+	}
+
+	@ViewBuilder
+	var content: some View {
+		VStack {
+			if message.body != "" {
 				Text(message.body)
 					.foregroundColor(textColor)
 					.padding()
 					.background(background)
-				if !isFromMe {
-					Spacer()
+			}
+
+			ForEach(message.attachments ?? [], id: \.id) { attachment in
+				if let attachment = attachment.toXMTP {
+					AttachmentPreviewView(attachment: attachment)
 				}
 			}
 		}

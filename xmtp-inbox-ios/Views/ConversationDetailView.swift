@@ -23,7 +23,7 @@ struct ConversationDetailView: View {
 			MessageListView(client: client, conversation: conversation)
 				.frame(maxHeight: .infinity)
 				.backgroundStyle(.blue)
-			MessageComposerView(offset: $offset, onSend: sendMessage(text:))
+			MessageComposerView(offset: $offset, onSend: sendMessage)
 				.padding(.horizontal)
 				.padding(.bottom)
 		}
@@ -37,10 +37,10 @@ struct ConversationDetailView: View {
 		}
 	}
 
-	func sendMessage(text: String) async {
+	func sendMessage(text: String, attachment: XMTP.Attachment?) async {
 		do {
 			// TODO(elise): Optimistic upload / undo
-			try await conversation.send(text: text, client: client)
+			try await conversation.send(text: text, attachment: attachment, client: client)
 		} catch {
 			await MainActor.run {
 				self.errorViewModel.showError("Error sending message: \(error)")

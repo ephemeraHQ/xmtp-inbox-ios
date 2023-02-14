@@ -10,6 +10,11 @@ import GRDB
 import SwiftUI
 import XMTP
 
+struct MessageWithAttachments: Codable, FetchableRecord {
+	var message: DB.Message
+	var attachments: [DB.MessageAttachment]
+}
+
 class MessageLoader: ObservableObject {
 	var client: XMTP.Client
 	var conversation: DB.Conversation
@@ -100,9 +105,15 @@ class MessageLoader: ObservableObject {
 	func fetchLocal() throws {
 		let messages = try DB.read { db in
 			try DB.Message
+				.including(all: DB.Message.attachments.forKey("attachments"))
 				.filter(Column("conversationID") == self.conversation.id)
 				.order(Column("createdAt").asc)
+				.asRequest(of: MessageWithAttachments.self)
 				.fetchAll(db)
+		}.map {
+			var message = $0.message
+			message.attachments = $0.attachments
+			return message
 		}
 
 		Task(priority: .userInitiated) {

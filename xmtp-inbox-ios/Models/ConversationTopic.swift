@@ -36,6 +36,18 @@ extension DB {
 		var contextData: Data?
 		var version: Version = .v2 // Default to v2
 
+		var context: InvitationV1.Context? {
+			guard let contextData else {
+				return nil
+			}
+
+			do {
+				return try InvitationV1.Context(serializedData: contextData)
+			} catch {
+				return nil
+			}
+		}
+
 		func toXMTP(client: Client) throws -> XMTP.Conversation {
 			switch version {
 			case .v1:

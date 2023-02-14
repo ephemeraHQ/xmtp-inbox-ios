@@ -248,8 +248,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "fix-message-ids-when-streaming",
-        "revision" : "46d3ea4815431ffe16a703cd82f24041dd1a066e"
+        "branch" : "attachments-proposal",
+        "revision" : "84c0af42f8f7d52866d8b6adf41a870965dbe43a"
       }
     }
   ],

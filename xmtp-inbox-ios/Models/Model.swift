@@ -50,6 +50,17 @@ extension Model {
 		}
 	}
 
+	static func `where`(_ predicate: SQLSpecificExpressible) -> [Self] {
+		do {
+			return try DB.read { db in
+				try filter(predicate).fetchAll(db)
+			}
+		} catch {
+			print("Error finding \(predicate) : \(error)")
+			return []
+		}
+	}
+
 	static func find(_ predicate: SQLSpecificExpressible) -> Self? {
 		do {
 			return try DB.read { db in
