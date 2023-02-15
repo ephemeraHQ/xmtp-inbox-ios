@@ -42,10 +42,9 @@ struct WalletConnectionWebview: UIViewRepresentable {
 			webView.load(request)
 		}
 
-		func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-			if let navigation {
-				print("did start provisional navigation: \(webView.url)")
-			}
+		func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+			print("navigating to \(navigationAction.request.url)")
+			decisionHandler(.allow)
 		}
 	}
 
