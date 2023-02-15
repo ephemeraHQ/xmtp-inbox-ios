@@ -12,7 +12,7 @@ import XMTP
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = 6
+	static let version = -10
 
 	enum DBError: Error {
 		case badData(String)
