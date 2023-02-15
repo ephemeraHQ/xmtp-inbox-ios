@@ -10,6 +10,19 @@ import XMTP
 
 public enum WalletProvider {
 	case rainbow, metamask, coinbase, walletconnect
+
+	var scheme: String {
+		switch self {
+		case .rainbow:
+			return "https://rnbwapp.com"
+		case .metamask:
+			return "https://metamask.app.link"
+		case .coinbase:
+			return "cbwallet"
+		case .walletconnect:
+			return "wc"
+		}
+	}
 }
 
 /// Wrapper around a WalletConnect V1 wallet connection. Account conforms to ``SigningKey`` so
@@ -17,14 +30,14 @@ public enum WalletProvider {
 ///
 /// > Warning: The WalletConnect V1 API will be deprecated soon.
 public struct Account {
-	var connection: WalletConnection
+	var connection: WCWalletConnection
 
 	public static func create() throws -> Account {
 		let connection = WCWalletConnection()
 		return try Account(connection: connection)
 	}
 
-	init(connection: WalletConnection) throws {
+	init(connection: WCWalletConnection) throws {
 		self.connection = connection
 	}
 
@@ -34,10 +47,6 @@ public struct Account {
 
 	public var address: String {
 		connection.walletAddress ?? ""
-	}
-
-	public func wcUrl(provider: WalletProvider) throws -> URL {
-		try connection.wcUrl(provider: provider)
 	}
 
 	public func connect() async throws {

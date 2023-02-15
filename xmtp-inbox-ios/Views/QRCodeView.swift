@@ -17,6 +17,12 @@ struct QRCodeView: View {
 			VStack {
 				image
 				Text("Scan this QR code with your phone.")
+
+				HapticButton(action: {
+					UIPasteboard.general.string = String(data: data, encoding: .utf8) ?? ""
+				}, label: {
+					Text("Copy to Clipboard")
+				})
 			}
 		} else {
 			ProgressView("Generating…")

@@ -74,24 +74,43 @@ struct ContentView: View {
 		if case .connecting = environmentCoordinator.auth.status {
 			// swiftlint:disable force_unwrapping
 			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
-				UIApplication.shared.open(wcUrl!)
+				let openableURL = URL(string: "\(provider.scheme)/wc?uri=\(wcUrl!.absoluteString)")
+				UIApplication.shared.open(openableURL!, options: [.universalLinksOnly: true])
 				return
 			}
 			// swiftlint:enable force_unwrapping
 		}
 
 		environmentCoordinator.auth.status = .connecting
-		Task {
+
+		Task.detached {
 			do {
 				let account = try Account.create()
-				let url = try account.wcUrl(provider: provider)
+
+				let url = "wc:\(account.connection.topic)@1?bridge=\(account.connection.bridge)&key=\(account.connection.key)"
+				let escaped = url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)?
+					.replacing("&", with: "%26")
+					.replacing("=", with: "%3D")
+				guard let escaped,
+				      let openableURL = URL(string: "\(provider.scheme)/wc?uri=\(escaped)")
+				else {
+					return
+				}
+
+				print("openable url: \(openableURL.absoluteString)")
 
 				await MainActor.run {
-					self.wcUrl = url
-
-					environmentCoordinator.auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
+					self.wcUrl = URL(string: url)
+					environmentCoordinator.auth.isShowingQRCode = !UIApplication.shared.canOpenURL(openableURL)
 				}
-				await UIApplication.shared.open(url)
+
+				await MainActor.run {
+					do {
+						UIApplication.shared.open(openableURL, options: [.universalLinksOnly: true])
+					} catch {
+						environmentCoordinator.auth.isShowingQRCode = true
+					}
+				}
 
 				try await account.connect()
 				for _ in 0 ... 30 {

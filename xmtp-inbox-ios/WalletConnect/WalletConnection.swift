@@ -11,25 +11,6 @@ import WalletConnectSwift
 import web3
 import XMTP
 
-extension WCURL {
-	func asURL(provider: WalletProvider) -> URL {
-		// swiftlint:disable force_unwrapping
-		let escaped = absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-
-		switch provider {
-		case .rainbow:
-			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
-		case .metamask:
-			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
-		case .coinbase:
-			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
-		case .walletconnect:
-			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
-		}
-		// swiftlint:enable force_unwrapping
-	}
-}
-
 enum WalletConnectionError: String, Error {
 	case walletConnectURL
 	case noSession
@@ -38,15 +19,7 @@ enum WalletConnectionError: String, Error {
 	case noSignature
 }
 
-protocol WalletConnection {
-	var isConnected: Bool { get }
-	var walletAddress: String? { get }
-	func wcUrl(provider: WalletProvider) throws -> URL
-	func connect() async throws
-	func sign(_ data: Data) async throws -> Data
-}
-
-class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
+class WCWalletConnection: WalletConnectSwift.ClientDelegate {
 	@Published public var isConnected = false
 
 	var walletConnectClient: WalletConnectSwift.Client!
@@ -58,7 +31,17 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 		}
 	}
 
+	var topic: UUID
+	var key: String
+	var bridge = "https://bridge.walletconnect.org"
+
 	init() {
+		// swiftlint:disable force_try
+		let keybytes = try! WCWalletConnection.secureRandomBytes(count: 32)
+		// swiftlint:enable force_try
+		key = keybytes.reduce("") { $0 + String(format: "%02x", $1) }
+		topic = UUID()
+
 		let peerMeta = Session.ClientMeta(
 			name: "XMTP Inbox",
 			description: "Universal XMTP messaging app",
@@ -72,30 +55,13 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 		walletConnectClient = WalletConnectSwift.Client(delegate: self, dAppInfo: dAppInfo)
 	}
 
-	func wcUrl(provider: WalletProvider) throws -> URL {
-		guard let url = walletConnectURL?.asURL(provider: provider) else {
-			throw WalletConnectionError.walletConnectURL
-		}
-		return url
-	}
-
-	lazy var walletConnectURL: WCURL? = {
-		do {
-			let keybytes = try secureRandomBytes(count: 32)
-
-			return WCURL(
-				topic: UUID().uuidString,
-				// swiftlint:disable force_unwrapping
-				bridgeURL: URL(string: "https://bridge.walletconnect.org")!,
-				// swiftlint:enable force_unwrapping
-				key: keybytes.reduce("") { $0 + String(format: "%02x", $1) }
-			)
-		} catch {
-			return nil
-		}
+	lazy var walletConnectURL: WCURL = {
+		// swiftlint:disable force_unwrapping
+		WCURL(topic: topic.uuidString, bridgeURL: URL(string: bridge)!, key: key)
+		// swiftlint:enable force_unwrapping
 	}()
 
-	func secureRandomBytes(count: Int) throws -> Data {
+	static func secureRandomBytes(count: Int) throws -> Data {
 		var bytes = [UInt8](repeating: 0, count: count)
 
 		// Fill bytes with secure random data
@@ -114,11 +80,7 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 	}
 
 	func connect() async throws {
-		guard let url = walletConnectURL else {
-			throw WalletConnectionError.walletConnectURL
-		}
-
-		try walletConnectClient.connect(to: url)
+		try walletConnectClient.connect(to: walletConnectURL)
 	}
 
 	func sign(_ data: Data) async throws -> Data {
@@ -130,17 +92,13 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 			throw WalletConnectionError.noAddress
 		}
 
-		guard let url = walletConnectURL else {
-			throw WalletConnectionError.walletConnectURL
-		}
-
 		guard let message = String(data: data, encoding: .utf8) else {
 			throw WalletConnectionError.invalidMessage
 		}
 
 		return try await withCheckedThrowingContinuation { continuation in
 			do {
-				try walletConnectClient.personal_sign(url: url, message: message, account: walletAddress) { response in
+				try walletConnectClient.personal_sign(url: walletConnectURL, message: message, account: walletAddress) { response in
 					if let error = response.error {
 						continuation.resume(throwing: error)
 						return
