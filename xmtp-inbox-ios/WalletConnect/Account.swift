@@ -8,6 +8,10 @@ import Foundation
 import UIKit
 import XMTP
 
+public enum WalletProvider {
+	case rainbow, metamask, coinbase, walletconnect
+}
+
 /// Wrapper around a WalletConnect V1 wallet connection. Account conforms to ``SigningKey`` so
 /// you can use it to create a ``Client``.
 ///
@@ -32,8 +36,8 @@ public struct Account {
 		connection.walletAddress ?? ""
 	}
 
-	public func wcUrl() throws -> URL {
-		try connection.wcUrl()
+	public func wcUrl(provider: WalletProvider) throws -> URL {
+		try connection.wcUrl(provider: provider)
 	}
 
 	public func connect() async throws {

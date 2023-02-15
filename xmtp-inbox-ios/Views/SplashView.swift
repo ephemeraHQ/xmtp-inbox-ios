@@ -10,7 +10,13 @@ import SwiftUI
 struct SplashView: View {
 	var isConnecting: Bool
 	var onTryDemo: () -> Void
-	var onConnectWallet: () -> Void
+	var onConnectWallet: (WalletProvider) -> Void
+
+	@State private var isChoosingWallet = false
+
+	func connectWallet() {
+		isChoosingWallet.toggle()
+	}
 
 	var body: some View {
 		VStack {
@@ -33,7 +39,7 @@ struct SplashView: View {
 
 			let buttonHeight = 58.0
 			if isConnecting {
-				Button(action: onConnectWallet) {
+				Button(action: connectWallet) {
 					ProgressView()
 						.progressViewStyle(CircularProgressViewStyle(tint: .actionPrimaryText))
 						.padding(4.0)
@@ -48,7 +54,7 @@ struct SplashView: View {
 				.clipShape(Capsule())
 				.padding()
 			} else {
-				Button(action: onConnectWallet) {
+				Button(action: connectWallet) {
 					Text("connect-wallet-cta")
 						.kerning(0.5)
 						.padding()
@@ -68,6 +74,11 @@ struct SplashView: View {
 					onTryDemo()
 				}
 		}
+		.sheet(isPresented: $isChoosingWallet) {
+			WalletSelectionSheet { scheme in
+				onConnectWallet(scheme)
+			}
+		}
 	}
 }
 
@@ -75,6 +86,7 @@ struct SplashView_Previews: PreviewProvider {
 	static var onTryDemo: () -> Void = {}
 	static var onConnectWallet: () -> Void = {}
 	static var previews: some View {
-		SplashView(isConnecting: false, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
+		SplashView(isConnecting: false, onTryDemo: onTryDemo) { _ in
+		}
 	}
 }

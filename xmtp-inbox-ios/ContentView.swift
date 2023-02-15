@@ -67,7 +67,7 @@ struct ContentView: View {
 		}
 	}
 
-	func onConnectWallet() {
+	func onConnectWallet(provider: WalletProvider) {
 		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
 
 		// If already connecting, bounce back out to the WalletConnect URL
@@ -84,7 +84,7 @@ struct ContentView: View {
 		Task {
 			do {
 				let account = try Account.create()
-				let url = try account.wcUrl()
+				let url = try account.wcUrl(provider: provider)
 
 				await MainActor.run {
 					self.wcUrl = url

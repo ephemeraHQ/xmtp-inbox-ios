@@ -12,9 +12,20 @@ import web3
 import XMTP
 
 extension WCURL {
-	var asURL: URL {
+	func asURL(provider: WalletProvider) -> URL {
 		// swiftlint:disable force_unwrapping
-		URL(string: "wc://wc?uri=\(absoluteString)")!
+		let escaped = absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+
+		switch provider {
+		case .rainbow:
+			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
+		case .metamask:
+			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
+		case .coinbase:
+			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
+		case .walletconnect:
+			return URL(string: "wc:\(topic)@1?bridge=\(bridgeURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)&key=\(key)")!
+		}
 		// swiftlint:enable force_unwrapping
 	}
 }
@@ -30,7 +41,7 @@ enum WalletConnectionError: String, Error {
 protocol WalletConnection {
 	var isConnected: Bool { get }
 	var walletAddress: String? { get }
-	func wcUrl() throws -> URL
+	func wcUrl(provider: WalletProvider) throws -> URL
 	func connect() async throws
 	func sign(_ data: Data) async throws -> Data
 }
@@ -53,7 +64,7 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 			description: "Universal XMTP messaging app",
 			icons: [],
 			// swiftlint:disable force_unwrapping
-			url: URL(string: "https://safe.gnosis.io")!
+			url: URL(string: "https://xmtp.org")!
 			// swiftlint:enable force_unwrapping
 		)
 		let dAppInfo = WalletConnectSwift.Session.DAppInfo(peerId: UUID().uuidString, peerMeta: peerMeta)
@@ -61,8 +72,8 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 		walletConnectClient = WalletConnectSwift.Client(delegate: self, dAppInfo: dAppInfo)
 	}
 
-	func wcUrl() throws -> URL {
-		guard let url = walletConnectURL?.asURL else {
+	func wcUrl(provider: WalletProvider) throws -> URL {
+		guard let url = walletConnectURL?.asURL(provider: provider) else {
 			throw WalletConnectionError.walletConnectURL
 		}
 		return url
