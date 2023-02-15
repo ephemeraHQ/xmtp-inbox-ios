@@ -13,6 +13,7 @@ struct ContentView: View {
 	@StateObject private var environmentCoordinator = EnvironmentCoordinator()
 
 	// TODO: Move all this elsewhere
+	@State private var account: Account?
 	@State private var wcUrl: URL?
 	@State private var provider: WalletProvider?
 
@@ -75,9 +76,9 @@ struct ContentView: View {
 		// If already connecting, bounce back out to the WalletConnect URL
 		if case .connecting = environmentCoordinator.auth.status {
 			// swiftlint:disable force_unwrapping
-			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
-				let openableURL = URL(string: "\(provider.scheme)/wc?uri=\(wcUrl!.absoluteString)")
-				UIApplication.shared.open(openableURL!, options: [.universalLinksOnly: true])
+			if let account, UIApplication.shared.canOpenURL(wcUrl!) {
+				let openableURL = provider.openableURL(from: account)
+				UIApplication.shared.open(openableURL, options: [.universalLinksOnly: true])
 				return
 			}
 			// swiftlint:enable force_unwrapping
@@ -88,33 +89,24 @@ struct ContentView: View {
 		Task.detached {
 			do {
 				let account = try Account.create()
-
-				let url = "wc:\(account.connection.topic)@1?bridge=\(account.connection.bridge)&key=\(account.connection.key)"
-				let escaped = url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)?
-					.replacing("&", with: "%26")
-					.replacing("=", with: "%3D")
-				guard let escaped,
-				      let openableURL = URL(string: "\(provider.scheme)/wc?uri=\(escaped)")
-				else {
-					return
+				await MainActor.run {
+					self.account = account
 				}
-
-				print("openable url: \(openableURL.absoluteString)")
+				
+				let url = provider.url(from: account)
+				let openableURL = provider.openableURL(from: account)
+				try await account.connect()
 
 				await MainActor.run {
-					self.wcUrl = URL(string: url)
-					environmentCoordinator.auth.isShowingQRCode = !UIApplication.shared.canOpenURL(openableURL)
-				}
+					self.wcUrl = url
 
-				await MainActor.run {
-					do {
-						UIApplication.shared.open(openableURL, options: [.universalLinksOnly: true])
-					} catch {
+					if provider == .walletconnect || !UIApplication.shared.canOpenURL(openableURL) {
 						environmentCoordinator.auth.isShowingQRCode = true
+					} else {
+						UIApplication.shared.open(openableURL)
 					}
 				}
 
-				try await account.connect()
 				for _ in 0 ... 30 {
 					if account.isConnected {
 						let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))

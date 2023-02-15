@@ -7,18 +7,38 @@
 import Foundation
 import UIKit
 import XMTP
+import WalletConnectSwift
 
 public enum WalletProvider {
 	case rainbow, metamask, walletconnect
 
-	var scheme: String {
+	func url(from account: Account) -> URL {
+		let topic = account.connection.topic
+		let bridgeURL = account.connection.bridge
+		let key = account.connection.key
+
+		return URL(forceString: "wc:\(topic)@1?bridge=\(bridgeURL)&key=\(key)")
+	}
+
+	func openableURL(from account: Account) -> URL {
+		let topic = account.connection.topic
+		let bridgeURL = account.connection.bridge
+		let key = account.connection.key
+
 		switch self {
 		case .rainbow:
-			return "https://rnbwapp.com"
+			let url = "wc:\(topic)@1?bridge=\(bridgeURL)&key=\(key)"
+			let escaped = url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)?
+				.replacing("&", with: "%26")
+				.replacing("=", with: "%3D")
+			// swiftlint:disable force_unwrapping
+			return URL(forceString: "https://rnbwapp.com/wc?uri=\(escaped!)")
+			// swiftlint:enable force_unwrapping
 		case .metamask:
-			return "metamask://wc"
+			return URL(forceString: "metamask://wc")
 		case .walletconnect:
-			return "wc://wc"
+			let wcURL = WCURL(topic: topic.uuidString, bridgeURL: URL(forceString: bridgeURL), key: key)
+			return URL(forceString: "wc://wc?uri=\(wcURL.absoluteString)")
 		}
 	}
 }
@@ -27,7 +47,7 @@ public enum WalletProvider {
 /// you can use it to create a ``Client``.
 ///
 /// > Warning: The WalletConnect V1 API will be deprecated soon.
-public struct Account {
+public struct Account: Sendable {
 	var connection: WCWalletConnection
 
 	public static func create() throws -> Account {
