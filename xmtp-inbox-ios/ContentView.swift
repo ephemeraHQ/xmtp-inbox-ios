@@ -12,7 +12,9 @@ import XMTP
 struct ContentView: View {
 	@StateObject private var environmentCoordinator = EnvironmentCoordinator()
 
+	// TODO: Move all this elsewhere
 	@State private var wcUrl: URL?
+	@State private var provider: WalletProvider?
 
 	@StateObject private var errorViewModel = ErrorViewModel()
 
@@ -24,9 +26,9 @@ struct ContentView: View {
 			case .loadingKeys:
 				ProgressView()
 			case .signedOut, .tryingDemo:
-				SplashView(isConnecting: false, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
+				SplashView(isConnecting: false, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet, provider: $provider)
 			case .connecting:
-				SplashView(isConnecting: true, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
+				SplashView(isConnecting: true, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet, provider: $provider)
 			case let .connected(client):
 				HomeView(client: client)
 			}

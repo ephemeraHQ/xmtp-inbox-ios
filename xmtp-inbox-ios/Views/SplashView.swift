@@ -13,9 +13,14 @@ struct SplashView: View {
 	var onConnectWallet: (WalletProvider) -> Void
 
 	@State private var isChoosingWallet = false
+	@Binding var provider: WalletProvider?
 
 	func connectWallet() {
-		isChoosingWallet.toggle()
+		if let provider {
+			onConnectWallet(provider)
+		} else {
+			isChoosingWallet.toggle()
+		}
 	}
 
 	var body: some View {
@@ -75,8 +80,9 @@ struct SplashView: View {
 				}
 		}
 		.sheet(isPresented: $isChoosingWallet) {
-			WalletSelectionSheet { scheme in
-				onConnectWallet(scheme)
+			WalletSelectionSheet { provider in
+				onConnectWallet(provider)
+				self.provider = provider
 			}
 		}
 	}
@@ -86,7 +92,7 @@ struct SplashView_Previews: PreviewProvider {
 	static var onTryDemo: () -> Void = {}
 	static var onConnectWallet: () -> Void = {}
 	static var previews: some View {
-		SplashView(isConnecting: false, onTryDemo: onTryDemo) { _ in
-		}
+		SplashView(isConnecting: false, onTryDemo: onTryDemo, onConnectWallet: { _ in
+		}, provider: .constant(.rainbow))
 	}
 }

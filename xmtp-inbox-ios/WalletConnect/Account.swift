@@ -9,18 +9,16 @@ import UIKit
 import XMTP
 
 public enum WalletProvider {
-	case rainbow, metamask, coinbase, walletconnect
+	case rainbow, metamask, walletconnect
 
 	var scheme: String {
 		switch self {
 		case .rainbow:
 			return "https://rnbwapp.com"
 		case .metamask:
-			return "https://metamask.app.link"
-		case .coinbase:
-			return "cbwallet"
+			return "metamask://wc"
 		case .walletconnect:
-			return "wc"
+			return "wc://wc"
 		}
 	}
 }

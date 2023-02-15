@@ -24,11 +24,6 @@ struct WalletSelectionSheet: View {
 					Text("MetaMask")
 				}
 				Button(action: {
-					onChoose(.coinbase)
-				}) {
-					Text("Coinbase")
-				}
-				Button(action: {
 					onChoose(.walletconnect)
 				}) {
 					Text("WalletConnect")
