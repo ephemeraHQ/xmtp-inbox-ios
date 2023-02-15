@@ -6,8 +6,8 @@
 //
 import Foundation
 import UIKit
-import XMTP
 import WalletConnectSwift
+import XMTP
 
 public enum WalletProvider {
 	case rainbow, metamask, walletconnect
@@ -33,7 +33,7 @@ public enum WalletProvider {
 				.replacing("=", with: "%3D")
 			// swiftlint:disable force_unwrapping
 			return URL(forceString: "https://rnbwapp.com/wc?uri=\(escaped!)")
-			// swiftlint:enable force_unwrapping
+		// swiftlint:enable force_unwrapping
 		case .metamask:
 			return URL(forceString: "metamask://wc")
 		case .walletconnect:

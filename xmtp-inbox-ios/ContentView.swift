@@ -92,7 +92,7 @@ struct ContentView: View {
 				await MainActor.run {
 					self.account = account
 				}
-				
+
 				let url = provider.url(from: account)
 				let openableURL = provider.openableURL(from: account)
 				try await account.connect()
