@@ -12,7 +12,7 @@ final class xmtp_inbox_iosUITests: XCTestCase {
 		let app = XCUIApplication()
 		app.launch()
 
-		let connectButton = app.buttons["Connect your wallet"]
+		let connectButton = app.webViews.buttons["Connect your wallet"]
 		connectButton.waitForExistence(timeout: 10)
 
 		XCTAssert(connectButton.exists)
