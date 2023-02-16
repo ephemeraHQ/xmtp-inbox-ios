@@ -19,16 +19,15 @@ struct ContentView: View {
 	var body: some View {
 		ZStack {
 			Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-
 			switch environmentCoordinator.auth.status {
-			case .loadingKeys:
-				ProgressView()
-			case .signedOut, .tryingDemo:
-				SplashView(isConnecting: false, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
-			case .connecting:
-				SplashView(isConnecting: true, onTryDemo: onTryDemo, onConnectWallet: onConnectWallet)
 			case let .connected(client):
 				HomeView(client: client)
+			case .connecting:
+				ProgressView("Awaiting signatures…")
+			case .loadingKeys:
+				ProgressView()
+			default:
+				SplashView(onTryDemo: onTryDemo, onConnecting: onConnecting, onConnected: onConnectWallet)
 			}
 		}
 		.toast(isPresenting: $errorViewModel.isShowing) {
@@ -44,6 +43,12 @@ struct ContentView: View {
 		.environmentObject(environmentCoordinator)
 		.task {
 			await loadClient()
+		}
+	}
+
+	func onConnecting() {
+		withAnimation {
+			environmentCoordinator.auth.status = .connecting
 		}
 	}
 
@@ -67,59 +72,16 @@ struct ContentView: View {
 		}
 	}
 
-	func onConnectWallet() {
-		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-
-		// If already connecting, bounce back out to the WalletConnect URL
-		if case .connecting = environmentCoordinator.auth.status {
-			// swiftlint:disable force_unwrapping
-			if self.wcUrl != nil && UIApplication.shared.canOpenURL(wcUrl!) {
-				UIApplication.shared.open(wcUrl!)
-				return
-			}
-			// swiftlint:enable force_unwrapping
+	func onConnectWallet(client: Client) {
+		do {
+			let keys = client.v1keys
+			try Keystore.saveKeys(address: client.address, keys: keys)
+		} catch {
+			print("Error saving keys: \(error)")
 		}
 
-		environmentCoordinator.auth.status = .connecting
-		Task {
-			do {
-				let account = try Account.create()
-				let url = try account.wcUrl()
-
-				await MainActor.run {
-					self.wcUrl = url
-
-					environmentCoordinator.auth.isShowingQRCode = !UIApplication.shared.canOpenURL(url)
-				}
-				await UIApplication.shared.open(url)
-
-				try await account.connect()
-				for _ in 0 ... 30 {
-					if account.isConnected {
-						let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
-						let keys = client.v1keys
-						try Keystore.saveKeys(address: client.address, keys: keys)
-
-						await MainActor.run {
-							withAnimation {
-								environmentCoordinator.auth.status = .connected(client)
-							}
-						}
-						return
-					}
-
-					try await Task.sleep(for: .seconds(1))
-				}
-				await MainActor.run {
-					environmentCoordinator.auth.status = .signedOut
-					self.errorViewModel.showError("Timed out waiting to connect (30 seconds)")
-				}
-			} catch {
-				await MainActor.run {
-					environmentCoordinator.auth.status = .signedOut
-					self.errorViewModel.showError("Error connecting: \(error)")
-				}
-			}
+		withAnimation {
+			environmentCoordinator.auth.status = .connected(client)
 		}
 	}
 

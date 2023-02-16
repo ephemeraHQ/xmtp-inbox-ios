@@ -90,6 +90,7 @@
 		A69C928129942DD300E49F9B /* XMTPTestHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = A69C928029942DD300E49F9B /* XMTPTestHelpers */; };
 		A6A5AB7A29941DC6004F5006 /* ConversationLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */; };
 		A6C18C37299993EE001E00CA /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = A6C18C36299993EE001E00CA /* Introspect */; };
+		A6D80E33299C3313002E8117 /* connect.html in Resources */ = {isa = PBXBuildFile; fileRef = A6D80E32299C3313002E8117 /* connect.html */; };
 		A6FCA31B299AECCF00EFB39D /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */; };
 		A6FCA31C299AECCF00EFB39D /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */; };
 		C0FC8F7534D053D77C7844DE /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 317FFBF07954FD4F1A3422AD /* Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests.framework */; };
@@ -216,6 +217,7 @@
 		A68C8A4E298C6CC1003A9A95 /* ConversationLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoader.swift; sourceTree = "<group>"; };
 		A68C8A52298C8BED003A9A95 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoaderTests.swift; sourceTree = "<group>"; };
+		A6D80E32299C3313002E8117 /* connect.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = connect.html; sourceTree = "<group>"; };
 		A6FCA318299AEC9900EFB39D /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		C99AE74FEC77F3029E8F36C6 /* Pods-xmtp-inbox-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-iosTests/Pods-xmtp-inbox-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 		6A40154529526795003A6659 /* xmtp-inbox-ios */ = {
 			isa = PBXGroup;
 			children = (
+				A6D80E31299C32FD002E8117 /* HTML */,
 				A68C8A4D298C6CA6003A9A95 /* Loaders */,
 				A68C8A42298C5D8D003A9A95 /* Models */,
 				6A4612FD298177A400346D68 /* ViewModels */,
@@ -481,6 +484,14 @@
 				A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */,
 			);
 			path = Loaders;
+			sourceTree = "<group>";
+		};
+		A6D80E31299C32FD002E8117 /* HTML */ = {
+			isa = PBXGroup;
+			children = (
+				A6D80E32299C3313002E8117 /* connect.html */,
+			);
+			path = HTML;
 			sourceTree = "<group>";
 		};
 		CDE5052D4E36926AFC31564A /* Pods */ = {
@@ -661,6 +672,7 @@
 			files = (
 				6AF033EE2954CF3F0043FB6A /* Localizable.strings in Resources */,
 				6AC5CFB32953FA750046325C /* .swiftformat in Resources */,
+				A6D80E33299C3313002E8117 /* connect.html in Resources */,
 				6A40154F29526796003A6659 /* Preview Assets.xcassets in Resources */,
 				6A40154B29526796003A6659 /* Assets.xcassets in Resources */,
 			);
@@ -1427,7 +1439,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = "fix-message-ids-when-streaming";
+				branch = main;
 				kind = branch;
 			};
 		};
