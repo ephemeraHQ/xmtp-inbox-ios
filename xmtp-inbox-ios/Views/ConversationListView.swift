@@ -45,15 +45,6 @@ struct ConversationListView: View {
 					ForEach(conversationLoader.conversations, id: \.id) { conversation in
 						Button(action: {
 							coordinator.path.append(conversation)
-//
-//							Task {
-//								do {
-//									// Reload conversations here to update read state
-//									try await conversationLoader.fetchLocal()
-//								} catch {
-//									print("Error reloading conversations: \(error)")
-//								}
-//							}
 						}) {
 							ConversationCellView(conversation: conversation)
 								.padding(.horizontal, 8)
