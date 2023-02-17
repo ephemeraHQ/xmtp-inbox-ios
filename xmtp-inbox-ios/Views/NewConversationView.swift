@@ -94,6 +94,11 @@ struct NewConversationView: View {
 						self.error = NSLocalizedString("invalid-ethereum-address", comment: "")
 					}
 				}
+
+				if debouncedText.lowercased() == client.address.lowercased() {
+					self.error = NSLocalizedString("cannot-message-self", comment: "")
+					self.searchResults = []
+				}
 			}
 		} catch {
 			print("Error searching: \(error)")

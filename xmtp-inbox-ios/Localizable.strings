@@ -34,4 +34,5 @@
 "new-message-prompt" = "Enter a wallet address";
 "valid-ethereum-address" = "Valid Ethereum address";
 "invalid-ethereum-address" = "Invalid Ethereum address";
+"cannot-message-self" = "Sorry, you can‘t message yourself";
 "not-on-network-error" = "Recipient is not on the XMTP network";
