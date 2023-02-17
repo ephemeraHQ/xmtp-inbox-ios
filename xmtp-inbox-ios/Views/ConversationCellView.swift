@@ -25,7 +25,7 @@ struct ConversationCellView: View {
 				.fill(isUnread ? Color.blue : Color.clear)
 				.frame(width: 8, height: 8)
 			HStack(alignment: .top) {
-				EnsImageView(imageSize: 48.0, peerAddress: conversation.peerAddress)
+				AvatarView(imageSize: 48.0, peerAddress: conversation.peerAddress)
 				VStack(alignment: .leading) {
 					HStack {
 						Text(conversation.title)

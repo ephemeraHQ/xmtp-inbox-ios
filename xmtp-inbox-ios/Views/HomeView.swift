@@ -35,7 +35,7 @@ struct HomeView: View {
 			.navigationBarItems(leading: HapticButton {
 				isShowingAccount.toggle()
 			} label: {
-				EnsImageView(imageSize: 40.0, peerAddress: client.address)
+				AvatarView(imageSize: 40.0, peerAddress: client.address)
 			})
 			.toolbar {
 				ToolbarItem(placement: .principal) {
