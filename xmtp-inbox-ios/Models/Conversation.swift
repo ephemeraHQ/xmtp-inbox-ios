@@ -20,19 +20,21 @@ extension DB {
 		var peerAddress: String
 		var createdAt: Date
 		var updatedAt: Date
+		var viewedAt: Date?
 
 		enum CodingKeys: String, CodingKey {
-			case id, ens, peerAddress, createdAt, updatedAt
+			case id, ens, peerAddress, createdAt, updatedAt, viewedAt
 		}
 
 		// Can be prefilled
 		var lastMessage: DB.Message?
 
-		init(id: Int? = nil, peerAddress: String, createdAt: Date, updatedAt: Date? = nil) {
+		init(id: Int? = nil, peerAddress: String, createdAt: Date, updatedAt: Date? = nil, viewedAt: Date? = nil) {
 			self.id = id
 			self.peerAddress = peerAddress
 			self.createdAt = createdAt
 			self.updatedAt = updatedAt ?? createdAt
+			self.viewedAt = viewedAt
 		}
 
 		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation) async throws -> DB.Conversation {
@@ -88,6 +90,15 @@ extension DB {
 
 		var title: String {
 			ens ?? peerAddress.truncatedAddress()
+		}
+
+		mutating func markViewed() {
+			do {
+				viewedAt = Date()
+				try save()
+			} catch {
+				print("Error marking conversation viewed: \(error)")
+			}
 		}
 
 		func messages(client: Client) async throws -> [DecodedMessage] {
@@ -152,6 +163,7 @@ extension DB.Conversation: Model {
 			t.column("peerAddress", .text).notNull()
 			t.column("createdAt", .date).notNull()
 			t.column("updatedAt", .date).notNull()
+			t.column("viewedAt", .date)
 		}
 	}
 
