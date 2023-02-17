@@ -11,7 +11,17 @@ import SwiftUI
 import UIKit
 import XMTP
 
-class MessageTableViewCell: UITableViewCell {}
+class MessageTableViewCell: UITableViewCell {
+	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+		super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+		selectionStyle = .none
+	}
+
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+}
 
 class MessageObserver: TransactionObserver {
 	var callback: () -> Void
@@ -144,6 +154,10 @@ class MessagesTableViewController: UITableViewController {
 
 			loadEarlier()
 		}
+	}
+
+	override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+		return nil
 	}
 
 	override func tableView(_: UITableView, willDisplay _: UITableViewCell, forRowAt indexPath: IndexPath) {
