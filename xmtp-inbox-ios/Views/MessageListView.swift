@@ -179,7 +179,7 @@ class MessagesTableViewController: UITableViewController {
 		}
 		.margins(.vertical, 4)
 		// Give it a bit more room for the last one
-		.margins(.bottom, indexPath.row == loader.timeline.count-1 ? 8 : 4)
+		.margins(.bottom, indexPath.row == loader.timeline.count - 1 ? 8 : 4)
 
 		return newCell
 	}

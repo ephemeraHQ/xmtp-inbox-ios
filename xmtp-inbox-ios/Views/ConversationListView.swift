@@ -43,15 +43,27 @@ struct ConversationListView: View {
 			case .success:
 				List {
 					ForEach(conversationLoader.conversations, id: \.id) { conversation in
-						NavigationLink(destination: ConversationDetailView(client: client, conversation: conversation)
-						) {
+						Button(action: {
+							coordinator.path.append(conversation)
+//
+//							Task {
+//								do {
+//									// Reload conversations here to update read state
+//									try await conversationLoader.fetchLocal()
+//								} catch {
+//									print("Error reloading conversations: \(error)")
+//								}
+//							}
+						}) {
 							ConversationCellView(conversation: conversation)
+								.padding(.horizontal, 8)
 						}
 					}
 					.listRowBackground(Color.backgroundPrimary)
 					.listRowInsets(EdgeInsets())
 					.padding(.vertical)
 				}
+				.listStyle(.plain)
 				.scrollContentBackground(.hidden)
 				.refreshable {
 					await loadConversations()

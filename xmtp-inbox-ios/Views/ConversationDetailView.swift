@@ -11,7 +11,7 @@ import XMTP
 
 struct ConversationDetailView: View {
 	let client: XMTP.Client
-	let conversation: DB.Conversation
+	@State var conversation: DB.Conversation
 
 	@State private var errorViewModel = ErrorViewModel()
 
@@ -32,6 +32,13 @@ struct ConversationDetailView: View {
 		.navigationTitle(conversation.title)
 		.navigationBarTitleDisplayMode(.inline)
 		.toolbarBackground(.visible, for: .navigationBar)
+		.onAppear {
+			do {
+				try conversation.markViewed()
+			} catch {
+				print("Error marking conversation as viewed: \(error)")
+			}
+		}
 		.toast(isPresenting: $errorViewModel.isShowing) {
 			AlertToast.error(errorViewModel.errorMessage)
 		}
