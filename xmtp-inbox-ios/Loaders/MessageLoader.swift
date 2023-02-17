@@ -34,20 +34,25 @@ class MessageLoader: ObservableObject {
 		}
 	}
 
+	func streamTopic(topic: DB.ConversationTopic) async {
+		do {
+			for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
+				let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
+				await MainActor.run {
+					messages.append(message)
+					mostRecentMessageID = message.xmtpID
+				}
+			}
+		} catch {
+			print("Error streaming topic (\(topic)): \(error). Retrying…")
+			await streamTopic(topic: topic)
+		}
+	}
+
 	func streamMessages() async {
 		for topic in conversation.topics() {
 			Task {
-				for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
-					do {
-						let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
-						await MainActor.run {
-							messages.append(message)
-							mostRecentMessageID = message.xmtpID
-						}
-					} catch {
-						print("Error with message: \(error)")
-					}
-				}
+				await streamTopic(topic: topic)
 			}
 		}
 	}
