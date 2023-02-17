@@ -15,6 +15,7 @@ struct ConversationListView: View {
 	}
 
 	let client: XMTP.Client
+	let observer: MessageObserver!
 
 	@State private var mostRecentMessages = [String: DecodedMessage]()
 	@State private var status: LoadingStatus = .success
@@ -25,8 +26,25 @@ struct ConversationListView: View {
 	@StateObject private var conversationLoader: ConversationLoader
 
 	init(client: XMTP.Client) {
+		let conversationLoader = ConversationLoader(client: client)
+
 		self.client = client
-		_conversationLoader = StateObject(wrappedValue: ConversationLoader(client: client))
+		_conversationLoader = StateObject(wrappedValue: conversationLoader)
+
+		observer = MessageObserver {
+			Task {
+				try await Task.sleep(for: .milliseconds(500))
+				try await conversationLoader.fetchLocal()
+			}
+		}
+
+		do {
+			try DB.read { db in
+				db.add(transactionObserver: observer)
+			}
+		} catch {
+			print("Error adding observer \(error)")
+		}
 	}
 
 	var body: some View {
