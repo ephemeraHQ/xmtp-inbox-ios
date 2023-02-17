@@ -21,18 +21,6 @@ class DB {
 
 	private static let shared = DB()
 
-	static var observer: DatabaseQueue {
-		shared.queue
-	}
-
-	static func observe<T>(setup: @escaping (Database) -> AnyPublisher<T, Error>) -> DatabasePublishers.Value<AnyPublisher<T, any Error>> {
-		let observation = ValueObservation.tracking { db in
-			setup(db)
-		}
-
-		return observation.publisher(in: shared.queue)
-	}
-
 	static func prepareTest(client: XMTP.Client) throws {
 		shared.mode = .test
 		try prepare(client: client, reset: true)
