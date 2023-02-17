@@ -177,6 +177,9 @@ class MessagesTableViewController: UITableViewController {
 		newCell.contentConfiguration = UIHostingConfiguration {
 			MessageListEntryView(messagelistEntry: entry)
 		}
+		.margins(.vertical, 4)
+		// Give it a bit more room for the last one
+		.margins(.bottom, indexPath.row == loader.timeline.count-1 ? 8 : 4)
 
 		return newCell
 	}
