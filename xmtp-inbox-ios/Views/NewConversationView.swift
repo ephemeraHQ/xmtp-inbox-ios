@@ -48,7 +48,7 @@ struct NewConversationView: View {
 								createConversation(address: result.address)
 							} label: {
 								HStack {
-									EnsImageView(imageSize: 48, peerAddress: result.address)
+									AvatarView(imageSize: 48, peerAddress: result.address)
 										.padding(.trailing, 8)
 									VStack(alignment: .leading) {
 										Text(result.address.truncatedAddress())

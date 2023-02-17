@@ -28,7 +28,7 @@ struct AccountView: View {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				List {
 					VStack(alignment: .center) {
-						EnsImageView(imageSize: 80, peerAddress: client.address)
+						AvatarView(imageSize: 80, peerAddress: client.address)
 							.padding()
 
 						HapticButton(action: {
