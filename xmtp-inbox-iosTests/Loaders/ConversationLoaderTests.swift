@@ -49,7 +49,7 @@ final class ConversationLoaderTests: XCTestCase {
 		XCTAssertEqual("1", loadedConversation.lastMessage?.body)
 
 		let thePast = Date().addingTimeInterval(-1000)
-		try await DB.write { db in
+		try DB.write { db in
 			try db.execute(sql: "UPDATE message SET createdAt = ?", arguments: [thePast])
 		}
 

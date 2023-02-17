@@ -17,8 +17,9 @@ extension DB {
 		var conversationTopicID: Int
 		var senderAddress: String
 		var createdAt: Date
+		var isFromMe: Bool
 
-		init(id: Int? = nil, xmtpID: String, body: String, conversationID: Int, conversationTopicID: Int, senderAddress: String, createdAt: Date) {
+		init(id: Int? = nil, xmtpID: String, body: String, conversationID: Int, conversationTopicID: Int, senderAddress: String, createdAt: Date, isFromMe: Bool) {
 			self.id = id
 			self.xmtpID = xmtpID
 			self.body = body
@@ -26,9 +27,10 @@ extension DB {
 			self.conversationTopicID = conversationTopicID
 			self.senderAddress = senderAddress
 			self.createdAt = createdAt
+			self.isFromMe = isFromMe
 		}
 
-		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic) throws -> DB.Message {
+		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool) throws -> DB.Message {
 			if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
 				return existing
 			}
@@ -47,7 +49,8 @@ extension DB {
 				conversationID: conversationID,
 				conversationTopicID: topicID,
 				senderAddress: xmtpMessage.senderAddress,
-				createdAt: xmtpMessage.sent
+				createdAt: xmtpMessage.sent,
+				isFromMe: isFromMe
 			)
 
 			try message.save()
@@ -67,12 +70,13 @@ extension DB.Message: Model {
 			t.column("conversationTopicID", .integer).notNull().indexed()
 			t.column("senderAddress", .text).notNull()
 			t.column("createdAt", .date)
+			t.column("isFromMe", .boolean).notNull()
 		}
 	}
 }
 
 extension DB.Message {
 	static var preview: DB.Message {
-		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "hello there", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date())
+		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "hello there", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
 	}
 }

@@ -16,10 +16,16 @@ class MessageLoader: ObservableObject {
 
 	let fetchLimit = 10
 
-	@MainActor @Published var mostRecentMessageID = ""
-	@MainActor @Published var messages: [DB.Message] = []
+	@Published var mostRecentMessageID = ""
+	@Published var messages: [DB.Message] = [] {
+		didSet {
+			Task { await regenerateTimeline() }
+		}
+	}
 
-	init(client: XMTP.Client, conversation: DB.Conversation) {
+	@Published var timeline: [MessageListEntry] = []
+
+	@MainActor init(client: XMTP.Client, conversation: DB.Conversation) {
 		self.client = client
 		self.conversation = conversation
 
@@ -37,7 +43,7 @@ class MessageLoader: ObservableObject {
 	func streamTopic(topic: DB.ConversationTopic) async {
 		do {
 			for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
-				let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic)
+				let message = try DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, isFromMe: client.address == xmtpMessage.senderAddress)
 				await MainActor.run {
 					messages.append(message)
 					mostRecentMessageID = message.xmtpID
@@ -58,7 +64,7 @@ class MessageLoader: ObservableObject {
 	}
 
 	func load() async throws {
-		try fetchLocal()
+		try await fetchLocal()
 		try await fetchRemote()
 	}
 
@@ -68,7 +74,7 @@ class MessageLoader: ObservableObject {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit)
 				for message in messages {
 					do {
-						_ = try DB.Message.from(message, conversation: conversation, topic: topic)
+						_ = try DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress)
 					} catch {
 						print("Error importing message: \(error)")
 					}
@@ -78,7 +84,7 @@ class MessageLoader: ObservableObject {
 			}
 		}
 
-		try fetchLocal()
+		try await fetchLocal()
 	}
 
 	func fetchEarlier() async throws {
@@ -89,7 +95,7 @@ class MessageLoader: ObservableObject {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit, before: before)
 				for message in messages {
 					do {
-						_ = try DB.Message.from(message, conversation: conversation, topic: topic)
+						_ = try DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress)
 					} catch {
 						print("Error importing message: \(error)")
 					}
@@ -99,10 +105,10 @@ class MessageLoader: ObservableObject {
 			}
 		}
 
-		try fetchLocal()
+		try await fetchLocal()
 	}
 
-	func fetchLocal() throws {
+	@MainActor func fetchLocal() throws {
 		let messages = try DB.read { db in
 			try DB.Message
 				.filter(Column("conversationID") == self.conversation.id)
@@ -110,11 +116,33 @@ class MessageLoader: ObservableObject {
 				.fetchAll(db)
 		}
 
-		Task(priority: .userInitiated) {
-			await MainActor.run {
-				self.messages = messages
-				self.mostRecentMessageID = messages.last?.xmtpID ?? ""
+		self.messages = messages
+		mostRecentMessageID = messages.last?.xmtpID ?? ""
+	}
+
+	func regenerateTimeline() async {
+		var result: [MessageListEntry] = []
+		var lastTimestamp: Date?
+
+		let timestampWindow: TimeInterval = 60 * 10 // 10 minutes
+
+		// swiftlint:disable force_unwrapping
+		for message in messages {
+			if lastTimestamp != nil, message.createdAt > lastTimestamp!.addingTimeInterval(timestampWindow) {
+				lastTimestamp = message.createdAt
+				result.append(.timestamp(lastTimestamp!))
+			} else if lastTimestamp == nil {
+				lastTimestamp = message.createdAt
+				result.append(.timestamp(lastTimestamp!))
 			}
+
+			result.append(.message(message))
+		}
+		// swiftlint:enable force_unwrapping
+
+		let timeline = result
+		await MainActor.run {
+			self.timeline = timeline
 		}
 	}
 }

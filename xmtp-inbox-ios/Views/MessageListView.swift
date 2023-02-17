@@ -147,21 +147,21 @@ class MessagesTableViewController: UITableViewController {
 	}
 
 	override func tableView(_: UITableView, willDisplay _: UITableViewCell, forRowAt indexPath: IndexPath) {
-		isPinnedToBottom = indexPath.row + 1 == loader.messages.count
+		isPinnedToBottom = indexPath.row + 1 == loader.timeline.count
 	}
 
 	override func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-		return loader.messages.count
+		return loader.timeline.count
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let message = loader.messages[indexPath.row]
+		let entry = loader.timeline[indexPath.row]
 		// swiftlint:disable force_cast
 		let newCell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
 		// swiftlint:enable force_cast
 
 		newCell.contentConfiguration = UIHostingConfiguration {
-			MessageCellView(isFromMe: message.senderAddress == loader.client.address, message: message)
+			MessageListEntryView(messagelistEntry: entry)
 		}
 
 		return newCell
@@ -173,13 +173,13 @@ class MessagesTableViewController: UITableViewController {
 		}
 
 		DispatchQueue.main.async { [self] in
-			if loader.messages.isEmpty {
+			if loader.timeline.isEmpty {
 				return
 			}
 
 			tableView.reloadData()
 
-			if let path = tableView.presentationIndexPath(forDataSourceIndexPath: IndexPath(row: loader.messages.count - 1, section: 0)) {
+			if let path = tableView.presentationIndexPath(forDataSourceIndexPath: IndexPath(row: loader.timeline.count - 1, section: 0)) {
 				tableView.scrollToRow(at: path, at: .bottom, animated: animated)
 			}
 		}
