@@ -170,7 +170,24 @@ struct WalletConnectionWebview: UIViewRepresentable {
 			}
 		}
 
-		func webView(_: WKWebView, decidePolicyFor _: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+		func webView(_: WKWebView, decidePolicyFor action: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+			guard let url = action.request.url else {
+				decisionHandler(.allow)
+				return
+			}
+
+			if url.absoluteString.contains("?"),
+			   url.host() == "metamask.app.link",
+			   let query = url.query(percentEncoded: false),
+			   let deepLink = URL(string: "metamask://wc/wc?\(query)")
+			{
+				if UIApplication.shared.canOpenURL(deepLink) {
+					UIApplication.shared.open(deepLink)
+					decisionHandler(.cancel)
+					return
+				}
+			}
+
 			decisionHandler(.allow)
 		}
 	}
