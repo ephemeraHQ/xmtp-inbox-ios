@@ -141,6 +141,7 @@ class MessagesTableViewController: UITableViewController {
 				try await loader.load()
 				await MainActor.run {
 					tableView.reloadData()
+					scrollToBottom(animated: true)
 				}
 			} catch {
 				print("Error loading messages: \(error)")
