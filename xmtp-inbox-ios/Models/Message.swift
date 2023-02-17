@@ -61,7 +61,7 @@ extension DB.Message: Model {
 	static func createTable(db: GRDB.Database) throws {
 		try db.create(table: "message", ifNotExists: true) { t in
 			t.autoIncrementedPrimaryKey("id")
-			t.column("xmtpID", .text).notNull().indexed()
+			t.column("xmtpID", .text).notNull().indexed().unique()
 			t.column("body", .text).notNull()
 			t.column("conversationID", .integer).notNull().indexed()
 			t.column("conversationTopicID", .integer).notNull().indexed()
