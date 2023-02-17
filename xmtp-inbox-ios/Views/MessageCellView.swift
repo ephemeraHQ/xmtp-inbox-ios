@@ -9,21 +9,19 @@ import SwiftUI
 import XMTP
 
 struct MessageCellView: View {
-	var isFromMe: Bool
-
 	var message: DB.Message
 
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack {
-				if isFromMe {
+				if message.isFromMe {
 					Spacer()
 				}
 				Text(message.body)
 					.foregroundColor(textColor)
 					.padding()
 					.background(background)
-				if !isFromMe {
+				if !message.isFromMe {
 					Spacer()
 				}
 			}
@@ -31,7 +29,7 @@ struct MessageCellView: View {
 	}
 
 	var background: some View {
-		if isFromMe {
+		if message.isFromMe {
 			return Color.actionPrimary.roundCorners(16, corners: [.topLeft, .topRight, .bottomLeft])
 		} else {
 			return Color.backgroundSecondary.roundCorners(16, corners: [.topRight, .bottomLeft, .bottomRight])
@@ -39,7 +37,7 @@ struct MessageCellView: View {
 	}
 
 	var textColor: Color {
-		if isFromMe {
+		if message.isFromMe {
 			return .actionPrimaryText
 		} else {
 			return .textPrimary
@@ -50,7 +48,7 @@ struct MessageCellView: View {
 struct MessageCellView_Previews: PreviewProvider {
 	static var previews: some View {
 		List {
-			MessageCellView(isFromMe: true, message: DB.Message.preview)
+			MessageCellView(message: DB.Message.preview)
 		}
 		.listStyle(.plain)
 	}

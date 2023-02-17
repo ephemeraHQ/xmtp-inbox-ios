@@ -106,7 +106,7 @@ extension DB {
 					return
 				}
 
-				try DB.Message.from(lastMessageXMTP, conversation: self, topic: topic)
+				try DB.Message.from(lastMessageXMTP, conversation: self, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress)
 			}
 
 			let lastMessage = try DB.read { db in
