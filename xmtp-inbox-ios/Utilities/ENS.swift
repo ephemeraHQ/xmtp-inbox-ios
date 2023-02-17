@@ -56,4 +56,16 @@ class ENS: ObservableObject {
 			return nil
 		}
 	}
+
+	func address(ens: String) async -> String? {
+		guard let service else {
+			return nil
+		}
+
+		do {
+			return try await service.resolve(ens: ens, mode: .allowOffchainLookup).toChecksumAddress()
+		} catch {
+			return nil
+		}
+	}
 }
