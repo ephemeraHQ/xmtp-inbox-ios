@@ -17,50 +17,48 @@ struct NewConversationView: View {
 
 	@Environment(\.dismiss) var dismiss
 	@FocusState var isFocused
-	@State private var searchText = ""
-	@State private var searchResults = [String]()
-	@State private var error: String?
+
+	@StateObject var contactFinder: ContactFinder
+
+	init(client: XMTP.Client, onCreate: @escaping (DB.Conversation) -> Void) {
+		self.client = client
+		self.onCreate = onCreate
+		_contactFinder = StateObject(wrappedValue: ContactFinder(client: client))
+	}
 
 	var body: some View {
 		NavigationView {
 			ZStack {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				List {
-					TextField("new-message-prompt", text: $searchText)
+					TextField("new-message-prompt", text: $contactFinder.searchText)
 						.autocorrectionDisabled(true)
 						.autocapitalization(.none)
 						.focused($isFocused)
 						.onAppear {
 							self.isFocused = true
 						}
-						.onChange(of: searchText) { searchText in
-							searchTextPublisher.send(searchText)
-						}
-						.onReceive(
-							searchTextPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-						) { debouncedText in
-							validateSearch(debouncedText)
-						}
-					if let error {
+					if let error = contactFinder.error {
 						Text(error)
 							.font(.Body2)
 							.foregroundColor(.actionNegative)
-					}
-					ForEach(searchResults, id: \.self) { address in
-						Button {
-							createConversation(address: address)
-						} label: {
-							HStack {
-								EnsImageView(imageSize: 48, peerAddress: address)
-									.padding(.trailing, 8)
-								VStack(alignment: .leading) {
-									Text(address.truncatedAddress())
-										.font(.Body1B)
-										.padding(.bottom, 1)
-										.foregroundColor(.textPrimary)
-									Text("valid-ethereum-address")
-										.font(.Body2)
-										.foregroundColor(.textScondary)
+					} else {
+						ForEach(contactFinder.results) { result in
+							Button {
+								createConversation(address: result.address)
+							} label: {
+								HStack {
+									EnsImageView(imageSize: 48, peerAddress: result.address)
+										.padding(.trailing, 8)
+									VStack(alignment: .leading) {
+										Text(result.address.truncatedAddress())
+											.font(.Body1B)
+											.padding(.bottom, 1)
+											.foregroundColor(.textPrimary)
+										Text("valid-ethereum-address")
+											.font(.Body2)
+											.foregroundColor(.textScondary)
+									}
 								}
 							}
 						}
@@ -80,34 +78,10 @@ struct NewConversationView: View {
 		.presentationDetents([.height(240)])
 	}
 
-	func validateSearch(_ debouncedText: String) {
-		do {
-			try withAnimation {
-				self.error = nil
-				let range = NSRange(location: 0, length: debouncedText.utf16.count)
-				let regex = try NSRegularExpression(pattern: "^0x[a-fA-F0-9]{40}$")
-				if regex.firstMatch(in: debouncedText, options: [], range: range) != nil {
-					self.searchResults = [debouncedText]
-				} else {
-					self.searchResults = []
-					if !debouncedText.isEmpty {
-						self.error = NSLocalizedString("invalid-ethereum-address", comment: "")
-					}
-				}
-
-				if debouncedText.lowercased() == client.address.lowercased() {
-					self.error = NSLocalizedString("cannot-message-self", comment: "")
-					self.searchResults = []
-				}
-			}
-		} catch {
-			print("Error searching: \(error)")
-		}
-	}
-
 	func createConversation(address: String) {
 		Task {
 			do {
+				var client = client
 				let conversation = try await client.conversations.newConversation(with: address)
 				let newConversation = try await DB.Conversation.from(conversation)
 				await MainActor.run {
@@ -117,13 +91,13 @@ struct NewConversationView: View {
 			} catch ConversationError.recipientNotOnNetwork {
 				await MainActor.run {
 					withAnimation {
-						self.error = NSLocalizedString("not-on-network-error", comment: "")
+						contactFinder.error = NSLocalizedString("not-on-network-error", comment: "")
 					}
 				}
 			} catch {
 				await MainActor.run {
 					withAnimation {
-						self.error = error.localizedDescription
+						contactFinder.error = error.localizedDescription
 					}
 				}
 			}
