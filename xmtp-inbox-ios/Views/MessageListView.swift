@@ -156,7 +156,7 @@ class MessagesTableViewController: UITableViewController {
 		}
 	}
 
-	override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+	override func tableView(_: UITableView, willSelectRowAt _: IndexPath) -> IndexPath? {
 		return nil
 	}
 
