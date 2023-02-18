@@ -141,7 +141,7 @@ class MessagesTableViewController: UITableViewController {
 
 		// Add some extra space in case you're p close to the bottom
 		if distanceFromBottom < height + 48 {
-			self.isPinnedToBottom = true
+			isPinnedToBottom = true
 		}
 	}
 
