@@ -139,6 +139,7 @@ class MessagesTableViewController: UITableViewController {
 		let contentYOffset = scrollView.contentOffset.y
 		let distanceFromBottom = scrollView.contentSize.height - contentYOffset
 
+		// Add some extra space in case you're p close to the bottom
 		if distanceFromBottom < height + 48 {
 			self.isPinnedToBottom = true
 		}
