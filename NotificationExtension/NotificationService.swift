@@ -47,14 +47,16 @@ class NotificationService: UNNotificationServiceExtension {
 				let decodedMessage = try conversationTopic.toXMTP(client: client).decode(envelope)
 
 				var conversation = DB.Conversation.find(id: conversationTopic.conversationID)
-				conversation?.updatedAt = decodedMessage.sent
-				try conversation?.save()
 
 				// Don't notify when we're the sender
 				if decodedMessage.senderAddress == client.address {
 					contentHandler(UNNotificationContent())
 					return
 				}
+
+				conversation?.updatedByPeerAt = decodedMessage.sent
+				conversation?.updatedAt = decodedMessage.sent
+				try conversation?.save()
 
 				if let conversation {
 					bestAttemptContent.title = conversation.title

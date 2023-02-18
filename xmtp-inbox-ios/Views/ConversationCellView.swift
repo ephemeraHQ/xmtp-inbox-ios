@@ -12,11 +12,13 @@ struct ConversationCellView: View {
 	var conversation: DB.Conversation
 
 	var isUnread: Bool {
-		guard let viewedAt = conversation.viewedAt else {
-			return true
+		guard let viewedAt = conversation.viewedAt,
+		      let updatedByPeerAt = conversation.updatedByPeerAt
+		else {
+			return false
 		}
 
-		return viewedAt < conversation.updatedAt
+		return viewedAt < updatedByPeerAt
 	}
 
 	var body: some View {
