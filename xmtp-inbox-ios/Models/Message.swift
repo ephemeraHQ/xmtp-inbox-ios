@@ -54,8 +54,30 @@ extension DB {
 			)
 
 			try message.save()
+			try message.updateConversationTimestamps(conversation: conversation)
 
 			return message
+		}
+
+		func updateConversationTimestamps(conversation: DB.Conversation) throws {
+			var conversation = conversation
+
+			if createdAt > conversation.updatedAt {
+				conversation.updatedAt = createdAt
+			}
+
+			if isFromMe {
+				try conversation.save()
+				return
+			}
+
+			if conversation.updatedByPeerAt == nil {
+				conversation.updatedByPeerAt = createdAt
+			} else if let updatedByPeerAt = conversation.updatedByPeerAt, updatedByPeerAt < createdAt {
+				conversation.updatedByPeerAt = createdAt
+			}
+
+			try conversation.save()
 		}
 	}
 }

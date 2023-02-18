@@ -20,10 +20,13 @@ extension DB {
 		var peerAddress: String
 		var createdAt: Date
 		var updatedAt: Date
+
+		// Fields for unread state
 		var viewedAt: Date?
+		var updatedByPeerAt: Date?
 
 		enum CodingKeys: String, CodingKey {
-			case id, ens, peerAddress, createdAt, updatedAt, viewedAt
+			case id, ens, peerAddress, createdAt, updatedAt, viewedAt, updatedByPeerAt
 		}
 
 		// Can be prefilled
@@ -164,6 +167,7 @@ extension DB.Conversation: Model {
 			t.column("createdAt", .date).notNull()
 			t.column("updatedAt", .date).notNull()
 			t.column("viewedAt", .date)
+			t.column("updatedByPeerAt", .date)
 		}
 	}
 
