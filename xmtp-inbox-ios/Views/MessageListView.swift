@@ -56,8 +56,9 @@ class MessagesTableViewController: UITableViewController {
 
 	func initDBObserver() {
 		observer = MessageObserver {
-			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
+			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) { [weak self] in
 				self?.tableView.reloadData()
+				self?.scrollToBottom(animated: true)
 			}
 		}
 
@@ -130,15 +131,21 @@ class MessagesTableViewController: UITableViewController {
 			tableView.refreshControl?.beginRefreshing()
 
 			loadEarlier()
+
+			return
+		}
+
+		let height = scrollView.frame.size.height
+		let contentYOffset = scrollView.contentOffset.y
+		let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+
+		if distanceFromBottom < height + 48 {
+			self.isPinnedToBottom = true
 		}
 	}
 
 	override func tableView(_: UITableView, willSelectRowAt _: IndexPath) -> IndexPath? {
 		return nil
-	}
-
-	override func tableView(_: UITableView, willDisplay _: UITableViewCell, forRowAt indexPath: IndexPath) {
-		isPinnedToBottom = indexPath.row + 1 == loader.timeline.count
 	}
 
 	override func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -162,6 +169,8 @@ class MessagesTableViewController: UITableViewController {
 	}
 
 	func scrollToBottom(animated: Bool = true, force: Bool = false) {
+		print("Scrolling to bottom \(isPinnedToBottom)")
+
 		if !isPinnedToBottom && !force {
 			return
 		}
