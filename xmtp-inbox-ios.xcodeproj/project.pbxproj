@@ -59,6 +59,8 @@
 		A6393EF529A2A1BC009BCE38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */; };
 		A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */; };
 		A6393EFA29A2A4C5009BCE38 /* RemoteMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */; };
+		A6393EFC29A2ACB0009BCE38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */; };
+		A6393EFE29A2ACBF009BCE38 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */; };
 		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
 		A671F71A2992C01900C0F36D /* KeyStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671F7192992C01900C0F36D /* KeyStoreTests.swift */; };
@@ -289,7 +291,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6393EFC29A2ACB0009BCE38 /* SDWebImageSwiftUI in Frameworks */,
 				CF1B45F2A383A42721D7B5B6 /* Pods_xmtp_inbox_iosTests.framework in Frameworks */,
+				A6393EFE29A2ACBF009BCE38 /* SDWebImageWebPCoder in Frameworks */,
 				A69C928129942DD300E49F9B /* XMTPTestHelpers in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -631,6 +635,8 @@
 			name = "xmtp-inbox-iosTests";
 			packageProductDependencies = (
 				A69C928029942DD300E49F9B /* XMTPTestHelpers */,
+				A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */,
+				A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */,
 			);
 			productName = "xmtp-inbox-iosTests";
 			productReference = 6A40155429526796003A6659 /* xmtp-inbox-iosTests.xctest */;
@@ -1605,6 +1611,16 @@
 			productName = SDWebImageSwiftUI;
 		};
 		A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
+			productName = SDWebImageWebPCoder;
+		};
+		A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
 			productName = SDWebImageWebPCoder;
