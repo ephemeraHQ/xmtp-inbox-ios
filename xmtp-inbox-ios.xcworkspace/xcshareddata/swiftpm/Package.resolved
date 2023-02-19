@@ -91,6 +91,15 @@
       }
     },
     {
+      "identity" : "nuke",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Nuke",
+      "state" : {
+        "branch" : "12.0.0-beta.3",
+        "revision" : "baccf1b00f458a77a9f9615e415bc4463029cf5e"
+      }
+    },
+    {
       "identity" : "opengraph",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/satoshi-takano/OpenGraph",

@@ -17,32 +17,34 @@ struct ContentView: View {
 	@StateObject private var errorViewModel = ErrorViewModel()
 
 	var body: some View {
-		ZStack {
-			Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-			switch environmentCoordinator.auth.status {
-			case let .connected(client):
-				HomeView(client: client)
-			case .connecting:
-				ProgressView("Awaiting signatures…")
-			case .loadingKeys:
-				ProgressView()
-			default:
-				SplashView(onTryDemo: onTryDemo, onConnecting: onConnecting, onConnected: onConnectWallet)
+		FullScreenContentProvider {
+			ZStack {
+				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
+				switch environmentCoordinator.auth.status {
+				case let .connected(client):
+					HomeView(client: client)
+				case .connecting:
+					ProgressView("Awaiting signatures…")
+				case .loadingKeys:
+					ProgressView()
+				default:
+					SplashView(onTryDemo: onTryDemo, onConnecting: onConnecting, onConnected: onConnectWallet)
+				}
 			}
-		}
-		.toast(isPresenting: $errorViewModel.isShowing) {
-			AlertToast.error(errorViewModel.errorMessage)
-		}
-		.sheet(isPresented: $environmentCoordinator.auth.isShowingQRCode) {
-			if let wcUrl {
-				QRCodeView(data: Data(wcUrl.absoluteString.utf8))
-			} else {
-				Text("Cannot connect to wallet.")
+			.toast(isPresenting: $errorViewModel.isShowing) {
+				AlertToast.error(errorViewModel.errorMessage)
 			}
-		}
-		.environmentObject(environmentCoordinator)
-		.task {
-			await loadClient()
+			.sheet(isPresented: $environmentCoordinator.auth.isShowingQRCode) {
+				if let wcUrl {
+					QRCodeView(data: Data(wcUrl.absoluteString.utf8))
+				} else {
+					Text("Cannot connect to wallet.")
+				}
+			}
+			.environmentObject(environmentCoordinator)
+			.task {
+				await loadClient()
+			}
 		}
 	}
 

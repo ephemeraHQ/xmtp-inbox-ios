@@ -7,6 +7,7 @@
 
 import Combine
 import GRDB
+import Nuke
 import SwiftUI
 import UIKit
 import XMTP
@@ -28,6 +29,7 @@ class MessagesTableViewController: UITableViewController {
 	var cancellables = [AnyCancellable]()
 	var observer: TransactionObserver?
 	var isPinnedToBottom = true
+	var imageCache: [String: UIImage?] = [:]
 
 	init(loader: MessageLoader) {
 		self.loader = loader
@@ -161,6 +163,10 @@ class MessagesTableViewController: UITableViewController {
 
 		if case var .message(message) = entry {
 			message.loadPreview()
+
+			if let image = imageCache[message.body] {
+				message.image = image
+			}
 
 			entry = .message(message)
 		}

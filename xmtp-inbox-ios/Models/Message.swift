@@ -7,6 +7,7 @@
 
 import GRDB
 import OpenGraph
+import UIKit
 import XMTP
 
 extension DB {
@@ -21,6 +22,9 @@ extension DB {
 		var isFromMe: Bool
 		var previewData: Data?
 
+		// Cached image
+		var image: UIImage?
+
 		enum CodingKeys: String, CodingKey {
 			case id, xmtpID, body, conversationID, conversationTopicID, senderAddress, createdAt, isFromMe, previewData
 		}
@@ -34,6 +38,14 @@ extension DB {
 			self.senderAddress = senderAddress
 			self.createdAt = createdAt
 			self.isFromMe = isFromMe
+		}
+
+		var isBareImageURL: Bool {
+			if body.isValidURL, let url = URL(string: body), ["jpg", "jpeg", "png", "gif"].contains(url.pathExtension) {
+				return true
+			}
+
+			return false
 		}
 
 		var preview: URLPreview?
@@ -102,6 +114,13 @@ extension DB {
 				message.previewData = try encoder.encode(preview)
 			}
 
+			if Settings.shared.showImageURLs,
+			   message.isBareImageURL,
+			   let url = URL(string: message.body)
+			{
+				try await ImageCache.shared.save(url: url)
+			}
+
 			try message.save()
 			try message.updateConversationTimestamps(conversation: conversation)
 
@@ -158,5 +177,9 @@ extension DB.Message: Model {
 extension DB.Message {
 	static var preview: DB.Message {
 		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "hello there", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
+	}
+
+	static var previewImage: DB.Message {
+		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://user-images.githubusercontent.com/483/219905054-3f7cc2c9-50e5-45b8-887c-82c863a01464.png", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
 	}
 }
