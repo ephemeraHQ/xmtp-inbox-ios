@@ -154,10 +154,16 @@ class MessagesTableViewController: UITableViewController {
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let entry = loader.timeline[indexPath.row]
+		var entry = loader.timeline[indexPath.row]
 		// swiftlint:disable force_cast
 		let newCell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
 		// swiftlint:enable force_cast
+
+		if case var .message(message) = entry {
+			message.loadPreview()
+
+			entry = .message(message)
+		}
 
 		newCell.contentConfiguration = UIHostingConfiguration {
 			MessageListEntryView(messagelistEntry: entry)

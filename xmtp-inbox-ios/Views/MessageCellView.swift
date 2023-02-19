@@ -5,8 +5,36 @@
 //  Created by Pat Nakajima on 12/7/22.
 //
 
+import OpenGraph
 import SwiftUI
 import XMTP
+
+struct URLPreviewView: View {
+	var preview: URLPreview
+
+	var body: some View {
+		HStack(alignment: .top) {
+			if let imageData = preview.imageData, let uiImage = UIImage(data: imageData) {
+				Image(uiImage: uiImage)
+					.resizable()
+					.scaledToFit()
+					.frame(width: 24, height: 24)
+			}
+
+			VStack(alignment: .leading, spacing: 8) {
+				Text(preview.title)
+					.font(.caption)
+					.bold()
+				Text(preview.url.absoluteString)
+					.font(.caption)
+					.foregroundColor(.secondary)
+			}
+		}
+		.onTapGesture {
+			UIApplication.shared.open(preview.url)
+		}
+	}
+}
 
 struct MessageTextView: UIViewRepresentable {
 	var content: String
@@ -63,19 +91,27 @@ struct MessageTextView: UIViewRepresentable {
 struct MessageCellView: View {
 	var message: DB.Message
 
+	@State private var isLoading = false
+	@State private var preview: URLPreview?
+
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack {
 				if message.isFromMe {
 					Spacer()
 				}
-				MessageTextView(content: message.body, textColor: UIColor(textColor)) { url in
-					print("URL \(url)")
+				VStack {
+					if let preview = message.preview {
+						URLPreviewView(preview: preview)
+					} else {
+						MessageTextView(content: message.body, textColor: UIColor(textColor)) { url in
+							print("URL \(url)")
+						}
+					}
 				}
 				.foregroundColor(textColor)
 				.padding()
 				.background(background)
-//				Text(message.body)
 
 				if !message.isFromMe {
 					Spacer()
