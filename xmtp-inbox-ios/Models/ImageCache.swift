@@ -7,7 +7,6 @@
 
 import CryptoKit
 import Foundation
-import Nuke
 import SwiftUI
 import UIKit
 
@@ -20,7 +19,7 @@ struct ImageCache {
 	func save(url: URL) async throws {
 		try? FileManager.default.createDirectory(at: imageCacheURL, withIntermediateDirectories: true)
 
-		let (data, _) = try await ImagePipeline.shared.data(for: url)
+		let (data, _) = try await URLSession.shared.data(from: url)
 		try data.write(to: cacheKey(for: url))
 	}
 

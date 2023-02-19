@@ -7,7 +7,6 @@
 
 import Combine
 import GRDB
-import Nuke
 import SwiftUI
 import UIKit
 import XMTP
@@ -164,7 +163,7 @@ class MessagesTableViewController: UITableViewController {
 		if case var .message(message) = entry {
 			message.loadPreview()
 
-			if let image = imageCache[message.body] {
+			if message.isBareImageURL, let image = ImageCache.shared.load(url: URL(string: message.body)) {
 				message.image = image
 			}
 
