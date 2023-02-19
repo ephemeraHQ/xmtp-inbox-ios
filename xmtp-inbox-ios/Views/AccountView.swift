@@ -22,6 +22,8 @@ struct AccountView: View {
 
 	@Environment(\.dismiss) var dismiss
 
+	@ObservedObject var settings = Settings.shared
+
 	var body: some View {
 		NavigationView {
 			ZStack {
@@ -53,6 +55,11 @@ struct AccountView: View {
 					}
 					.listRowBackground(Color.backgroundPrimary)
 					.frame(maxWidth: .infinity)
+
+					Section {
+						Toggle("Show Link Previews", isOn: $settings.showLinkPreviews.animation())
+						Toggle("Show Images from URLs", isOn: $settings.showImageURLs.animation())
+					}
 
 					Section {
 						HapticButton {
@@ -176,5 +183,15 @@ struct AccountView: View {
 
 	var footer: String {
 		"\(Constants.version) (\(Constants.buildNumber)) \(Constants.xmtpEnv)"
+	}
+}
+
+struct AccountView_Previews: PreviewProvider {
+	static var previews: some View {
+		ZStack {
+			PreviewClientProvider { client in
+				AccountView(client: client)
+			}
+		}
 	}
 }

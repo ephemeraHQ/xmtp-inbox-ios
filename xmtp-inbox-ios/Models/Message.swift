@@ -6,6 +6,7 @@
 //
 
 import GRDB
+import OpenGraph
 import XMTP
 
 extension DB {
@@ -18,6 +19,11 @@ extension DB {
 		var senderAddress: String
 		var createdAt: Date
 		var isFromMe: Bool
+		var previewData: Data?
+
+		enum CodingKeys: String, CodingKey {
+			case id, xmtpID, body, conversationID, conversationTopicID, senderAddress, createdAt, isFromMe, previewData
+		}
 
 		init(id: Int? = nil, xmtpID: String, body: String, conversationID: Int, conversationTopicID: Int, senderAddress: String, createdAt: Date, isFromMe: Bool) {
 			self.id = id
@@ -30,7 +36,27 @@ extension DB {
 			self.isFromMe = isFromMe
 		}
 
-		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool) throws -> DB.Message {
+		var preview: URLPreview?
+		mutating func loadPreview() {
+			if preview != nil {
+				return
+			}
+
+			guard let previewData else {
+				return
+			}
+
+			do {
+				let decoder = JSONDecoder()
+				let preview = try decoder.decode(URLPreview.self, from: previewData)
+
+				self.preview = preview
+			} catch {
+				print("Error loading preview: \(error)")
+			}
+		}
+
+		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool) async throws -> DB.Message {
 			if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
 				return existing
 			}
@@ -52,6 +78,29 @@ extension DB {
 				createdAt: xmtpMessage.sent,
 				isFromMe: isFromMe
 			)
+
+			if Settings.shared.showLinkPreviews,
+			   message.body.isValidURL,
+			   let url = URL(string: message.body),
+			   // swiftlint:disable no_optional_try
+			   let og = try? await OpenGraph.fetch(url: url),
+			   // swiftlint:enable no_optional_try
+			   let title = og[.title]
+			{
+				let encoder = JSONEncoder()
+				var preview = URLPreview(
+					url: url,
+					title: title,
+					description: og[.description],
+					imageURL: og[.image]
+				)
+
+				if let imageURL = og[.image], let url = URL(string: imageURL) {
+					(preview.imageData, _) = try await URLSession.shared.data(from: url)
+				}
+
+				message.previewData = try encoder.encode(preview)
+			}
 
 			try message.save()
 			try message.updateConversationTimestamps(conversation: conversation)
@@ -83,6 +132,14 @@ extension DB {
 }
 
 extension DB.Message: Model {
+	static func == (lhs: DB.Message, rhs: DB.Message) -> Bool {
+		lhs.id == rhs.id
+	}
+
+	func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
+	}
+
 	static func createTable(db: GRDB.Database) throws {
 		try db.create(table: "message", ifNotExists: true) { t in
 			t.autoIncrementedPrimaryKey("id")
@@ -93,6 +150,7 @@ extension DB.Message: Model {
 			t.column("senderAddress", .text).notNull()
 			t.column("createdAt", .date)
 			t.column("isFromMe", .boolean).notNull()
+			t.column("previewData", .blob)
 		}
 	}
 }
