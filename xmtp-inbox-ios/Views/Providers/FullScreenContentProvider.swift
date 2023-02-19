@@ -110,8 +110,8 @@ struct FullScreenContentProvider<Content: View>: View {
 						}
 					}
 					.updating($dragDistance) { event, state, _ in
-					state = event.translation.height
-				})
+						state = event.translation.height
+					})
 				.onChange(of: dragDistance) { distance in
 					self.dragAmount = min(1, distance / (Double(UIScreen.main.bounds.height) / 2))
 				}
