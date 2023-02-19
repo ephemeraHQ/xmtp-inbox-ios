@@ -82,25 +82,25 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 
 		Task {
 			do {
-			let data = try await URLSession.shared.data(from: selectedURL).0
+				let data = try await URLSession.shared.data(from: selectedURL).0
 
-			// Give the file a name and append it to the file path
-			fileURL = URL.temporaryDirectory.appendingPathComponent(
-				selectedURL.lastPathComponent
-			)
+				// Give the file a name and append it to the file path
+				fileURL = URL.temporaryDirectory.appendingPathComponent(
+					selectedURL.lastPathComponent
+				)
 
-			guard let fileUrl = fileURL else {
-				print("no file url?")
-				return
-			}
+				guard let fileUrl = fileURL else {
+					print("no file url?")
+					return
+				}
 
-			try data.write(to: fileUrl, options: .atomic)
+				try data.write(to: fileUrl, options: .atomic)
 
-			// Make sure the file can be opened and then present the pdf
-			if QLPreviewController.canPreview(fileUrl as QLPreviewItem) {
-				quickLookController.currentPreviewItemIndex = 0
-				present(quickLookController, animated: true, completion: nil)
-			}
+				// Make sure the file can be opened and then present the pdf
+				if QLPreviewController.canPreview(fileUrl as QLPreviewItem) {
+					quickLookController.currentPreviewItemIndex = 0
+					present(quickLookController, animated: true, completion: nil)
+				}
 
 			} catch {
 				// cant find the url resource
