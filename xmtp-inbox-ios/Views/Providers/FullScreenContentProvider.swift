@@ -80,30 +80,31 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 		quickLookController.delegate = self
 		quickLookController.currentPreviewItemIndex = 0
 
-		do {
-			Task {
-				let data = try await URLSession.shared.data(from: selectedURL).0
+		Task {
+			do {
+			let data = try await URLSession.shared.data(from: selectedURL).0
 
-				// Give the file a name and append it to the file path
-				fileURL = URL.temporaryDirectory.appendingPathComponent(
-					selectedURL.lastPathComponent
-				)
+			// Give the file a name and append it to the file path
+			fileURL = URL.temporaryDirectory.appendingPathComponent(
+				selectedURL.lastPathComponent
+			)
 
-				guard let fileUrl = fileURL else {
-					print("no file url?")
-					return
-				}
-
-				try data.write(to: fileUrl, options: .atomic)
-
-				// Make sure the file can be opened and then present the pdf
-				if QLPreviewController.canPreview(fileUrl as QLPreviewItem) {
-					quickLookController.currentPreviewItemIndex = 0
-					present(quickLookController, animated: true, completion: nil)
-				}
+			guard let fileUrl = fileURL else {
+				print("no file url?")
+				return
 			}
-		} catch {
-			// cant find the url resource
+
+			try data.write(to: fileUrl, options: .atomic)
+
+			// Make sure the file can be opened and then present the pdf
+			if QLPreviewController.canPreview(fileUrl as QLPreviewItem) {
+				quickLookController.currentPreviewItemIndex = 0
+				present(quickLookController, animated: true, completion: nil)
+			}
+
+			} catch {
+				// cant find the url resource
+			}
 		}
 	}
 
@@ -112,8 +113,9 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 	}
 
 	func previewController(_: QLPreviewController, previewItemAt _: Int) -> QLPreviewItem {
-//		return urls[index] as QLPreviewItem
+		// swiftlint:disable force_unwrapping
 		return fileURL! as QLPreviewItem
+		// swiftlint:enable force_unwrapping
 	}
 }
 
