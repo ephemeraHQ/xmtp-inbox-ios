@@ -101,7 +101,6 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 					quickLookController.currentPreviewItemIndex = 0
 					present(quickLookController, animated: true, completion: nil)
 				}
-
 			} catch {
 				// cant find the url resource
 			}
