@@ -28,7 +28,6 @@ class MessagesTableViewController: UITableViewController {
 	var cancellables = [AnyCancellable]()
 	var observer: TransactionObserver?
 	var isPinnedToBottom = true
-	var imageCache: [String: UIImage?] = [:]
 
 	init(loader: MessageLoader) {
 		self.loader = loader
@@ -162,11 +161,6 @@ class MessagesTableViewController: UITableViewController {
 
 		if case var .message(message) = entry {
 			message.loadPreview()
-
-			if message.isBareImageURL, let image = ImageCache.shared.load(url: URL(string: message.body)) {
-				message.image = image
-			}
-
 			entry = .message(message)
 		}
 

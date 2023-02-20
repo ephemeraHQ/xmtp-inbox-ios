@@ -136,15 +136,6 @@
       }
     },
     {
-      "identity" : "sdwebimagevideocoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImageVideoCoder",
-      "state" : {
-        "revision" : "117eda8a4872c34dd136b5a673b39058d495a13d",
-        "version" : "0.2.0"
-      }
-    },
-    {
       "identity" : "sdwebimagewebpcoder",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImageWebPCoder",

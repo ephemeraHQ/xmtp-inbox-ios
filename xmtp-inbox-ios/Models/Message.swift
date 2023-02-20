@@ -115,13 +115,6 @@ extension DB {
 				message.previewData = try encoder.encode(preview)
 			}
 
-			if Settings.shared.showImageURLs,
-			   message.isBareImageURL,
-			   let url = URL(string: message.body)
-			{
-				try await ImageCache.shared.save(url: url)
-			}
-
 			try message.save()
 			try message.updateConversationTimestamps(conversation: conversation)
 
