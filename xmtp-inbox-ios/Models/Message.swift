@@ -70,7 +70,7 @@ extension DB {
 			}
 		}
 
-		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool, client: Client) async throws -> DB.Message {
+		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool, client _: Client) async throws -> DB.Message {
 			if var existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id), let messageID = existing.id {
 				existing.attachments = DB.MessageAttachment.where(Column("messageID") == messageID)
 				return existing
@@ -89,6 +89,7 @@ extension DB {
 			if xmtpMessage.encodedContent.type == ContentTypeRemoteAttachment {
 				body = ""
 				remoteAttachment = try xmtpMessage.content()
+				print("GOT REMOTE ATTACHMENT: \(remoteAttachment)")
 			} else {
 				body = try xmtpMessage.content()
 			}
@@ -103,13 +104,34 @@ extension DB {
 				isFromMe: isFromMe
 			)
 
-			if Settings.shared.showLinkPreviews,
-			   message.body.isValidURL,
-			   let url = URL(string: message.body),
-			   // swiftlint:disable no_optional_try
-			   let og = try? await OpenGraph.fetch(url: url),
-			   // swiftlint:enable no_optional_try
-			   let title = og[.title]
+			try message.save()
+			try message.updateConversationTimestamps(conversation: conversation)
+
+			if let remoteAttachment,
+			   let url = URL(string: remoteAttachment.url),
+			   let messageID = message.id,
+			   let payload = try await IPFS.shared.get(url.lastPathComponent)
+			{
+				print("GOT PAYLOAD \(payload)")
+
+				let encodedContent = try remoteAttachment.decrypt(payload: payload)
+				let attachment: Attachment = try encodedContent.decoded()
+
+				let uuid = UUID()
+				let attachmentDataURL = URL.documentsDirectory.appendingPathComponent(uuid.uuidString)
+
+				var messageAttachment = DB.MessageAttachment(messageID: messageID, mimeType: attachment.mimeType, filename: attachment.filename, uuid: uuid)
+				try messageAttachment.save(data: attachment.data)
+				try messageAttachment.save()
+
+				message.attachments = [messageAttachment]
+			} else if Settings.shared.showLinkPreviews,
+			          message.body.isValidURL,
+			          let url = URL(string: message.body),
+			          // swiftlint:disable no_optional_try
+			          let og = try? await OpenGraph.fetch(url: url),
+			          // swiftlint:enable no_optional_try
+			          let title = og[.title]
 			{
 				let encoder = JSONEncoder()
 				var preview = URLPreview(
@@ -124,29 +146,6 @@ extension DB {
 				}
 
 				message.previewData = try encoder.encode(preview)
-			}
-
-			try message.save()
-			try message.updateConversationTimestamps(conversation: conversation)
-
-			if let remoteAttachment,
-			   let url = URL(string: remoteAttachment.url),
-			   let messageID = message.id,
-			   let envelopeData = try await IPFS.shared.get(url.lastPathComponent)
-			{
-				let envelope = try Envelope(serializedData: envelopeData)
-				let decodedMessage = try topic.toXMTP(client: client).decode(envelope)
-				let attachment: Attachment = try decodedMessage.content()
-
-				// TODO: Handle more than IPFS
-				let uuid = UUID()
-				let attachmentDataURL = URL.documentsDirectory.appendingPathComponent(uuid.uuidString)
-
-				var messageAttachment = DB.MessageAttachment(messageID: messageID, mimeType: attachment.mimeType, filename: attachment.filename, uuid: uuid)
-				try messageAttachment.save(data: attachment.data)
-				try messageAttachment.save()
-
-				message.attachments = [messageAttachment]
 			}
 
 			return message

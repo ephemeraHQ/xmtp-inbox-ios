@@ -38,13 +38,17 @@ struct IPFS {
 	}
 
 	func get(_ cid: String) async throws -> Data? {
-		guard let url = URL(string: "https://ipfs.io/ipfs/\(cid)") else {
-			return nil
-		}
+		let url = url.appendingPathComponent("/api/v0/cat").appending(queryItems: [
+			URLQueryItem(name: "arg", value: cid),
+		])
 
-		let request = URLRequest(url: url)
+		print("GETTING \(cid)")
 
-		let (data, response) = try await URLSession.shared.data(for: request)
+		var request = URLRequest(url: url)
+		request.httpMethod = "POST"
+
+		let (downloadedURL, response) = try await URLSession.shared.download(for: request)
+		let data = try Data(contentsOf: downloadedURL)
 		print("RESPONSE: \(response)")
 
 		print("Hash of downloaded data: \(SHA256.hash(data: data).description)")

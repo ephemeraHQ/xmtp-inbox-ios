@@ -48,13 +48,12 @@ struct ConversationDetailView: View {
 	func sendMessage(text: String, attachment: Attachment? = nil) async {
 		do {
 			if let attachment {
-				let payload = try await conversation.toXMTP(client: client).encode(codec: XMTP.AttachmentCodec(), content: attachment)
-				let envelope = try Envelope(serializedData: payload)
+				let encryptedEncodedContent = try RemoteAttachment.encodeEncrypted(content: attachment, codec: AttachmentCodec())
 				if let response = try await IPFS.shared.upload(
 					filename: attachment.filename,
-					data: payload
+					data: encryptedEncodedContent.payload
 				) {
-					let remoteAttachment = RemoteAttachment(url: "https://ipfs.io/ipfs/\(response.hash)")
+					let remoteAttachment = RemoteAttachment(url: "https://ipfs.io/ipfs/\(response.hash)", encryptedEncodedContent: encryptedEncodedContent)
 					try await conversation.toXMTP(client: client).send(content: remoteAttachment, options: .init(contentType: ContentTypeRemoteAttachment, contentFallback: "an attachment"))
 				} else {
 					print("NO RESPONSE")

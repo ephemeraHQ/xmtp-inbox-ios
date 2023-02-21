@@ -294,7 +294,7 @@
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
         "branch" : "remote-attachment-proposal",
-        "revision" : "16ac7d6ef0368e8ed282ffdf79e357b0d6fd3108"
+        "revision" : "9c5b494a7fe705d52e53130efb86476afb329071"
       }
     }
   ],

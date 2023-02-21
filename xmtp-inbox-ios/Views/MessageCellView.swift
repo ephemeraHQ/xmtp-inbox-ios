@@ -22,7 +22,7 @@ struct MessageCellView: View {
 				if message.isFromMe {
 					Spacer()
 				}
-	      VStack {
+				VStack {
 					if let preview = message.preview {
 						URLPreviewView(preview: preview)
 							.foregroundColor(textColor)
