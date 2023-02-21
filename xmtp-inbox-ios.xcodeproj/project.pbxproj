@@ -55,6 +55,12 @@
 		A61B44FB299AB7E800F2CBEA /* XMTPEnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */; };
 		A61B44FC299AB88300F2CBEA /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4612FE298177B300346D68 /* Auth.swift */; };
 		A6292C31299415E4004B5A27 /* SQLDebuggerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */; };
+		A6393EF229A29C0B009BCE38 /* URLPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */; };
+		A6393EF529A2A1BC009BCE38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */; };
+		A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */; };
+		A6393EFA29A2A4C5009BCE38 /* RemoteMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */; };
+		A6393EFC29A2ACB0009BCE38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */; };
+		A6393EFE29A2ACBF009BCE38 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */; };
 		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
 		A671F71A2992C01900C0F36D /* KeyStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671F7192992C01900C0F36D /* KeyStoreTests.swift */; };
@@ -78,6 +84,8 @@
 		A68907A729A19921006D9EC7 /* URLPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68907A629A19921006D9EC7 /* URLPreview.swift */; };
 		A68907A829A19A71006D9EC7 /* URLPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68907A629A19921006D9EC7 /* URLPreview.swift */; };
 		A68907AA29A19A86006D9EC7 /* OpenGraph in Frameworks */ = {isa = PBXBuildFile; productRef = A68907A929A19A86006D9EC7 /* OpenGraph */; };
+		A68907B829A1AE64006D9EC7 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68907B729A1AE64006D9EC7 /* MessageTextView.swift */; };
+		A68907BF29A1BB94006D9EC7 /* FullScreenContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68907BE29A1BB94006D9EC7 /* FullScreenContentProvider.swift */; };
 		A68BCAF729959374001159B8 /* ConversationTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68BCAF629959374001159B8 /* ConversationTopic.swift */; };
 		A68BCB022995BF2B001159B8 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68BCB012995BF2B001159B8 /* NotificationService.swift */; };
 		A68BCB062995BF2B001159B8 /* NotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A68BCAFF2995BF2A001159B8 /* NotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -209,6 +217,8 @@
 		A61B44F7299AAFD200F2CBEA /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMTPEnvironmentManager.swift; sourceTree = "<group>"; };
 		A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLDebuggerView.swift; sourceTree = "<group>"; };
+		A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLPreviewView.swift; sourceTree = "<group>"; };
+		A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMediaView.swift; sourceTree = "<group>"; };
 		A65544A5298C5AA8005337C3 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
@@ -225,6 +235,8 @@
 		A689079D29A04012006D9EC7 /* MessageObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageObserver.swift; sourceTree = "<group>"; };
 		A689079F29A18F6A006D9EC7 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A68907A629A19921006D9EC7 /* URLPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLPreview.swift; sourceTree = "<group>"; };
+		A68907B729A1AE64006D9EC7 /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
+		A68907BE29A1BB94006D9EC7 /* FullScreenContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenContentProvider.swift; sourceTree = "<group>"; };
 		A68BCAF629959374001159B8 /* ConversationTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTopic.swift; sourceTree = "<group>"; };
 		A68BCAFF2995BF2A001159B8 /* NotificationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A68BCB012995BF2B001159B8 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -256,6 +268,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6393EF529A2A1BC009BCE38 /* SDWebImageSwiftUI in Frameworks */,
 				A68907A529A1946E006D9EC7 /* OpenGraph in Frameworks */,
 				6AE264EB2974F62B0055250A /* IGIdenticon in Frameworks */,
 				A69C92752994286C00E49F9B /* XMTP in Frameworks */,
@@ -265,6 +278,7 @@
 				6A4613112981F96300346D68 /* AlertToast in Frameworks */,
 				6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */,
 				A6C18C37299993EE001E00CA /* Introspect in Frameworks */,
+				A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */,
 				F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 				7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 			);
@@ -274,7 +288,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6393EFC29A2ACB0009BCE38 /* SDWebImageSwiftUI in Frameworks */,
 				CF1B45F2A383A42721D7B5B6 /* Pods_xmtp_inbox_iosTests.framework in Frameworks */,
+				A6393EFE29A2ACBF009BCE38 /* SDWebImageWebPCoder in Frameworks */,
 				A69C928129942DD300E49F9B /* XMTPTestHelpers in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,6 +438,9 @@
 				6A58A3AF29968A85009F62D0 /* NewConversationView.swift */,
 				A61B44F7299AAFD200F2CBEA /* DebugView.swift */,
 				A689078A29A01A4B006D9EC7 /* MessageListEntryView.swift */,
+				A68907B729A1AE64006D9EC7 /* MessageTextView.swift */,
+				A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */,
+				A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -486,6 +505,7 @@
 			isa = PBXGroup;
 			children = (
 				A689079229A038B0006D9EC7 /* AvatarProvider.swift */,
+				A68907BE29A1BB94006D9EC7 /* FullScreenContentProvider.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -587,6 +607,8 @@
 				A68BCB312995C4EE001159B8 /* KeychainAccess */,
 				A6C18C36299993EE001E00CA /* Introspect */,
 				A68907A429A1946E006D9EC7 /* OpenGraph */,
+				A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */,
+				A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */,
 			);
 			productName = "xmtp-inbox-ios";
 			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
@@ -609,6 +631,8 @@
 			name = "xmtp-inbox-iosTests";
 			packageProductDependencies = (
 				A69C928029942DD300E49F9B /* XMTPTestHelpers */,
+				A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */,
+				A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */,
 			);
 			productName = "xmtp-inbox-iosTests";
 			productReference = 6A40155429526796003A6659 /* xmtp-inbox-iosTests.xctest */;
@@ -705,6 +729,8 @@
 				A68BCB302995C4EE001159B8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				A6C18C35299993EE001E00CA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				A68907A329A1946E006D9EC7 /* XCRemoteSwiftPackageReference "OpenGraph" */,
+				A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
 			projectDirPath = "";
@@ -928,8 +954,10 @@
 				6A4612FF298177B300346D68 /* Auth.swift in Sources */,
 				A689079E29A04012006D9EC7 /* MessageObserver.swift in Sources */,
 				6A40154729526795003A6659 /* xmtp_inbox_iosApp.swift in Sources */,
+				A6393EFA29A2A4C5009BCE38 /* RemoteMediaView.swift in Sources */,
 				6A40157D2952AEFB003A6659 /* ColorExtensions.swift in Sources */,
 				6ACD972F298AE3F000C6AD66 /* HapticButton.swift in Sources */,
+				A6393EF229A29C0B009BCE38 /* URLPreviewView.swift in Sources */,
 				A6FCA31B299AECCF00EFB39D /* DataExtensions.swift in Sources */,
 				A689079329A038B0006D9EC7 /* AvatarProvider.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
@@ -940,6 +968,7 @@
 				A677CEA6298CB97100055697 /* MessageLoader.swift in Sources */,
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
 				A68BCB0C2995C02F001159B8 /* AppGroup.swift in Sources */,
+				A68907B829A1AE64006D9EC7 /* MessageTextView.swift in Sources */,
 				A68C8A4F298C6CC1003A9A95 /* ConversationLoader.swift in Sources */,
 				A689078D29A0224C006D9EC7 /* ContactFinder.swift in Sources */,
 				A68BCAF729959374001159B8 /* ConversationTopic.swift in Sources */,
@@ -950,6 +979,7 @@
 				A68C8A53298C8BED003A9A95 /* Message.swift in Sources */,
 				6A1ABA7829773EA4001E0B41 /* Keystore.swift in Sources */,
 				A68C8A48298C61E9003A9A95 /* Conversation.swift in Sources */,
+				A68907BF29A1BB94006D9EC7 /* FullScreenContentProvider.swift in Sources */,
 				6AE264ED2975EFD40055250A /* Constants.swift in Sources */,
 				A66339A02989D14400477E2E /* QRCode.swift in Sources */,
 				6AE264EF2975F2570055250A /* AvatarView.swift in Sources */,
@@ -1493,6 +1523,22 @@
 				version = 0.8.0;
 			};
 		};
+		A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageWebPCoder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.1;
+			};
+		};
 		A68907A329A1946E006D9EC7 /* XCRemoteSwiftPackageReference "OpenGraph" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/satoshi-takano/OpenGraph";
@@ -1552,6 +1598,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */;
 			productName = IGIdenticon;
+		};
+		A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
+			productName = SDWebImageWebPCoder;
+		};
+		A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
+			productName = SDWebImageWebPCoder;
 		};
 		A689079729A03A68006D9EC7 /* ENSKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -161,7 +161,6 @@ class MessagesTableViewController: UITableViewController {
 
 		if case var .message(message) = entry {
 			message.loadPreview()
-
 			entry = .message(message)
 		}
 

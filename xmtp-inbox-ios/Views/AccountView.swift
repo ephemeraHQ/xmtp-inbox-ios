@@ -56,6 +56,18 @@ struct AccountView: View {
 					.listRowBackground(Color.backgroundPrimary)
 					.frame(maxWidth: .infinity)
 
+					Section(footer: Text("Show OpenGraph information from links")) {
+						Toggle("Show Link Previews", isOn: $settings.showLinkPreviews.animation())
+							.tint(Color.actionPrimary)
+							.listRowBackground(Color.backgroundTertiary)
+					}
+
+					Section(footer: Text("Displays images when a message is just an image URL")) {
+						Toggle("Show Images from URLs", isOn: $settings.showImageURLs.animation())
+							.tint(Color.actionPrimary)
+							.listRowBackground(Color.backgroundTertiary)
+					}
+
 					Section {
 						Toggle("Show Link Previews", isOn: $settings.showLinkPreviews.animation())
 						Toggle("Show Images from URLs", isOn: $settings.showImageURLs.animation())

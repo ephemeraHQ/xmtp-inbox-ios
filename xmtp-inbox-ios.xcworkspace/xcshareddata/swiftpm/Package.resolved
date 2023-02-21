@@ -91,6 +91,15 @@
       }
     },
     {
+      "identity" : "libwebp-xcode",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/libwebp-Xcode.git",
+      "state" : {
+        "revision" : "4f52fc9b29600a03de6e05af16df0d694cb44301",
+        "version" : "1.2.4"
+      }
+    },
+    {
       "identity" : "opengraph",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/satoshi-takano/OpenGraph",
@@ -106,6 +115,33 @@
       "state" : {
         "branch" : "main",
         "revision" : "07180005024b320da26ee35f0b47ae9a459043f0"
+      }
+    },
+    {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "state" : {
+        "revision" : "554e05a4415fe20add53531c21e593c403685c3d",
+        "version" : "5.15.3"
+      }
+    },
+    {
+      "identity" : "sdwebimageswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImageSwiftUI",
+      "state" : {
+        "revision" : "61fefe9c284fd41ddef77d02749e88f00c305196",
+        "version" : "2.2.2"
+      }
+    },
+    {
+      "identity" : "sdwebimagewebpcoder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImageWebPCoder",
+      "state" : {
+        "revision" : "e6cd1a9d2c976c14a52a040062646b535d0a6337",
+        "version" : "0.10.1"
       }
     },
     {
@@ -258,7 +294,7 @@
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "71a3aae83ce0f784686f60a24fb560f436e51301"
+        "revision" : "941b78aa9f00b91bfe8d9438a21fc23b7f80ac03"
       }
     }
   ],
