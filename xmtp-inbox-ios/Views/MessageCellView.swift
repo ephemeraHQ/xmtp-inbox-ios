@@ -13,6 +13,7 @@ import XMTP
 struct MessageCellView: View {
 	var message: DB.Message
 
+	@State private var isLoading = false
 	@State private var preview: URLPreview?
 
 	var body: some View {
@@ -21,8 +22,7 @@ struct MessageCellView: View {
 				if message.isFromMe {
 					Spacer()
 				}
-
-				VStack {
+	      VStack {
 					if let preview = message.preview {
 						URLPreviewView(preview: preview)
 							.foregroundColor(textColor)
