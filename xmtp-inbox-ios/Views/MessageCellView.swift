@@ -33,11 +33,11 @@ struct MessageCellView: View {
 						MessageTextView(content: message.body, textColor: UIColor(textColor)) { url in
 							print("URL \(url)")
 						}
+						.foregroundColor(textColor)
+						.padding()
+						.background(background)
           }
 				}
-				.foregroundColor(textColor)
-				.padding()
-				.background(background)
 
 				if !message.isFromMe {
 					Spacer()
