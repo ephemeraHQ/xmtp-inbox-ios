@@ -89,7 +89,6 @@ extension DB {
 			if xmtpMessage.encodedContent.type == ContentTypeRemoteAttachment {
 				body = ""
 				remoteAttachment = try xmtpMessage.content()
-				print("GOT REMOTE ATTACHMENT: \(remoteAttachment)")
 			} else {
 				body = try xmtpMessage.content()
 			}
