@@ -65,7 +65,6 @@
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
 		A671F71A2992C01900C0F36D /* KeyStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671F7192992C01900C0F36D /* KeyStoreTests.swift */; };
 		A673855E29A4093700625ACE /* SheetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A673855D29A4093700625ACE /* SheetButton.swift */; };
-		A673856129A4305400625ACE /* IPFSKit in Frameworks */ = {isa = PBXBuildFile; productRef = A673856029A4305400625ACE /* IPFSKit */; };
 		A673856329A430A300625ACE /* IPFS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A673856229A430A300625ACE /* IPFS.swift */; };
 		A673856529A43BC000625ACE /* ConversationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A673856429A43BC000625ACE /* ConversationExtensions.swift */; };
 		A673856729A4442D00625ACE /* MessageAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A673856629A4442D00625ACE /* MessageAttachment.swift */; };
@@ -292,7 +291,6 @@
 				A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */,
 				F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 				7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
-				A673856129A4305400625ACE /* IPFSKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -633,7 +631,6 @@
 				A68907A429A1946E006D9EC7 /* OpenGraph */,
 				A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */,
 				A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */,
-				A673856029A4305400625ACE /* IPFSKit */,
 			);
 			productName = "xmtp-inbox-ios";
 			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
@@ -756,7 +753,6 @@
 				A68907A329A1946E006D9EC7 /* XCRemoteSwiftPackageReference "OpenGraph" */,
 				A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
-				A673855F29A4305400625ACE /* XCRemoteSwiftPackageReference "IPFSKit" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
 			projectDirPath = "";
@@ -1571,14 +1567,6 @@
 				minimumVersion = 0.9.1;
 			};
 		};
-		A673855F29A4305400625ACE /* XCRemoteSwiftPackageReference "IPFSKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pexavc/IPFSKit";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		A68907A329A1946E006D9EC7 /* XCRemoteSwiftPackageReference "OpenGraph" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/satoshi-takano/OpenGraph";
@@ -1658,11 +1646,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
 			productName = SDWebImageWebPCoder;
-		};
-		A673856029A4305400625ACE /* IPFSKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A673855F29A4305400625ACE /* XCRemoteSwiftPackageReference "IPFSKit" */;
-			productName = IPFSKit;
 		};
 		A689079729A03A68006D9EC7 /* ENSKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -7,7 +7,6 @@
 
 import CryptoKit
 import Foundation
-import IPFSKit
 
 struct IPFSUploadResponse: Codable {
 	let name, hash, size: String

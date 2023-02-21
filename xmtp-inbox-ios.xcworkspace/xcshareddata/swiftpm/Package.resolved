@@ -82,15 +82,6 @@
       }
     },
     {
-      "identity" : "ipfskit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pexavc/IPFSKit",
-      "state" : {
-        "branch" : "main",
-        "revision" : "336df3fcb054ba80bbe93b4c4c8ec3a01e985f91"
-      }
-    },
-    {
       "identity" : "keychainaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
