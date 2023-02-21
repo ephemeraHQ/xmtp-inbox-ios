@@ -7,6 +7,7 @@
 
 import OpenGraph
 import SwiftUI
+import UIKit
 import XMTP
 
 struct MessageCellView: View {
@@ -29,13 +30,25 @@ struct MessageCellView: View {
 							.background(background)
 					} else if message.isBareImageURL, let url = URL(string: message.body), Settings.shared.showImageURLs {
 						RemoteMediaView(message: message, url: url)
-					} else {
+					} else if message.body != "" {
 						MessageTextView(content: message.body, textColor: UIColor(textColor)) { url in
 							print("URL \(url)")
 						}
 						.foregroundColor(textColor)
 						.padding()
 						.background(background)
+					}
+
+					ForEach(message.attachments, id: \.id) { attachment in
+						if let xmtpAttachment = attachment.toXMTP {
+							Image(uiImage: UIImage(data: try! Data(contentsOf: attachment.location))!)
+								.resizable()
+								.scaledToFit()
+								.aspectRatio(contentMode: .fit)
+								.frame(height: 200)
+								.cornerRadius(12)
+								.fullScreenable(url: attachment.location)
+						}
 					}
 				}
 

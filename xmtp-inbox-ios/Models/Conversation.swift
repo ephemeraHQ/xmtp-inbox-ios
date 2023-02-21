@@ -95,6 +95,15 @@ extension DB {
 			ens ?? peerAddress.truncatedAddress()
 		}
 
+		func toXMTP(client: Client) -> XMTP.Conversation {
+			do {
+				// TODO: make sure this isn't returning a metatopic
+				return try topics()[0].toXMTP(client: client)
+			} catch {
+				fatalError("Could not get XMTP conversation: \(error)")
+			}
+		}
+
 		mutating func markViewed() {
 			do {
 				viewedAt = Date()
@@ -120,7 +129,7 @@ extension DB {
 					return
 				}
 
-				try await DB.Message.from(lastMessageXMTP, conversation: self, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress)
+				try await DB.Message.from(lastMessageXMTP, conversation: self, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress, client: client)
 			}
 
 			let lastMessage = try DB.read { db in
@@ -138,7 +147,7 @@ extension DB {
 		}
 
 		func send(text: String, client: Client, topic: ConversationTopic? = nil) async throws {
-			guard let topic = topic ?? topics().last else {
+			guard let topic = topic ?? topics().first else {
 				throw ConversationError.noTopic
 			}
 

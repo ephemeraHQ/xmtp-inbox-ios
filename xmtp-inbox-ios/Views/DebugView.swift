@@ -60,6 +60,18 @@ struct DebugView: View {
 				Section("XMTP Environment") {
 					EnvironmentToggleView()
 				}
+
+				Section {
+					Button(action: {
+						do {
+							try DB.clear()
+						} catch {
+							print("Error clearing DB")
+						}
+					}) {
+						Text("Clear DB")
+					}
+				}
 			}
 			.navigationTitle("Debug")
 			.navigationBarTitleDisplayMode(.inline)

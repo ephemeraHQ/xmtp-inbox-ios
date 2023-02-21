@@ -6,6 +6,10 @@
 	<string>$(INFURA_KEY)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>IPFS_INFURA_KEY</key>
+	<string>$(IPFS_INFURA_KEY)</string>
+	<key>IPFS_INFURA_SECRET_KEY</key>
+	<string>$(IPFS_INFURA_SECRET_KEY)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>wc</string>

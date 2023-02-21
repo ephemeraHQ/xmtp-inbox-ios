@@ -26,35 +26,6 @@ struct QuickLookPreview: UIViewControllerRepresentable {
 	func updateUIViewController(_: UIViewController, context _: Context) {}
 }
 
-// class AppQLPreviewController: UIViewController {
-//	let selectedURL: URL
-//	let urls: [URL]
-//
-//	var qlController: QLPreviewController?
-//
-//	init(selectedURL: URL, urls: [URL]) {
-//		self.selectedURL = selectedURL
-//		self.urls = urls
-//		super.init(nibName: nil, bundle: nil)
-//	}
-//
-//	@available(*, unavailable)
-//	required init?(coder _: NSCoder) {
-//		fatalError("init(coder:) has not been implemented")
-//	}
-//
-//	override func viewWillAppear(_ animated: Bool) {
-//		super.viewWillAppear(animated)
-//		if qlController == nil {
-//			qlController = QLPreviewController()
-//			qlController?.dataSource = self
-//			qlController?.delegate = self
-//			qlController?.currentPreviewItemIndex = urls.firstIndex(of: selectedURL) ?? 0
-//			present(qlController!, animated: true)
-//		}
-//	}
-// }
-
 class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSource {
 	let urls: [URL]
 	let selectedURL: URL
@@ -82,7 +53,9 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 
 		Task {
 			do {
-				let data = try await URLSession.shared.data(from: selectedURL).0
+				let data = selectedURL.absoluteString.hasPrefix("file") ?
+					try Data(contentsOf: selectedURL) :
+					try await URLSession.shared.data(from: selectedURL).0
 
 				// Give the file a name and append it to the file path
 				fileURL = URL.temporaryDirectory.appendingPathComponent(
@@ -96,11 +69,7 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 
 				try data.write(to: fileUrl, options: .atomic)
 
-				// Make sure the file can be opened and then present the pdf
-				if QLPreviewController.canPreview(fileUrl as QLPreviewItem) {
-					quickLookController.currentPreviewItemIndex = 0
-					present(quickLookController, animated: true, completion: nil)
-				}
+				present(quickLookController, animated: true, completion: nil)
 			} catch {
 				// cant find the url resource
 			}

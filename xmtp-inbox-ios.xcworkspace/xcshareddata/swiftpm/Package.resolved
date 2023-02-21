@@ -82,6 +82,15 @@
       }
     },
     {
+      "identity" : "ipfskit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pexavc/IPFSKit",
+      "state" : {
+        "branch" : "main",
+        "revision" : "336df3fcb054ba80bbe93b4c4c8ec3a01e985f91"
+      }
+    },
+    {
       "identity" : "keychainaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
@@ -293,8 +302,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "main",
-        "revision" : "71a3aae83ce0f784686f60a24fb560f436e51301"
+        "branch" : "remote-attachment-proposal",
+        "revision" : "16ac7d6ef0368e8ed282ffdf79e357b0d6fd3108"
       }
     }
   ],

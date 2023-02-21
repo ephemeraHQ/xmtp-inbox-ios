@@ -10,6 +10,11 @@ import GRDB
 import SwiftUI
 import XMTP
 
+struct MessageWithAttachments: Codable, FetchableRecord {
+	var message: DB.Message
+	var attachments: [DB.MessageAttachment]
+}
+
 class MessageLoader: ObservableObject {
 	var client: XMTP.Client
 	var conversation: DB.Conversation
@@ -43,7 +48,7 @@ class MessageLoader: ObservableObject {
 	func streamTopic(topic: DB.ConversationTopic) async {
 		do {
 			for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
-				let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, isFromMe: client.address == xmtpMessage.senderAddress)
+				let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, isFromMe: client.address == xmtpMessage.senderAddress, client: client)
 				await MainActor.run {
 					messages.append(message)
 					mostRecentMessageID = message.xmtpID
@@ -74,7 +79,7 @@ class MessageLoader: ObservableObject {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit)
 				for message in messages {
 					do {
-						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress)
+						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress, client: client)
 					} catch {
 						print("Error importing message: \(error)")
 					}
@@ -95,7 +100,7 @@ class MessageLoader: ObservableObject {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit, before: before)
 				for message in messages {
 					do {
-						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress)
+						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress, client: client)
 					} catch {
 						print("Error importing message: \(error)")
 					}
@@ -111,9 +116,16 @@ class MessageLoader: ObservableObject {
 	@MainActor func fetchLocal() throws {
 		let messages = try DB.read { db in
 			try DB.Message
+				.including(all: DB.Message.attachments.forKey("attachments"))
 				.filter(Column("conversationID") == self.conversation.id)
 				.order(Column("createdAt").asc)
+				.asRequest(of: MessageWithAttachments.self)
 				.fetchAll(db)
+		}
+		.map {
+			var message = $0.message
+			message.attachments = $0.attachments
+			return message
 		}
 
 		self.messages = messages

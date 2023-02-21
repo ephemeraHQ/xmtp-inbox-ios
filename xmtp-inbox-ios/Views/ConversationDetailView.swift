@@ -6,6 +6,7 @@
 //
 
 import AlertToast
+import CryptoKit
 import SwiftUI
 import XMTP
 
@@ -23,7 +24,7 @@ struct ConversationDetailView: View {
 			MessageListView(client: client, conversation: conversation)
 				.frame(maxHeight: .infinity)
 				.backgroundStyle(.blue)
-			MessageComposerView(offset: $offset, onSend: sendMessage(text:))
+			MessageComposerView(offset: $offset, onSend: sendMessage)
 				.padding(.horizontal)
 				.padding(.bottom)
 		}
@@ -44,10 +45,24 @@ struct ConversationDetailView: View {
 		}
 	}
 
-	func sendMessage(text: String) async {
+	func sendMessage(text: String, attachment: Attachment? = nil) async {
 		do {
-			// TODO(elise): Optimistic upload / undo
-			try await conversation.send(text: text, client: client)
+			if let attachment {
+				let payload = try await conversation.toXMTP(client: client).encode(codec: XMTP.AttachmentCodec(), content: attachment)
+				let envelope = try Envelope(serializedData: payload)
+				if let response = try await IPFS.shared.upload(
+					filename: attachment.filename,
+					data: payload
+				) {
+					let remoteAttachment = RemoteAttachment(url: "https://ipfs.io/ipfs/\(response.hash)")
+					try await conversation.toXMTP(client: client).send(content: remoteAttachment, options: .init(contentType: ContentTypeRemoteAttachment, contentFallback: "an attachment"))
+				} else {
+					print("NO RESPONSE")
+				}
+			} else {
+				// TODO(elise): Optimistic upload / undo
+				try await conversation.send(text: text, client: client)
+			}
 		} catch {
 			await MainActor.run {
 				self.errorViewModel.showError("Error sending message: \(error)")

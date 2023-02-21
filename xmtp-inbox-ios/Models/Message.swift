@@ -21,6 +21,7 @@ extension DB {
 		var createdAt: Date
 		var isFromMe: Bool
 		var previewData: Data?
+		var attachments: [MessageAttachment] = []
 
 		// Cached images
 		var image: Image?
@@ -69,8 +70,9 @@ extension DB {
 			}
 		}
 
-		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool) async throws -> DB.Message {
-			if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
+		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool, client: Client) async throws -> DB.Message {
+			if var existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id), let messageID = existing.id {
+				existing.attachments = DB.MessageAttachment.where(Column("messageID") == messageID)
 				return existing
 			}
 
@@ -82,9 +84,18 @@ extension DB {
 				throw DBError.badData("Missing XMTP ID")
 			}
 
+			var body: String
+			var remoteAttachment: XMTP.RemoteAttachment?
+			if xmtpMessage.encodedContent.type == ContentTypeRemoteAttachment {
+				body = ""
+				remoteAttachment = try xmtpMessage.content()
+			} else {
+				body = try xmtpMessage.content()
+			}
+
 			var message = DB.Message(
 				xmtpID: xmtpMessage.id,
-				body: try xmtpMessage.content(),
+				body: body,
 				conversationID: conversationID,
 				conversationTopicID: topicID,
 				senderAddress: xmtpMessage.senderAddress,
@@ -117,6 +128,26 @@ extension DB {
 
 			try message.save()
 			try message.updateConversationTimestamps(conversation: conversation)
+
+			if let remoteAttachment,
+			   let url = URL(string: remoteAttachment.url),
+			   let messageID = message.id,
+			   let envelopeData = try await IPFS.shared.get(url.lastPathComponent)
+			{
+				let envelope = try Envelope(serializedData: envelopeData)
+				let decodedMessage = try topic.toXMTP(client: client).decode(envelope)
+				let attachment: Attachment = try decodedMessage.content()
+
+				// TODO: Handle more than IPFS
+				let uuid = UUID()
+				let attachmentDataURL = URL.documentsDirectory.appendingPathComponent(uuid.uuidString)
+
+				var messageAttachment = DB.MessageAttachment(messageID: messageID, mimeType: attachment.mimeType, filename: attachment.filename, uuid: uuid)
+				try messageAttachment.save(data: attachment.data)
+				try messageAttachment.save()
+
+				message.attachments = [messageAttachment]
+			}
 
 			return message
 		}
@@ -166,6 +197,8 @@ extension DB.Message: Model {
 			t.column("previewData", .blob)
 		}
 	}
+
+	static var attachments = hasMany(DB.MessageAttachment.self, key: "messageID")
 }
 
 extension DB.Message {
