@@ -31,9 +31,6 @@ struct RemoteAttachmentUploader: CredentialsProvider {
 		let key = Bundle.main.infoDictionary?["AWS_ACCESS_KEY_ID"] as? String ?? ""
 		let secret = Bundle.main.infoDictionary?["AWS_SECRET_ACCESS_KEY_ID"] as? String ?? ""
 
-		print("KJey: \(key)")
-		print("secret \(secret)")
-
 		return AWSClientRuntime.AWSCredentials(accessKey: key, secret: secret)
 	}
 }
