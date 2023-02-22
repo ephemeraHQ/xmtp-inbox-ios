@@ -26,7 +26,7 @@ class MessageTableViewCell: UITableViewCell {
 class MessagesTableViewController: UITableViewController {
 	var loader: MessageLoader
 	var cancellables = [AnyCancellable]()
-	var observer: TransactionObserver?
+	var observer: MessageObserver?
 	var isPinnedToBottom = true
 
 	init(loader: MessageLoader) {

@@ -6,10 +6,10 @@
 	<string>$(INFURA_KEY)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>IPFS_INFURA_KEY</key>
-	<string>$(IPFS_INFURA_KEY)</string>
-	<key>IPFS_INFURA_SECRET_KEY</key>
-	<string>$(IPFS_INFURA_SECRET_KEY)</string>
+	<key>AWS_ACCESS_KEY_ID</key>
+	<string>$(AWS_ACCESS_KEY_ID)</string>
+	<key>AWS_SECRET_ACCESS_KEY_ID</key>
+	<string>$(AWS_SECRET_ACCESS_KEY_ID)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>wc</string>

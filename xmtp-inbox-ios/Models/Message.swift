@@ -107,23 +107,20 @@ extension DB {
 			try message.updateConversationTimestamps(conversation: conversation)
 
 			if let remoteAttachment,
-			   let url = URL(string: remoteAttachment.url),
-			   let messageID = message.id,
-			   let payload = try await IPFS.shared.get(url.lastPathComponent)
+			   let messageID = message.id
 			{
-				print("GOT PAYLOAD \(payload)")
+				do {
+					let encodedContent = try await remoteAttachment.content()
+					let attachment: Attachment = try encodedContent.decoded()
 
-				let encodedContent = try remoteAttachment.decrypt(payload: payload)
-				let attachment: Attachment = try encodedContent.decoded()
+					let uuid = UUID()
 
-				let uuid = UUID()
-				let attachmentDataURL = URL.documentsDirectory.appendingPathComponent(uuid.uuidString)
-
-				var messageAttachment = DB.MessageAttachment(messageID: messageID, mimeType: attachment.mimeType, filename: attachment.filename, uuid: uuid)
-				try messageAttachment.save(data: attachment.data)
-				try messageAttachment.save()
-
-				message.attachments = [messageAttachment]
+					var messageAttachment = DB.MessageAttachment(messageID: messageID, mimeType: attachment.mimeType, filename: attachment.filename, uuid: uuid)
+					try messageAttachment.save(data: attachment.data)
+					try messageAttachment.save()
+				} catch {
+					print("Error in detached task getting remote attachment: \(error)")
+				}
 			} else if Settings.shared.showLinkPreviews,
 			          message.body.isValidURL,
 			          let url = URL(string: message.body),

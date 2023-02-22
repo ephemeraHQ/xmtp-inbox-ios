@@ -49,15 +49,10 @@ struct ConversationDetailView: View {
 		do {
 			if let attachment {
 				let encryptedEncodedContent = try RemoteAttachment.encodeEncrypted(content: attachment, codec: AttachmentCodec())
-				if let response = try await IPFS.shared.upload(
-					filename: attachment.filename,
-					data: encryptedEncodedContent.payload
-				) {
-					let remoteAttachment = RemoteAttachment(url: "https://ipfs.io/ipfs/\(response.hash)", encryptedEncodedContent: encryptedEncodedContent)
-					try await conversation.toXMTP(client: client).send(content: remoteAttachment, options: .init(contentType: ContentTypeRemoteAttachment, contentFallback: "an attachment"))
-				} else {
-					print("NO RESPONSE")
-				}
+				let url = try await RemoteAttachmentUploader(data: encryptedEncodedContent.payload).upload()
+
+				let remoteAttachment = try RemoteAttachment(url: url, encryptedEncodedContent: encryptedEncodedContent)
+				try await conversation.toXMTP(client: client).send(content: remoteAttachment, options: .init(contentType: ContentTypeRemoteAttachment, contentFallback: "an attachment"))
 			} else {
 				// TODO(elise): Optimistic upload / undo
 				try await conversation.send(text: text, client: client)
