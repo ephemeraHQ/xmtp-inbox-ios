@@ -5,7 +5,6 @@
 //  Created by Elise Alix on 12/20/22.
 //
 
-import AlertToast
 import SwiftUI
 import XMTP
 
@@ -30,9 +29,6 @@ struct ContentView: View {
 				default:
 					SplashView(onTryDemo: onTryDemo, onConnecting: onConnecting, onConnected: onConnectWallet)
 				}
-			}
-			.toast(isPresenting: $errorViewModel.isShowing) {
-				AlertToast.error(errorViewModel.errorMessage)
 			}
 			.sheet(isPresented: $environmentCoordinator.auth.isShowingQRCode) {
 				if let wcUrl {

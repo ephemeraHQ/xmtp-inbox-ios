@@ -5,7 +5,6 @@
 //  Created by Elise Alix on 2/10/23.
 //
 
-import AlertToast
 import Combine
 import SwiftUI
 import XMTP

@@ -104,9 +104,6 @@ struct ConversationListView: View {
 		.task {
 			await streamConversations()
 		}
-		.toast(isPresenting: $errorViewModel.isShowing) {
-			AlertToast.error(errorViewModel.errorMessage)
-		}
 		.sheet(isPresented: $isShowingNewMessage) {
 			NewConversationView(client: client) { conversation in
 				conversationLoader.insertConversation(conversation, at: conversationLoader.conversations.endIndex)
@@ -146,6 +143,11 @@ struct ConversationListView: View {
 				}
 			}
 		}
+
+		// swiftlint:disable no_optional_try
+		try? await Task.sleep(for: .seconds(5))
+
+		await loadConversations()
 	}
 
 	func streamConversations() async {

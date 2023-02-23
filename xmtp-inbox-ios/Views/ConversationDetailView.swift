@@ -39,9 +39,6 @@ struct ConversationDetailView: View {
 				print("Error marking conversation as viewed: \(error)")
 			}
 		}
-		.toast(isPresenting: $errorViewModel.isShowing) {
-			AlertToast.error(errorViewModel.errorMessage)
-		}
 	}
 
 	func sendMessage(text: String) async {
