@@ -92,6 +92,8 @@ struct ConversationListView: View {
 					.padding(24)
 				}
 			}
+			.frame(maxWidth: .infinity)
+			.frame(maxHeight: .infinity)
 		}
 		.navigationDestination(for: DB.Conversation.self) { conversation in
 			ConversationDetailView(client: client, conversation: conversation)
