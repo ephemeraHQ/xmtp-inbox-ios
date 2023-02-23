@@ -53,8 +53,12 @@ struct ConversationListView: View {
 			case .loading:
 				ProgressView()
 			case .empty:
-				Text("conversations-empty")
-					.padding()
+				if let error = conversationLoader.error {
+					Text(error.localizedDescription)
+				} else {
+					Text("conversations-empty")
+						.padding()
+				}
 			case let .error(errorMessage):
 				Text(errorMessage)
 					.padding()

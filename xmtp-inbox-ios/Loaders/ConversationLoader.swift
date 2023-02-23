@@ -19,6 +19,7 @@ class ConversationLoader: ObservableObject {
 	var client: XMTP.Client
 
 	@MainActor @Published var conversations: [DB.Conversation] = []
+	@MainActor @Published var error: Error?
 
 	init(client: XMTP.Client) {
 		self.client = client
@@ -38,6 +39,9 @@ class ConversationLoader: ObservableObject {
 			// Reload what we got from the db
 			try await fetchLocal()
 		} catch {
+			await MainActor.run {
+				self.error = error
+			}
 			print("Error in ConversationLoader.load(): \(error)")
 		}
 	}

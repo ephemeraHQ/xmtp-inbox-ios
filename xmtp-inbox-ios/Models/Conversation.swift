@@ -40,7 +40,7 @@ extension DB {
 			self.viewedAt = viewedAt
 		}
 
-		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation) async throws -> DB.Conversation {
+		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation, ens: String? = nil) async throws -> DB.Conversation {
 			do {
 				if let conversation = DB.Conversation.find(Column("peerAddress") == xmtpConversation.peerAddress) {
 					try conversation.createTopic(from: xmtpConversation)
@@ -52,6 +52,8 @@ extension DB {
 					peerAddress: xmtpConversation.peerAddress,
 					createdAt: xmtpConversation.createdAt
 				)
+
+				conversation.ens = ens
 
 				try conversation.save()
 				try conversation.createTopic(from: xmtpConversation)

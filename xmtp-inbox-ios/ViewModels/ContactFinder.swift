@@ -45,12 +45,12 @@ class ContactFinder: ObservableObject {
 			do {
 				if searchText.hasSuffix(".eth") {
 					if let address = try await lookupENS() {
-						try await validateAddress(address: address)
+						try await validateAddress(address: address, ens: searchText)
 					} else {
 						await setError("No address found for \(searchText)")
 					}
 				} else {
-					try await validateAddress(address: searchText)
+					try await validateAddress(address: searchText, ens: nil)
 				}
 			} catch {
 				print("Error searching: \(error)")
@@ -71,7 +71,7 @@ class ContactFinder: ObservableObject {
 		return await ENS.shared.address(ens: searchText)
 	}
 
-	func validateAddress(address: String) async throws {
+	func validateAddress(address: String, ens: String?) async throws {
 		await MainActor.run {
 			self.results = []
 			self.error = nil
@@ -82,7 +82,7 @@ class ContactFinder: ObservableObject {
 		if regex.firstMatch(in: address, options: [], range: range) != nil {
 			await MainActor.run {
 				results = [
-					ContactFinderResult(address: address),
+					ContactFinderResult(address: address, ens: ens),
 				]
 			}
 		} else {

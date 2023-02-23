@@ -45,13 +45,13 @@ struct NewConversationView: View {
 					} else {
 						ForEach(contactFinder.results) { result in
 							Button {
-								createConversation(address: result.address)
+								createConversation(result: result)
 							} label: {
 								HStack {
 									AvatarView(imageSize: 48, peerAddress: result.address)
 										.padding(.trailing, 8)
 									VStack(alignment: .leading) {
-										Text(result.address.truncatedAddress())
+										Text(result.ens ?? result.address.truncatedAddress())
 											.font(.Body1B)
 											.padding(.bottom, 1)
 											.foregroundColor(.textPrimary)
@@ -78,12 +78,12 @@ struct NewConversationView: View {
 		.presentationDetents([.height(240)])
 	}
 
-	func createConversation(address: String) {
+	func createConversation(result: ContactFinderResult) {
 		Task {
 			do {
-				var client = client
-				let conversation = try await client.conversations.newConversation(with: address)
-				let newConversation = try await DB.Conversation.from(conversation)
+				let client = client
+				let conversation = try await client.conversations.newConversation(with: result.address)
+				let newConversation = try await DB.Conversation.from(conversation, ens: result.ens)
 				await MainActor.run {
 					dismiss()
 					onCreate(newConversation)
