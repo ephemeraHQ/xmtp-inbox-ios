@@ -138,11 +138,16 @@ extension DB {
 		}
 
 		func send(text: String, client: Client, topic: ConversationTopic? = nil) async throws {
-			guard let topic = topic ?? topics().last else {
+			guard let topic = topic ?? topics().last, let topicID = topic.id else {
 				throw ConversationError.noTopic
 			}
 
-			try await topic.toXMTP(client: client).send(text: text)
+			let messageID = try await topic.toXMTP(client: client).send(text: text)
+
+			try await MainActor.run {
+				var message = DB.Message(xmtpID: messageID, body: text, conversationID: topic.conversationID, conversationTopicID: topicID, senderAddress: topic.peerAddress, createdAt: Date(), isFromMe: true)
+				try message.save()
+			}
 		}
 
 		func topics() -> [ConversationTopic] {

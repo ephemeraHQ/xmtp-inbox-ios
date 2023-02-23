@@ -168,24 +168,26 @@ extension DB.Message: Model {
 	}
 }
 
-extension DB.Message {
-	static var preview: DB.Message {
-		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "hello there", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
-	}
+#if DEBUG
+	extension DB.Message {
+		static var preview: DB.Message {
+			DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "hello there", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
+		}
 
-	static var previewImage: DB.Message {
-		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://user-images.githubusercontent.com/483/219905054-3f7cc2c9-50e5-45b8-887c-82c863a01464.png", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
-	}
+		static var previewImage: DB.Message {
+			DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://user-images.githubusercontent.com/483/219905054-3f7cc2c9-50e5-45b8-887c-82c863a01464.png", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
+		}
 
-	static var previewGIF: DB.Message {
-		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://heavy.com/wp-content/uploads/2014/10/mglp5o.gif", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
-	}
+		static var previewGIF: DB.Message {
+			DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://heavy.com/wp-content/uploads/2014/10/mglp5o.gif", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
+		}
 
-	static var previewWebP: DB.Message {
-		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://media1.giphy.com/media/Fxw4gRt5Yhaw5FdAfc/giphy.webp", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
-	}
+		static var previewWebP: DB.Message {
+			DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://media1.giphy.com/media/Fxw4gRt5Yhaw5FdAfc/giphy.webp", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
+		}
 
-	static var previewMP4: DB.Message {
-		DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://s3.us-west-1.wasabisys.com/palmsyclub/cache/media_attachments/files/109/892/013/471/787/377/original/417fa3de9a4a1adc.mp4", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
+		static var previewMP4: DB.Message {
+			DB.Message(xmtpID: "aslkdjfalksdljkafsdjasf", body: "https://s3.us-west-1.wasabisys.com/palmsyclub/cache/media_attachments/files/109/892/013/471/787/377/original/417fa3de9a4a1adc.mp4", conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
+		}
 	}
-}
+#endif

@@ -21,7 +21,7 @@ struct MessageCellView: View {
 				if message.isFromMe {
 					Spacer()
 				}
-	      VStack {
+				VStack {
 					if let preview = message.preview {
 						URLPreviewView(preview: preview)
 							.foregroundColor(textColor)
@@ -36,7 +36,7 @@ struct MessageCellView: View {
 						.foregroundColor(textColor)
 						.padding()
 						.background(background)
-          }
+					}
 				}
 
 				if !message.isFromMe {
