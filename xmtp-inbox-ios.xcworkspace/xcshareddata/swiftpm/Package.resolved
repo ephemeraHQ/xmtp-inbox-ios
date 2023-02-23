@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "alerttoast",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elai950/AlertToast.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "b39252eacd159904afd7d718bba0afabb87f2f2f"
-      }
-    },
-    {
       "identity" : "bigint",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/attaswift/BigInt.git",
