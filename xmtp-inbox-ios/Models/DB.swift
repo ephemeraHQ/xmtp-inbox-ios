@@ -26,13 +26,22 @@ class DB {
 		try prepare(client: client, reset: true)
 	}
 
-	static func prepare(client: XMTP.Client, reset: Bool = false) throws {
+	static func prepare(client: XMTP.Client, reset: Bool = false, isRetry: Bool = false) throws {
 		let dbVersion = AppGroup.defaults.integer(forKey: "dbVersion")
 
 		let passphraseData = try client.privateKeyBundle.serializedData()
 		let passphrase = Data(SHA256.hash(data: passphraseData)).toHex
 
-		try shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
+		do {
+			try shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
+		} catch {
+			if isRetry {
+				throw error
+			} else {
+				print("ERROR PREPARE: \(error). Retrying with reset...")
+				try DB.prepare(client: client, reset: true, isRetry: true)
+			}
+		}
 
 		AppGroup.defaults.set(DB.version, forKey: "dbVersion")
 	}

@@ -55,6 +55,7 @@
 		A61B44FB299AB7E800F2CBEA /* XMTPEnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */; };
 		A61B44FC299AB88300F2CBEA /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4612FE298177B300346D68 /* Auth.swift */; };
 		A6292C31299415E4004B5A27 /* SQLDebuggerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */; };
+		A6324F6F29A817EA0040CBA4 /* TextFieldWithLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */; };
 		A6393EF229A29C0B009BCE38 /* URLPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */; };
 		A6393EF529A2A1BC009BCE38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */; };
 		A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */; };
@@ -217,6 +218,7 @@
 		A61B44F7299AAFD200F2CBEA /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMTPEnvironmentManager.swift; sourceTree = "<group>"; };
 		A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLDebuggerView.swift; sourceTree = "<group>"; };
+		A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithLoader.swift; sourceTree = "<group>"; };
 		A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLPreviewView.swift; sourceTree = "<group>"; };
 		A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMediaView.swift; sourceTree = "<group>"; };
 		A65544A5298C5AA8005337C3 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -419,6 +421,7 @@
 		6A40157429526A3C003A6659 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A6324F6D29A817CF0040CBA4 /* Components */,
 				A689079129A038A8006D9EC7 /* Providers */,
 				6ABDB41D2954A7070082EC42 /* SplashView.swift */,
 				6A40157929529F85003A6659 /* HomeView.swift */,
@@ -491,6 +494,14 @@
 				A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A6324F6D29A817CF0040CBA4 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		A682B1E8298B071800121651 /* ci_scripts */ = {
@@ -959,6 +970,7 @@
 				6ACD972F298AE3F000C6AD66 /* HapticButton.swift in Sources */,
 				A6393EF229A29C0B009BCE38 /* URLPreviewView.swift in Sources */,
 				A6FCA31B299AECCF00EFB39D /* DataExtensions.swift in Sources */,
+				A6324F6F29A817EA0040CBA4 /* TextFieldWithLoader.swift in Sources */,
 				A689079329A038B0006D9EC7 /* AvatarProvider.swift in Sources */,
 				6ABDB41E2954A7070082EC42 /* SplashView.swift in Sources */,
 				A677CE9F298CADF000055697 /* ENS.swift in Sources */,

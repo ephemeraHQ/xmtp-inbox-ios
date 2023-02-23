@@ -31,7 +31,7 @@ struct NewConversationView: View {
 			ZStack {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				List {
-					TextField("new-message-prompt", text: $contactFinder.searchText)
+					TextFieldWithLoader("new-message-prompt", text: $contactFinder.searchText, isLoading: contactFinder.isLoading)
 						.keyboardType(.alphabet)
 						.autocorrectionDisabled(true)
 						.autocapitalization(.none)

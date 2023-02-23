@@ -63,7 +63,7 @@ class ENS: ObservableObject {
 		}
 
 		do {
-			return try await service.resolve(ens: ens, mode: .allowOffchainLookup).toChecksumAddress()
+			return try await service.resolve(ens: ens.lowercased(), mode: .allowOffchainLookup).toChecksumAddress()
 		} catch {
 			return nil
 		}

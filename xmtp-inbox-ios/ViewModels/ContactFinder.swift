@@ -24,6 +24,7 @@ class ContactFinder: ObservableObject {
 	@Published var searchText: String = ""
 	@Published var results: [ContactFinderResult] = []
 	@Published var error: String?
+	@Published var isLoading = false
 
 	init(client: XMTP.Client) {
 		self.client = client
@@ -40,12 +41,15 @@ class ContactFinder: ObservableObject {
 	}
 
 	func validate() {
+		if searchText.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+			isLoading = true
+		}
 		validateTask?.cancel()
 		validateTask = Task {
 			do {
-				if searchText.hasSuffix(".eth") {
+				if searchText.lowercased().hasSuffix(".eth") {
 					if let address = try await lookupENS() {
-						try await validateAddress(address: address, ens: searchText)
+						try await validateAddress(address: address, ens: searchText.lowercased())
 					} else {
 						await setError("No address found for \(searchText)")
 					}
@@ -63,12 +67,13 @@ class ContactFinder: ObservableObject {
 			withAnimation {
 				self.results = []
 				self.error = message
+				self.isLoading = false
 			}
 		}
 	}
 
 	func lookupENS() async throws -> String? {
-		return await ENS.shared.address(ens: searchText)
+		return await ENS.shared.address(ens: searchText.lowercased())
 	}
 
 	func validateAddress(address: String, ens: String?) async throws {
@@ -81,6 +86,7 @@ class ContactFinder: ObservableObject {
 		let regex = try NSRegularExpression(pattern: "^0x[a-fA-F0-9]{40}$")
 		if regex.firstMatch(in: address, options: [], range: range) != nil {
 			await MainActor.run {
+				isLoading = false
 				results = [
 					ContactFinderResult(address: address, ens: ens),
 				]
