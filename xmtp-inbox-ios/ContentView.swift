@@ -13,21 +13,21 @@ struct ContentView: View {
 
 	@State private var wcUrl: URL?
 
-	@StateObject private var errorViewModel = ErrorViewModel()
-
 	var body: some View {
 		FullScreenContentProvider {
-			ZStack {
-				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-				switch environmentCoordinator.auth.status {
-				case let .connected(client):
-					HomeView(client: client)
-				case .connecting:
-					ProgressView("Awaiting signatures…")
-				case .loadingKeys:
-					ProgressView()
-				default:
-					SplashView(onTryDemo: onTryDemo, onConnecting: onConnecting, onConnected: onConnectWallet)
+			FlashProvider {
+				ZStack {
+					Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
+					switch environmentCoordinator.auth.status {
+					case let .connected(client):
+						HomeView(client: client)
+					case .connecting:
+						ProgressView("Awaiting signatures…")
+					case .loadingKeys:
+						ProgressView()
+					default:
+						SplashView(onTryDemo: onTryDemo, onConnecting: onConnecting, onConnected: onConnectWallet)
+					}
 				}
 			}
 			.sheet(isPresented: $environmentCoordinator.auth.isShowingQRCode) {
@@ -101,7 +101,7 @@ struct ContentView: View {
 			} catch {
 				await MainActor.run {
 					environmentCoordinator.auth.status = .signedOut
-					self.errorViewModel.showError("Error generating random wallet: \(error)")
+					Flash.add(.error("Error generating random wallet: \(error)"))
 				}
 			}
 		}

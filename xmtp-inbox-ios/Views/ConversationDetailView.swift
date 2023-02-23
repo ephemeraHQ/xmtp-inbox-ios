@@ -13,8 +13,6 @@ struct ConversationDetailView: View {
 	let client: XMTP.Client
 	@State var conversation: DB.Conversation
 
-	@State private var errorViewModel = ErrorViewModel()
-
 	// For interactive keyboard dismiss
 	@State private var offset = CGFloat()
 
@@ -47,7 +45,7 @@ struct ConversationDetailView: View {
 			try await conversation.send(text: text, client: client)
 		} catch {
 			await MainActor.run {
-				self.errorViewModel.showError("Error sending message: \(error)")
+				Flash.add(.error("Error sending message: \(error)"))
 			}
 		}
 	}

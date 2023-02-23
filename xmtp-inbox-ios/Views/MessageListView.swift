@@ -225,7 +225,6 @@ struct MessageListView: View {
 	let client: Client
 	let conversation: DB.Conversation
 
-	@State private var errorViewModel = ErrorViewModel()
 	@StateObject private var messageLoader: MessageLoader
 
 	init(client: Client, conversation: DB.Conversation) {
@@ -246,7 +245,7 @@ struct MessageListView: View {
 		} catch {
 			print("ERROR LOADING MESSAGSE: \(error)")
 			await MainActor.run {
-				self.errorViewModel.showError("Error loading messages: \(error)")
+				Flash.add(.error("Error loading messages: \(error)"))
 			}
 		}
 	}

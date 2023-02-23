@@ -22,7 +22,6 @@ struct ConversationListView: View {
 	@State var isShowingNewMessage = false
 
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
-	@StateObject private var errorViewModel = ErrorViewModel()
 	@StateObject private var conversationLoader: ConversationLoader
 
 	init(client: XMTP.Client) {
@@ -139,7 +138,7 @@ struct ConversationListView: View {
 				if conversationLoader.conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
 				} else {
-					self.errorViewModel.showError("Error loading conversations: \(error)")
+					Flash.add(.error("Error loading conversations: \(error)"))
 				}
 			}
 		}
@@ -175,7 +174,7 @@ struct ConversationListView: View {
 				if conversationLoader.conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
 				} else {
-					self.errorViewModel.showError("Error streaming conversations: \(error)")
+					Flash.add(.error("Error streaming conversations: \(error)"))
 				}
 			}
 		}

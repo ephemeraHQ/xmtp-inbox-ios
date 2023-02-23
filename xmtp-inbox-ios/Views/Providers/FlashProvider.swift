@@ -124,6 +124,7 @@ struct FlashProvider<Content: View>: View {
 				}
 				.animation(.spring())
 			}
+			.padding(.top)
 		}
 	}
 
