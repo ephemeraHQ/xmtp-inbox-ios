@@ -36,7 +36,7 @@ struct ConversationCellView: View {
 							.lineLimit(1)
 							.font(.Body1B)
 						if let lastMessage = conversation.lastMessage {
-							Text(lastMessage.createdAt.timeAgo)
+							UpdatingRelativeTimestamp(lastMessage.createdAt)
 								.frame(maxWidth: .infinity, alignment: .trailing)
 								.lineLimit(1)
 								.font(.BodyXS)

@@ -9,7 +9,7 @@ import Foundation
 
 extension Date {
 	var timeAgo: String {
-		if self > Date().addingTimeInterval(-3) {
+		if self > Date().addingTimeInterval(-1) {
 			return "Now"
 		}
 
