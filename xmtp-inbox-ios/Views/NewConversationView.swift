@@ -32,6 +32,7 @@ struct NewConversationView: View {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				List {
 					TextField("new-message-prompt", text: $contactFinder.searchText)
+						.keyboardType(.alphabet)
 						.autocorrectionDisabled(true)
 						.autocapitalization(.none)
 						.focused($isFocused)
