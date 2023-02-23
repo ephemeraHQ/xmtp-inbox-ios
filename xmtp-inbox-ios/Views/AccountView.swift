@@ -69,11 +69,6 @@ struct AccountView: View {
 					}
 
 					Section {
-						Toggle("Show Link Previews", isOn: $settings.showLinkPreviews.animation())
-						Toggle("Show Images from URLs", isOn: $settings.showImageURLs.animation())
-					}
-
-					Section {
 						HapticButton {
 							guard let url = URL(string: privacyUrl) else {
 								return
