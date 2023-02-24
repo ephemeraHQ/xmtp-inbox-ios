@@ -8,31 +8,20 @@
 import SwiftUI
 
 struct UpdatingRelativeTimestamp: View {
+	let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 	var date: Date
-	@State var formatted: String = ""
+	@State var formatted: String?
 
 	init(_ date: Date) {
 		self.date = date
-		formatted = date.timeAgo
 	}
 
 	var body: some View {
-		Text(formatted)
+		Text(formatted ?? date.timeAgo)
 			.monospacedDigit()
-			.id(date)
-			.task {
-				await update()
+			.onReceive(timer) { _ in
+				formatted = date.timeAgo
 			}
-	}
-
-	func update() async {
-		await MainActor.run {
-			self.formatted = date.timeAgo
-		}
-
-		try? await Task.sleep(for: .seconds(5))
-
-		await update()
 	}
 }
 

@@ -21,6 +21,10 @@ class DB {
 
 	private static let shared = DB()
 
+	static var _queue: DatabaseQueue {
+		shared.queue
+	}
+
 	static func prepareTest(client: XMTP.Client) throws {
 		shared.mode = .test
 		try prepare(client: client, reset: true)

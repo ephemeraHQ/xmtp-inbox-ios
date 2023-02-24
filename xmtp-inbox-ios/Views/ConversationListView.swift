@@ -5,6 +5,7 @@
 //  Created by Elise Alix on 12/22/22.
 //
 
+import GRDBQuery
 import SwiftUI
 import XMTP
 
@@ -14,35 +15,20 @@ struct ConversationListView: View {
 	}
 
 	let client: XMTP.Client
-	let observer: MessageObserver!
 
-	@State private var mostRecentMessages = [String: DecodedMessage]()
 	@State private var status: LoadingStatus = .success
 	@State var isShowingNewMessage = false
 
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
 	@StateObject private var conversationLoader: ConversationLoader
 
+	@Query(ConversationsRequest(), in: \.dbQueue) var conversations: [DB.Conversation]
+
 	init(client: XMTP.Client) {
 		let conversationLoader = ConversationLoader(client: client)
 
 		self.client = client
 		_conversationLoader = StateObject(wrappedValue: conversationLoader)
-
-		observer = MessageObserver {
-			Task {
-				try await Task.sleep(for: .milliseconds(500))
-				try await conversationLoader.fetchLocal()
-			}
-		}
-
-		do {
-			try DB.read { db in
-				db.add(transactionObserver: observer)
-			}
-		} catch {
-			print("Error adding observer \(error)")
-		}
 	}
 
 	var body: some View {
@@ -62,7 +48,7 @@ struct ConversationListView: View {
 					.padding()
 			case .success:
 				List {
-					ForEach(conversationLoader.conversations, id: \.id) { conversation in
+					ForEach(conversations, id: \.id) { conversation in
 						Button(action: {
 							coordinator.path.append(conversation)
 						}) {
@@ -96,25 +82,26 @@ struct ConversationListView: View {
 		.navigationDestination(for: DB.Conversation.self) { conversation in
 			ConversationDetailView(client: client, conversation: conversation)
 		}
-		.task {
-			await loadConversations()
+		.onAppear {
+			Task.detached {
+				await loadConversations()
+			}
 		}
 		.task {
 			await streamConversations()
 		}
 		.sheet(isPresented: $isShowingNewMessage) {
 			NewConversationView(client: client) { conversation in
-				conversationLoader.insertConversation(conversation, at: conversationLoader.conversations.endIndex)
 				coordinator.path.append(conversation)
 			}
 		}
 	}
 
-	func loadConversations() async {
+	func loadConversations(poll: Bool = false) async {
 		do {
 			await MainActor.run {
 				withAnimation {
-					if conversationLoader.conversations.isEmpty {
+					if conversations.isEmpty {
 						self.status = .loading
 					}
 				}
@@ -124,7 +111,7 @@ struct ConversationListView: View {
 
 			await MainActor.run {
 				withAnimation {
-					if conversationLoader.conversations.isEmpty {
+					if conversations.isEmpty {
 						self.status = .empty
 					} else {
 						self.status = .success
@@ -134,7 +121,7 @@ struct ConversationListView: View {
 		} catch {
 			print("ERROR LOADING CONVERSATIONS \(error)")
 			await MainActor.run {
-				if conversationLoader.conversations.isEmpty {
+				if conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
 				} else {
 					Flash.add(.error("Error loading conversations: \(error)"))
@@ -142,10 +129,12 @@ struct ConversationListView: View {
 			}
 		}
 
-		// swiftlint:disable no_optional_try
-		try? await Task.sleep(for: .seconds(5))
+		if poll {
+			// swiftlint:disable no_optional_try
+			try? await Task.sleep(for: .seconds(5))
 
-		await loadConversations()
+			await loadConversations()
+		}
 	}
 
 	func streamConversations() async {
@@ -154,23 +143,11 @@ struct ConversationListView: View {
 				where newConversation.peerAddress != client.address
 			{
 				var newConversation = try await DB.Conversation.from(newConversation)
-
 				try await newConversation.loadMostRecentMessage(client: client)
-
-				await MainActor.run {
-					withAnimation {
-						if newConversation.lastMessage == nil {
-							conversationLoader.insertConversation(newConversation, at: conversationLoader.conversations.endIndex)
-						} else {
-							conversationLoader.insertConversation(newConversation, at: 0)
-						}
-						self.status = .success
-					}
-				}
 			}
 		} catch {
 			await MainActor.run {
-				if conversationLoader.conversations.isEmpty {
+				if conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
 				} else {
 					Flash.add(.error("Error streaming conversations: \(error)"))

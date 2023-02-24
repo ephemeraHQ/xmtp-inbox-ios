@@ -40,7 +40,7 @@ extension DB {
 			self.viewedAt = viewedAt
 		}
 
-		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation, ens: String? = nil) async throws -> DB.Conversation {
+		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation, ens: String? = nil) throws -> DB.Conversation {
 			do {
 				if let conversation = DB.Conversation.find(Column("peerAddress") == xmtpConversation.peerAddress) {
 					try conversation.createTopic(from: xmtpConversation)
@@ -117,12 +117,18 @@ extension DB {
 		}
 
 		mutating func loadMostRecentMessage(client: Client) async throws {
-			for topic in topics() {
-				guard let lastMessageXMTP = try await topic.toXMTP(client: client).messages(limit: 1).first else {
-					return
-				}
+			let conversation = self
 
-				try await DB.Message.from(lastMessageXMTP, conversation: self, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress)
+			await withThrowingTaskGroup(of: Void.self) { group in
+				for topic in topics() {
+					group.addTask {
+						guard let lastMessageXMTP = try await topic.toXMTP(client: client).messages(limit: 1).first else {
+							return
+						}
+
+						try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress)
+					}
+				}
 			}
 
 			let lastMessage = try DB.read { db in
@@ -133,23 +139,30 @@ extension DB {
 				return
 			}
 
-			updatedAt = lastMessage.createdAt
-			try save()
+			if updatedAt < lastMessage.createdAt {
+				updatedAt = lastMessage.createdAt
+				try save()
+			}
 
 			self.lastMessage = lastMessage
 		}
 
-		func send(text: String, client: Client, topic: ConversationTopic? = nil) async throws {
+		mutating func send(text: String, client: Client, topic: ConversationTopic? = nil) async throws {
 			guard let topic = topic ?? topics().last, let topicID = topic.id else {
 				throw ConversationError.noTopic
 			}
 
+			let date = Date()
 			let messageID = try await topic.toXMTP(client: client).send(text: text)
 
-			try await MainActor.run {
-				var message = DB.Message(xmtpID: messageID, body: text, conversationID: topic.conversationID, conversationTopicID: topicID, senderAddress: topic.peerAddress, createdAt: Date(), isFromMe: true)
-				try message.save()
+			var message = DB.Message(xmtpID: messageID, body: text, conversationID: topic.conversationID, conversationTopicID: topicID, senderAddress: topic.peerAddress, createdAt: date, isFromMe: true)
+			try message.save()
+
+			if var conversation = DB.Conversation.find(id: topic.conversationID) {
+				try message.updateConversationTimestamps(conversation: conversation)
 			}
+
+			lastMessage = message
 		}
 
 		func topics() -> [ConversationTopic] {

@@ -55,6 +55,11 @@
 		A6324F6F29A817EA0040CBA4 /* TextFieldWithLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */; };
 		A6324F7129A81D170040CBA4 /* UpdatingRelativeTimestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7029A81D170040CBA4 /* UpdatingRelativeTimestamp.swift */; };
 		A6324F7329A822F90040CBA4 /* FlashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7229A822F90040CBA4 /* FlashProvider.swift */; };
+		A6324F7629A836B80040CBA4 /* GRDBQuery in Frameworks */ = {isa = PBXBuildFile; productRef = A6324F7529A836B80040CBA4 /* GRDBQuery */; };
+		A6324F7929A836ED0040CBA4 /* ConversationsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7829A836ED0040CBA4 /* ConversationsRequest.swift */; };
+		A6324F7B29A837C50040CBA4 /* EnvironmentValueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7A29A837C50040CBA4 /* EnvironmentValueExtensions.swift */; };
+		A6324F7D29A83EDD0040CBA4 /* MostRecentMessagesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7C29A83EDD0040CBA4 /* MostRecentMessagesRequest.swift */; };
+		A6324F7F29A841A30040CBA4 /* ConversationMessagesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7E29A841A30040CBA4 /* ConversationMessagesRequest.swift */; };
 		A6393EF229A29C0B009BCE38 /* URLPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */; };
 		A6393EF529A2A1BC009BCE38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */; };
 		A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */; };
@@ -218,6 +223,10 @@
 		A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithLoader.swift; sourceTree = "<group>"; };
 		A6324F7029A81D170040CBA4 /* UpdatingRelativeTimestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatingRelativeTimestamp.swift; sourceTree = "<group>"; };
 		A6324F7229A822F90040CBA4 /* FlashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashProvider.swift; sourceTree = "<group>"; };
+		A6324F7829A836ED0040CBA4 /* ConversationsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsRequest.swift; sourceTree = "<group>"; };
+		A6324F7A29A837C50040CBA4 /* EnvironmentValueExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentValueExtensions.swift; sourceTree = "<group>"; };
+		A6324F7C29A83EDD0040CBA4 /* MostRecentMessagesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MostRecentMessagesRequest.swift; sourceTree = "<group>"; };
+		A6324F7E29A841A30040CBA4 /* ConversationMessagesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessagesRequest.swift; sourceTree = "<group>"; };
 		A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLPreviewView.swift; sourceTree = "<group>"; };
 		A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMediaView.swift; sourceTree = "<group>"; };
 		A65544A5298C5AA8005337C3 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -275,6 +284,7 @@
 				A69C92752994286C00E49F9B /* XMTP in Frameworks */,
 				A68BCB322995C4EE001159B8 /* KeychainAccess in Frameworks */,
 				6AE264E82974E63F0055250A /* ENSKit in Frameworks */,
+				A6324F7629A836B80040CBA4 /* GRDBQuery in Frameworks */,
 				6AA65965297B2A2200E980AD /* WalletConnectSwift in Frameworks */,
 				6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */,
 				A6C18C37299993EE001E00CA /* Introspect in Frameworks */,
@@ -455,6 +465,7 @@
 				6AE264F22975FD270055250A /* StringExtensions.swift */,
 				6A5DA489298C03A700CEA7CD /* DateExtensions.swift */,
 				A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */,
+				A6324F7A29A837C50040CBA4 /* EnvironmentValueExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -462,6 +473,7 @@
 		6A4612FD298177A400346D68 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				A6324F7729A836E30040CBA4 /* Requests */,
 				6A4612FE298177B300346D68 /* Auth.swift */,
 				6A461308298191F700346D68 /* DisplayName.swift */,
 				A689078829A01A26006D9EC7 /* MessageListEntry.swift */,
@@ -499,6 +511,16 @@
 				A6324F7029A81D170040CBA4 /* UpdatingRelativeTimestamp.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		A6324F7729A836E30040CBA4 /* Requests */ = {
+			isa = PBXGroup;
+			children = (
+				A6324F7829A836ED0040CBA4 /* ConversationsRequest.swift */,
+				A6324F7C29A83EDD0040CBA4 /* MostRecentMessagesRequest.swift */,
+				A6324F7E29A841A30040CBA4 /* ConversationMessagesRequest.swift */,
+			);
+			path = Requests;
 			sourceTree = "<group>";
 		};
 		A682B1E8298B071800121651 /* ci_scripts */ = {
@@ -617,6 +639,7 @@
 				A68907A429A1946E006D9EC7 /* OpenGraph */,
 				A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */,
 				A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */,
+				A6324F7529A836B80040CBA4 /* GRDBQuery */,
 			);
 			productName = "xmtp-inbox-ios";
 			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
@@ -738,6 +761,7 @@
 				A68907A329A1946E006D9EC7 /* XCRemoteSwiftPackageReference "OpenGraph" */,
 				A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
+				A6324F7429A836B80040CBA4 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
 			projectDirPath = "";
@@ -936,6 +960,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6324F7F29A841A30040CBA4 /* ConversationMessagesRequest.swift in Sources */,
 				6A40157A29529F85003A6659 /* HomeView.swift in Sources */,
 				A68907A729A19921006D9EC7 /* URLPreview.swift in Sources */,
 				6A4613032981831D00346D68 /* ConversationDetailView.swift in Sources */,
@@ -950,6 +975,7 @@
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
 				A6292C31299415E4004B5A27 /* SQLDebuggerView.swift in Sources */,
 				6AA6596B297B2DB000E980AD /* Account.swift in Sources */,
+				A6324F7D29A83EDD0040CBA4 /* MostRecentMessagesRequest.swift in Sources */,
 				6A461309298191F700346D68 /* DisplayName.swift in Sources */,
 				6A5DA48A298C03A700CEA7CD /* DateExtensions.swift in Sources */,
 				6A40157F2952B237003A6659 /* FontExtensions.swift in Sources */,
@@ -974,12 +1000,14 @@
 				A677CEA6298CB97100055697 /* MessageLoader.swift in Sources */,
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
 				A68BCB0C2995C02F001159B8 /* AppGroup.swift in Sources */,
+				A6324F7B29A837C50040CBA4 /* EnvironmentValueExtensions.swift in Sources */,
 				A68907B829A1AE64006D9EC7 /* MessageTextView.swift in Sources */,
 				A68C8A4F298C6CC1003A9A95 /* ConversationLoader.swift in Sources */,
 				A689078D29A0224C006D9EC7 /* ContactFinder.swift in Sources */,
 				A68BCAF729959374001159B8 /* ConversationTopic.swift in Sources */,
 				A68C8A46298C61C6003A9A95 /* Model.swift in Sources */,
 				6A46130B2981ABF500346D68 /* ViewExtensions.swift in Sources */,
+				A6324F7929A836ED0040CBA4 /* ConversationsRequest.swift in Sources */,
 				6AE264F32975FD270055250A /* StringExtensions.swift in Sources */,
 				A689078F29A03618006D9EC7 /* Avatars.swift in Sources */,
 				A68C8A53298C8BED003A9A95 /* Message.swift in Sources */,
@@ -1523,6 +1551,14 @@
 				version = 0.8.0;
 			};
 		};
+		A6324F7429A836B80040CBA4 /* XCRemoteSwiftPackageReference "GRDBQuery" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDBQuery";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.1;
+			};
+		};
 		A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
@@ -1593,6 +1629,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */;
 			productName = IGIdenticon;
+		};
+		A6324F7529A836B80040CBA4 /* GRDBQuery */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6324F7429A836B80040CBA4 /* XCRemoteSwiftPackageReference "GRDBQuery" */;
+			productName = GRDBQuery;
 		};
 		A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -46,6 +46,15 @@
       }
     },
     {
+      "identity" : "grdbquery",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/groue/GRDBQuery",
+      "state" : {
+        "revision" : "df514f2bd74548f94e082f3233022190e594fce4",
+        "version" : "0.5.1"
+      }
+    },
+    {
       "identity" : "grpc-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/grpc/grpc-swift",

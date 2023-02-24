@@ -51,6 +51,7 @@ struct HomeView: View {
 				}
 			}
 		}
+		.environment(\.dbQueue, DB._queue)
 		.accentColor(.textPrimary)
 		.environmentObject(environmentCoordinator)
 		.sheet(isPresented: $isShowingAccount) {

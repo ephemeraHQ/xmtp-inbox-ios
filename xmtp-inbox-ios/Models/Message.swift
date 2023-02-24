@@ -71,6 +71,7 @@ extension DB {
 
 		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, isFromMe: Bool) async throws -> DB.Message {
 			if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
+				try existing.updateConversationTimestamps(conversation: conversation)
 				return existing
 			}
 
@@ -92,27 +93,31 @@ extension DB {
 				isFromMe: isFromMe
 			)
 
-			if Settings.shared.showLinkPreviews,
-			   message.body.isValidURL,
-			   let url = URL(string: message.body),
-			   // swiftlint:disable no_optional_try
-			   let og = try? await OpenGraph.fetch(url: url),
-			   // swiftlint:enable no_optional_try
-			   let title = og[.title]
-			{
-				let encoder = JSONEncoder()
-				var preview = URLPreview(
-					url: url,
-					title: title,
-					description: og[.description],
-					imageURL: og[.image]
-				)
+			do {
+				if Settings.shared.showLinkPreviews,
+				   message.body.isValidURL,
+				   let url = URL(string: message.body),
+				   // swiftlint:disable no_optional_try
+				   let og = try? await OpenGraph.fetch(url: url),
+				   // swiftlint:enable no_optional_try
+				   let title = og[.title]
+				{
+					let encoder = JSONEncoder()
+					var preview = URLPreview(
+						url: url,
+						title: title,
+						description: og[.description],
+						imageURL: og[.image]
+					)
 
-				if let imageURL = og[.image], let url = URL(string: imageURL) {
-					(preview.imageData, _) = try await URLSession.shared.data(from: url)
+					if let imageURL = og[.image], let url = URL(string: imageURL) {
+						(preview.imageData, _) = try await URLSession.shared.data(from: url)
+					}
+
+					message.previewData = try encoder.encode(preview)
 				}
-
-				message.previewData = try encoder.encode(preview)
+			} catch {
+				print("Error loading link preview: \(error)")
 			}
 
 			try message.save()
