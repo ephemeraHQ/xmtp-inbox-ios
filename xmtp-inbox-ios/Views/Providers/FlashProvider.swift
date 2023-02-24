@@ -1,5 +1,5 @@
 //
-//  ToastProvider.swift
+//  FlashProvider.swift
 //  xmtp-inbox-ios
 //
 //  Created by Pat on 2/23/23.
