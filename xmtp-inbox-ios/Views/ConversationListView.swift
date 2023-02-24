@@ -5,10 +5,10 @@
 //  Created by Elise Alix on 12/22/22.
 //
 
+import Combine
 import GRDBQuery
 import SwiftUI
 import XMTP
-import Combine
 
 struct ConversationListView: View {
 	enum LoadingStatus {

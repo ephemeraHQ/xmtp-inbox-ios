@@ -26,10 +26,10 @@ struct ConversationsRequest: Queryable {
 					.fetchAll(db)
 
 				let mostRecentMessagesByConversationID = mostRecentMessages.reduce([Int: DB.Message]()) { res, message in
-						var res = res
-						res[message.conversationID] = message
-						return res
-					}
+					var res = res
+					res[message.conversationID] = message
+					return res
+				}
 
 				let conversationsWithMostRecentMessages = conversations.map {
 					var conversation = $0
