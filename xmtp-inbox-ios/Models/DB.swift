@@ -13,7 +13,7 @@ import XMTP
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = -15
+	static let version = -18
 
 	enum DBError: Error {
 		case badData(String)
@@ -21,18 +21,32 @@ class DB {
 
 	private static let shared = DB()
 
-	static func prepareTest(client: XMTP.Client) throws {
-		shared.mode = .test
-		try prepare(client: client, reset: true)
+	static var _queue: DatabaseQueue {
+		shared.queue
 	}
 
-	static func prepare(client: XMTP.Client, reset: Bool = false) throws {
+	static func prepareTest(client _: XMTP.Client) throws {
+		shared.mode = .test
+		shared.queue = try DatabaseQueue()
+		try shared.prepare(passphrase: "TEST", reset: true)
+	}
+
+	static func prepare(client: XMTP.Client, reset: Bool = false, isRetry: Bool = false) throws {
 		let dbVersion = AppGroup.defaults.integer(forKey: "dbVersion")
 
 		let passphraseData = try client.privateKeyBundle.serializedData()
 		let passphrase = Data(SHA256.hash(data: passphraseData)).toHex
 
-		try shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
+		do {
+			try shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
+		} catch {
+			if isRetry {
+				throw error
+			} else {
+				print("ERROR PREPARE: \(error). Retrying with reset...")
+				try DB.prepare(client: client, reset: true, isRetry: true)
+			}
+		}
 
 		AppGroup.defaults.set(DB.version, forKey: "dbVersion")
 	}
@@ -80,7 +94,7 @@ class DB {
 
 			#if DEBUG
 //				db.trace { print("SQL: \($0)") }
-				self.config.publicStatementArguments = true
+//				self.config.publicStatementArguments = true
 			#endif
 		}
 

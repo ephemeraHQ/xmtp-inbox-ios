@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "alerttoast",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elai950/AlertToast.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "b39252eacd159904afd7d718bba0afabb87f2f2f"
-      }
-    },
-    {
       "identity" : "bigint",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/attaswift/BigInt.git",
@@ -52,6 +43,15 @@
       "state" : {
         "revision" : "0a06575f4038b504e78ac330913d920f1630f510",
         "version" : "2.0.2"
+      }
+    },
+    {
+      "identity" : "grdbquery",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/groue/GRDBQuery",
+      "state" : {
+        "revision" : "df514f2bd74548f94e082f3233022190e594fce4",
+        "version" : "0.5.1"
       }
     },
     {
@@ -293,8 +293,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "main",
-        "revision" : "941b78aa9f00b91bfe8d9438a21fc23b7f80ac03"
+        "branch" : "fix-fake-api-pagination",
+        "revision" : "441730678e428b6a2a779db6aec145f8f3e079e2"
       }
     }
   ],

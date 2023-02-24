@@ -17,27 +17,11 @@ class MessageLoader: ObservableObject {
 	let fetchLimit = 10
 
 	@Published var mostRecentMessageID = ""
-	@Published var messages: [DB.Message] = [] {
-		didSet {
-			Task { await regenerateTimeline() }
-		}
-	}
+	var messages: [DB.Message] = []
 
-	@Published var timeline: [MessageListEntry] = []
-
-	@MainActor init(client: XMTP.Client, conversation: DB.Conversation) {
+	init(client: XMTP.Client, conversation: DB.Conversation) {
 		self.client = client
 		self.conversation = conversation
-
-		do {
-			try fetchLocal()
-		} catch {
-			print("Error fetching local messages: \(error)")
-		}
-
-		Task {
-			await streamMessages()
-		}
 	}
 
 	func streamTopic(topic: DB.ConversationTopic) async {
@@ -45,7 +29,6 @@ class MessageLoader: ObservableObject {
 			for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
 				let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, isFromMe: client.address == xmtpMessage.senderAddress)
 				await MainActor.run {
-					messages.append(message)
 					mostRecentMessageID = message.xmtpID
 				}
 			}
@@ -64,7 +47,6 @@ class MessageLoader: ObservableObject {
 	}
 
 	func load() async throws {
-		try await fetchLocal()
 		try await fetchRemote()
 	}
 
@@ -83,8 +65,6 @@ class MessageLoader: ObservableObject {
 				print("Error loading messages for convo topic \(topic)")
 			}
 		}
-
-		try await fetchLocal()
 	}
 
 	func fetchEarlier() async throws {
@@ -103,46 +83,6 @@ class MessageLoader: ObservableObject {
 			} catch {
 				print("Error loading messages for convo topic \(topic)")
 			}
-		}
-
-		try await fetchLocal()
-	}
-
-	@MainActor func fetchLocal() throws {
-		let messages = try DB.read { db in
-			try DB.Message
-				.filter(Column("conversationID") == self.conversation.id)
-				.order(Column("createdAt").asc)
-				.fetchAll(db)
-		}
-
-		self.messages = messages
-		mostRecentMessageID = messages.last?.xmtpID ?? ""
-	}
-
-	func regenerateTimeline() async {
-		var result: [MessageListEntry] = []
-		var lastTimestamp: Date?
-
-		let timestampWindow: TimeInterval = 60 * 10 // 10 minutes
-
-		// swiftlint:disable force_unwrapping
-		for message in messages {
-			if lastTimestamp != nil, message.createdAt > lastTimestamp!.addingTimeInterval(timestampWindow) {
-				lastTimestamp = message.createdAt
-				result.append(.timestamp(lastTimestamp!))
-			} else if lastTimestamp == nil {
-				lastTimestamp = message.createdAt
-				result.append(.timestamp(lastTimestamp!))
-			}
-
-			result.append(.message(message))
-		}
-		// swiftlint:enable force_unwrapping
-
-		let timeline = result
-		await MainActor.run {
-			self.timeline = timeline
 		}
 	}
 }

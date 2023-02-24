@@ -7,6 +7,7 @@
 
 import Combine
 import GRDB
+import GRDBQuery
 import SwiftUI
 import UIKit
 import XMTP
@@ -25,12 +26,14 @@ class MessageTableViewCell: UITableViewCell {
 
 class MessagesTableViewController: UITableViewController {
 	var loader: MessageLoader
+	var timeline: [MessageListEntry]
 	var cancellables = [AnyCancellable]()
 	var observer: TransactionObserver?
 	var isPinnedToBottom = true
 
-	init(loader: MessageLoader) {
+	init(loader: MessageLoader, messages: [DB.Message]) {
 		self.loader = loader
+		timeline = MessagesTableViewController.generateTimeline(messages: messages)
 
 		super.init(style: .plain)
 
@@ -50,27 +53,30 @@ class MessagesTableViewController: UITableViewController {
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: UIResponder.keyboardDidHideNotification, object: nil)
 
-		initDBObserver()
 		initScrollToBottomObserver()
 	}
 
-	func initDBObserver() {
-		observer = MessageObserver {
-			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) { [weak self] in
-				self?.tableView.reloadData()
-				self?.scrollToBottom(animated: true)
-			}
-		}
+	static func generateTimeline(messages: [DB.Message]) -> [MessageListEntry] {
+		var result: [MessageListEntry] = []
+		var lastTimestamp: Date?
 
-		if let observer {
-			do {
-				try DB.read { db in
-					db.add(transactionObserver: observer)
-				}
-			} catch {
-				print("Error adding observer")
+		let timestampWindow: TimeInterval = 60 * 10 // 10 minutes
+
+		// swiftlint:disable force_unwrapping
+		for message in messages {
+			if lastTimestamp != nil, message.createdAt > lastTimestamp!.addingTimeInterval(timestampWindow) {
+				lastTimestamp = message.createdAt
+				result.append(.timestamp(lastTimestamp!))
+			} else if lastTimestamp == nil {
+				lastTimestamp = message.createdAt
+				result.append(.timestamp(lastTimestamp!))
 			}
+
+			result.append(.message(message))
 		}
+		// swiftlint:enable force_unwrapping
+
+		return result
 	}
 
 	deinit {
@@ -150,11 +156,11 @@ class MessagesTableViewController: UITableViewController {
 	}
 
 	override func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-		return loader.timeline.count
+		return timeline.count
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		var entry = loader.timeline[indexPath.row]
+		var entry = timeline[indexPath.row]
 		// swiftlint:disable force_cast
 		let newCell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
 		// swiftlint:enable force_cast
@@ -169,7 +175,7 @@ class MessagesTableViewController: UITableViewController {
 		}
 		.margins(.vertical, 4)
 		// Give it a bit more room for the last one
-		.margins(.bottom, indexPath.row == loader.timeline.count - 1 ? 8 : 4)
+		.margins(.bottom, indexPath.row == timeline.count - 1 ? 8 : 4)
 
 		return newCell
 	}
@@ -182,13 +188,13 @@ class MessagesTableViewController: UITableViewController {
 		}
 
 		DispatchQueue.main.async { [self] in
-			if loader.timeline.isEmpty {
+			if timeline.isEmpty {
 				return
 			}
 
 			tableView.reloadData()
 
-			if let path = tableView.presentationIndexPath(forDataSourceIndexPath: IndexPath(row: loader.timeline.count - 1, section: 0)) {
+			if let path = tableView.presentationIndexPath(forDataSourceIndexPath: IndexPath(row: timeline.count - 1, section: 0)) {
 				tableView.scrollToRow(at: path, at: .bottom, animated: animated)
 			}
 		}
@@ -197,27 +203,29 @@ class MessagesTableViewController: UITableViewController {
 
 struct MessagesTableView: UIViewControllerRepresentable {
 	var loader: MessageLoader
+	var messages: [DB.Message]
 
 	struct Coordinator {
 		var loader: MessageLoader
 		var controller: MessagesTableViewController
 
-		init(loader: MessageLoader) {
+		init(loader: MessageLoader, messages: [DB.Message]) {
 			self.loader = loader
-			controller = MessagesTableViewController(loader: loader)
+			controller = MessagesTableViewController(loader: loader, messages: messages)
 		}
 	}
 
 	func makeCoordinator() -> Coordinator {
-		Coordinator(loader: loader)
+		Coordinator(loader: loader, messages: messages)
 	}
 
 	func makeUIViewController(context: Context) -> MessagesTableViewController {
 		context.coordinator.controller
 	}
 
-	func updateUIViewController(_: MessagesTableViewController, context _: Context) {
-		// nothin yet
+	func updateUIViewController(_ controller: MessagesTableViewController, context _: Context) {
+		controller.timeline = MessagesTableViewController.generateTimeline(messages: messages)
+		controller.tableView.reloadData()
 	}
 }
 
@@ -225,18 +233,21 @@ struct MessageListView: View {
 	let client: Client
 	let conversation: DB.Conversation
 
-	@State private var errorViewModel = ErrorViewModel()
 	@StateObject private var messageLoader: MessageLoader
+	@Query(ConversationMessagesRequest(conversationID: -1), in: \.dbQueue) var messages
 
 	init(client: Client, conversation: DB.Conversation) {
 		self.client = client
 		self.conversation = conversation
 		_messageLoader = StateObject(wrappedValue: MessageLoader(client: client, conversation: conversation))
+		_messages = Query(ConversationMessagesRequest(conversationID: conversation.id ?? -1), in: \.dbQueue)
 	}
 
-	// TODO(elise and pat): Paginate list of messages
 	var body: some View {
-		MessagesTableView(loader: messageLoader)
+		MessagesTableView(loader: messageLoader, messages: messages)
+			.task {
+				await messageLoader.streamMessages()
+			}
 	}
 
 	func loadMessages() async {
@@ -246,7 +257,7 @@ struct MessageListView: View {
 		} catch {
 			print("ERROR LOADING MESSAGSE: \(error)")
 			await MainActor.run {
-				self.errorViewModel.showError("Error loading messages: \(error)")
+				Flash.add(.error("Error loading messages: \(error)"))
 			}
 		}
 	}

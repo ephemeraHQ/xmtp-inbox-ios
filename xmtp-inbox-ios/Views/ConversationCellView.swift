@@ -35,15 +35,13 @@ struct ConversationCellView: View {
 							.padding(.bottom, 1.0)
 							.lineLimit(1)
 							.font(.Body1B)
-						if let lastMessage = conversation.lastMessage {
-							Text(lastMessage.createdAt.timeAgo)
-								.frame(maxWidth: .infinity, alignment: .trailing)
-								.lineLimit(1)
-								.font(.BodyXS)
-								.foregroundColor(.textScondary)
-								.padding(.horizontal, 4.0)
-								.padding(.bottom, 1.0)
-						}
+						UpdatingRelativeTimestamp(conversation.lastMessage?.createdAt ?? conversation.updatedAt)
+							.frame(maxWidth: .infinity, alignment: .trailing)
+							.lineLimit(1)
+							.font(.BodyXS)
+							.foregroundColor(.textScondary)
+							.padding(.horizontal, 4.0)
+							.padding(.bottom, 1.0)
 					}
 					if messagePreview.isEmpty {
 						Text("no-message-preview")

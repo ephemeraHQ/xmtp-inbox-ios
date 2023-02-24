@@ -5,15 +5,12 @@
 //  Created by Pat Nakajima on 12/2/22.
 //
 
-import AlertToast
 import SwiftUI
 import XMTP
 
 struct ConversationDetailView: View {
 	let client: XMTP.Client
 	@State var conversation: DB.Conversation
-
-	@State private var errorViewModel = ErrorViewModel()
 
 	// For interactive keyboard dismiss
 	@State private var offset = CGFloat()
@@ -39,9 +36,6 @@ struct ConversationDetailView: View {
 				print("Error marking conversation as viewed: \(error)")
 			}
 		}
-		.toast(isPresenting: $errorViewModel.isShowing) {
-			AlertToast.error(errorViewModel.errorMessage)
-		}
 	}
 
 	func sendMessage(text: String) async {
@@ -50,7 +44,7 @@ struct ConversationDetailView: View {
 			try await conversation.send(text: text, client: client)
 		} catch {
 			await MainActor.run {
-				self.errorViewModel.showError("Error sending message: \(error)")
+				Flash.add(.error("Error sending message: \(error)"))
 			}
 		}
 	}

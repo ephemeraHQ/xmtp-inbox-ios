@@ -5,7 +5,8 @@
 //  Created by Elise Alix on 12/22/22.
 //
 
-import AlertToast
+import Combine
+import GRDBQuery
 import SwiftUI
 import XMTP
 
@@ -14,37 +15,24 @@ struct ConversationListView: View {
 		case loading, empty, success, error(String)
 	}
 
-	let client: XMTP.Client
-	let observer: MessageObserver!
+	let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+	@State @MainActor var isLoading = false
 
-	@State private var mostRecentMessages = [String: DecodedMessage]()
+	let client: XMTP.Client
+
 	@State private var status: LoadingStatus = .success
 	@State var isShowingNewMessage = false
 
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
-	@StateObject private var errorViewModel = ErrorViewModel()
 	@StateObject private var conversationLoader: ConversationLoader
+
+	@Query(ConversationsRequest(), in: \.dbQueue) var conversations: [DB.Conversation]
 
 	init(client: XMTP.Client) {
 		let conversationLoader = ConversationLoader(client: client)
 
 		self.client = client
 		_conversationLoader = StateObject(wrappedValue: conversationLoader)
-
-		observer = MessageObserver {
-			Task {
-				try await Task.sleep(for: .milliseconds(500))
-				try await conversationLoader.fetchLocal()
-			}
-		}
-
-		do {
-			try DB.read { db in
-				db.add(transactionObserver: observer)
-			}
-		} catch {
-			print("Error adding observer \(error)")
-		}
 	}
 
 	var body: some View {
@@ -53,14 +41,18 @@ struct ConversationListView: View {
 			case .loading:
 				ProgressView()
 			case .empty:
-				Text("conversations-empty")
-					.padding()
+				if let error = conversationLoader.error {
+					Text(error.localizedDescription)
+				} else {
+					Text("conversations-empty")
+						.padding()
+				}
 			case let .error(errorMessage):
 				Text(errorMessage)
 					.padding()
 			case .success:
 				List {
-					ForEach(conversationLoader.conversations, id: \.id) { conversation in
+					ForEach(conversations, id: \.id) { conversation in
 						Button(action: {
 							coordinator.path.append(conversation)
 						}) {
@@ -88,33 +80,52 @@ struct ConversationListView: View {
 					.padding(24)
 				}
 			}
+			.frame(maxWidth: .infinity)
+			.frame(maxHeight: .infinity)
 		}
 		.navigationDestination(for: DB.Conversation.self) { conversation in
 			ConversationDetailView(client: client, conversation: conversation)
 		}
-		.task {
-			await loadConversations()
+		.onAppear {
+			timer.upstream.connect()
+			Task.detached {
+				await loadConversations()
+			}
+		}
+		.onDisappear {
+			timer.upstream.connect().cancel()
+		}
+		.onReceive(timer) { _ in
+			if isLoading {
+				return
+			}
+
+			Task {
+				await loadConversations()
+			}
 		}
 		.task {
 			await streamConversations()
 		}
-		.toast(isPresenting: $errorViewModel.isShowing) {
-			AlertToast.error(errorViewModel.errorMessage)
-		}
 		.sheet(isPresented: $isShowingNewMessage) {
 			NewConversationView(client: client) { conversation in
-				conversationLoader.insertConversation(conversation, at: conversationLoader.conversations.endIndex)
 				coordinator.path.append(conversation)
 			}
 		}
 	}
 
 	func loadConversations() async {
+		print("load conversations called")
+		if isLoading {
+			return
+		}
+
 		do {
 			await MainActor.run {
 				withAnimation {
-					if conversationLoader.conversations.isEmpty {
+					if conversations.isEmpty {
 						self.status = .loading
+						self.isLoading = true
 					}
 				}
 			}
@@ -122,8 +133,9 @@ struct ConversationListView: View {
 			try await conversationLoader.load()
 
 			await MainActor.run {
+				self.isLoading = false
 				withAnimation {
-					if conversationLoader.conversations.isEmpty {
+					if conversations.isEmpty {
 						self.status = .empty
 					} else {
 						self.status = .success
@@ -133,10 +145,12 @@ struct ConversationListView: View {
 		} catch {
 			print("ERROR LOADING CONVERSATIONS \(error)")
 			await MainActor.run {
-				if conversationLoader.conversations.isEmpty {
+				if conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
+					self.isLoading = false
 				} else {
-					self.errorViewModel.showError("Error loading conversations: \(error)")
+					self.isLoading = false
+					Flash.add(.error("Error loading conversations: \(error)"))
 				}
 			}
 		}
@@ -148,26 +162,14 @@ struct ConversationListView: View {
 				where newConversation.peerAddress != client.address
 			{
 				var newConversation = try await DB.Conversation.from(newConversation)
-
-				try await newConversation.loadMostRecentMessage(client: client)
-
-				await MainActor.run {
-					withAnimation {
-						if newConversation.lastMessage == nil {
-							conversationLoader.insertConversation(newConversation, at: conversationLoader.conversations.endIndex)
-						} else {
-							conversationLoader.insertConversation(newConversation, at: 0)
-						}
-						self.status = .success
-					}
-				}
+				try await newConversation.loadMostRecentMessages(client: client)
 			}
 		} catch {
 			await MainActor.run {
-				if conversationLoader.conversations.isEmpty {
+				if conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
 				} else {
-					self.errorViewModel.showError("Error streaming conversations: \(error)")
+					Flash.add(.error("Error streaming conversations: \(error)"))
 				}
 			}
 		}

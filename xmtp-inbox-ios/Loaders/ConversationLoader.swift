@@ -18,7 +18,7 @@ struct ConversationWithLastMessage: Codable, FetchableRecord {
 class ConversationLoader: ObservableObject {
 	var client: XMTP.Client
 
-	@MainActor @Published var conversations: [DB.Conversation] = []
+	@MainActor @Published var error: Error?
 
 	init(client: XMTP.Client) {
 		self.client = client
@@ -26,65 +26,27 @@ class ConversationLoader: ObservableObject {
 
 	func load() async throws {
 		do {
-			// Load stuff we already have in the DB...
-			try await fetchLocal()
-
-			// ...then fetch from the network...
 			try await fetchRemote()
-
-			// ...then refresh most recent messages...
 			try await fetchRecentMessages()
-
-			// Reload what we got from the db
-			try await fetchLocal()
 		} catch {
+			await MainActor.run {
+				self.error = error
+			}
 			print("Error in ConversationLoader.load(): \(error)")
 		}
 	}
 
-	func fetchLocal() async throws {
-		let conversations = try DB.read { db in
-			try DB.Conversation
-				.including(optional: DB.Conversation.lastMessage.forKey("lastMessage"))
-				.order(Column("updatedAt").desc)
-				.group(Column("id"))
-				.asRequest(of: ConversationWithLastMessage.self)
-				.fetchAll(db)
-		}.map {
-			var conversation = $0.conversation
-			conversation.lastMessage = $0.lastMessage
-			return conversation
-		}
-
-		let topics = try DB.read { db in
-			try DB.ConversationTopic.all().fetchAll(db)
-		}
-
-		if !topics.isEmpty {
-			Task {
-				try await XMTPPush.shared.subscribe(topics: topics.map(\.topic))
-			}
-		}
-
-		await MainActor.run {
-			withAnimation {
-				self.conversations = conversations
-			}
-		}
-	}
-
 	func fetchRemote() async throws {
-		for conversation in try await client.conversations.list() {
-			try await DB.Conversation.from(conversation)
+		let conversations = try await client.conversations.list().map {
+			try DB.Conversation.from($0)
 		}
 
-		// Reload
-		try await fetchLocal()
-
-		let conversations = await conversations
 		let addresses = conversations.map(\.peerAddress)
+		print("Got addresses: \(addresses)")
+
 		do {
 			let ensResults = try await ENS.shared.ens(addresses: addresses)
+			print("Got ENS results: \(ensResults)")
 
 			for conversation in conversations {
 				var conversation = conversation
@@ -97,34 +59,22 @@ class ConversationLoader: ObservableObject {
 		} catch {
 			print("Error loading ENS: \(error)")
 		}
-
-		// Reload view now that we have ENS names
-		try await fetchLocal()
 	}
 
 	func fetchRecentMessages() async throws {
 		await withTaskGroup(of: Void.self) { group in
-			for conversation in await conversations {
+			for conversation in DB.Conversation.list() {
 				group.addTask {
 					do {
 						var conversation = conversation
-						try await conversation.loadMostRecentMessage(client: self.client)
+						print("Fetching most recent message for \(conversation.title)")
+						try await conversation.loadMostRecentMessages(client: self.client)
+						print("Done fetching most recent message for \(conversation.title)")
 					} catch {
 						print("Error loading most recent message for \(conversation.peerAddress): \(error)")
 					}
 				}
 			}
 		}
-	}
-
-	@MainActor
-	func insertConversation(_ conversation: DB.Conversation, at: Int) {
-		let existing = conversations.first { convo in
-			convo.peerAddress == conversation.peerAddress
-		}
-		guard existing == nil else {
-			return
-		}
-		conversations.insert(conversation, at: at)
 	}
 }
