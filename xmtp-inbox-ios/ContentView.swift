@@ -10,6 +10,7 @@ import XMTP
 
 struct ContentView: View {
 	@StateObject private var environmentCoordinator = EnvironmentCoordinator()
+	@StateObject private var auth: Auth = Auth()
 
 	@State private var wcUrl: URL?
 
@@ -18,19 +19,19 @@ struct ContentView: View {
 			FlashProvider {
 				ZStack {
 					Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-					switch environmentCoordinator.auth.status {
+					switch auth.status {
 					case let .connected(client):
 						HomeView(client: client)
 					case .connecting:
 						ProgressView("Awaiting signatures…")
 					case .loadingKeys:
-						ProgressView()
+						ProgressView("Loading keys…")
 					default:
 						SplashView(onTryDemo: onTryDemo, onConnecting: onConnecting, onConnected: onConnectWallet)
 					}
 				}
 			}
-			.sheet(isPresented: $environmentCoordinator.auth.isShowingQRCode) {
+			.sheet(isPresented: $auth.isShowingQRCode) {
 				if let wcUrl {
 					QRCodeView(data: Data(wcUrl.absoluteString.utf8))
 				} else {
@@ -38,6 +39,7 @@ struct ContentView: View {
 				}
 			}
 			.environmentObject(environmentCoordinator)
+			.environmentObject(auth)
 			.task {
 				await loadClient()
 			}
@@ -46,26 +48,28 @@ struct ContentView: View {
 
 	func onConnecting() {
 		withAnimation {
-			environmentCoordinator.auth.status = .connecting
+			auth.status = .connecting
 		}
 	}
 
 	func loadClient() async {
+		print("Load client")
 		do {
 			guard let keys = try Keystore.readKeys() else {
 				await MainActor.run {
-					environmentCoordinator.auth.status = .signedOut
+					auth.status = .signedOut
 				}
 				return
 			}
 			let client = try Client.from(v1Bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
 			await MainActor.run {
-				environmentCoordinator.auth.status = .connected(client)
+				print("Connected")
+				auth.status = .connected(client)
 			}
 		} catch {
 			print("Keystore read error: \(error.localizedDescription)")
 			await MainActor.run {
-				environmentCoordinator.auth.status = .signedOut
+				auth.status = .signedOut
 			}
 		}
 	}
@@ -79,13 +83,13 @@ struct ContentView: View {
 		}
 
 		withAnimation {
-			environmentCoordinator.auth.status = .connected(client)
+			auth.status = .connected(client)
 		}
 	}
 
 	func onTryDemo() {
 		UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-		environmentCoordinator.auth.status = .tryingDemo
+		auth.status = .tryingDemo
 		Task {
 			do {
 				let account = try PrivateKey.generate()
@@ -95,12 +99,12 @@ struct ContentView: View {
 
 				await MainActor.run {
 					withAnimation {
-						environmentCoordinator.auth.status = .connected(client)
+						auth.status = .connected(client)
 					}
 				}
 			} catch {
 				await MainActor.run {
-					environmentCoordinator.auth.status = .signedOut
+					auth.status = .signedOut
 					Flash.add(.error("Error generating random wallet: \(error)"))
 				}
 			}

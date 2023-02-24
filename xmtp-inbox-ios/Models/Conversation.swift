@@ -10,7 +10,7 @@ import GRDB
 import XMTP
 
 extension DB {
-	struct Conversation: Codable {
+	struct Conversation: Identifiable, Codable {
 		enum ConversationError: Error {
 			case conversionError(String), noTopic, noID
 		}

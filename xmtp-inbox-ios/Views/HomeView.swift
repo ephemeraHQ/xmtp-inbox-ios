@@ -8,15 +8,11 @@
 import SwiftUI
 import XMTP
 
-class EnvironmentCoordinator: ObservableObject {
-	@Published var path = NavigationPath()
-	@Published var auth = Auth()
-}
-
-struct HomeView: View {
+struct SingleColumnView: View {
 	let client: XMTP.Client
 	@State var isShowingAccount = false
-	@StateObject var environmentCoordinator = EnvironmentCoordinator()
+
+	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
 
 	var body: some View {
 		NavigationStack(path: $environmentCoordinator.path) {
@@ -24,12 +20,8 @@ struct HomeView: View {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
 				ConversationListView(client: client)
 			}
-			.task {
-				do {
-					try await XMTPPush.shared.request()
-				} catch {
-					print("Error request push notification access")
-				}
+			.navigationDestination(for: DB.Conversation.self) { conversation in
+				ConversationDetailView(client: client, conversation: conversation)
 			}
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationBarItems(leading: HapticButton {
@@ -53,9 +45,69 @@ struct HomeView: View {
 		}
 		.environment(\.dbQueue, DB._queue)
 		.accentColor(.textPrimary)
-		.environmentObject(environmentCoordinator)
 		.sheet(isPresented: $isShowingAccount) {
 			AccountView(client: client)
+		}
+	}
+}
+
+struct SplitColumnView: View {
+	let client: XMTP.Client
+	@State var selectedConversation: DB.Conversation?
+	@State var isShowingAccount = false
+
+	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
+
+	var body: some View {
+		NavigationSplitView(sidebar: {
+			ConversationListView(client: client, selectedConversation: $selectedConversation)
+				.toolbar {
+					ToolbarItem(placement: .automatic) {
+						HapticButton {
+							isShowingAccount.toggle()
+						} label: {
+							AvatarView(imageSize: 40.0, peerAddress: client.address)
+						}
+					}
+				}
+		}, detail: {
+			ZStack {
+				if let selectedConversation {
+					ConversationDetailView(client: client, conversation: selectedConversation)
+						.id(selectedConversation.id)
+				} else {
+					Text("Select a conversation…")
+						.foregroundColor(.secondary)
+				}
+			}
+		})
+		.navigationBarTitleDisplayMode(.inline)
+		.environment(\.dbQueue, DB._queue)
+		.accentColor(.textPrimary)
+		.sheet(isPresented: $isShowingAccount) {
+			AccountView(client: client)
+		}
+	}
+}
+
+class EnvironmentCoordinator: ObservableObject {
+	@Published var path = NavigationPath()
+}
+
+struct HomeView: View {
+	let client: XMTP.Client
+
+	var body: some View {
+		ViewThatFits {
+			SplitColumnView(client: client)
+			SingleColumnView(client: client)
+		}
+		.task {
+			do {
+				try await XMTPPush.shared.request()
+			} catch {
+				print("Error request push notification access")
+			}
 		}
 	}
 }

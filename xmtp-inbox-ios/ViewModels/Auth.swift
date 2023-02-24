@@ -9,13 +9,14 @@ import Foundation
 import SwiftUI
 import XMTP
 
-struct Auth {
+class Auth: ObservableObject {
 	enum AuthStatus {
 		case loadingKeys, signedOut, tryingDemo, connecting, connected(Client)
 	}
 
-	var status: AuthStatus = .loadingKeys {
+	@Published var status: AuthStatus = .loadingKeys {
 		didSet {
+			print("SET TO \(status)")
 			if case let .connected(client) = status {
 				self.isShowingQRCode = false
 
@@ -28,7 +29,7 @@ struct Auth {
 		}
 	}
 
-	var isShowingQRCode = false
+	@Published var isShowingQRCode = false
 
 	static func signOut() {
 		do {
@@ -39,7 +40,7 @@ struct Auth {
 		}
 	}
 
-	mutating func signOut() {
+	func signOut() {
 		Auth.signOut()
 		withAnimation {
 			self.status = .signedOut
