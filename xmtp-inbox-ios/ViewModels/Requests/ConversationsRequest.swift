@@ -14,40 +14,39 @@ struct ConversationsRequest: Queryable {
 	func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[DB.Conversation], Error> {
 		ValueObservation
 			.tracking { db in
-				do {
-					let conversations = try DB.Conversation
-						.order(Column("updatedAt").desc)
-						.group(Column("id"))
-						.fetchAll(db)
+				let conversations = try DB.Conversation
+					.order(Column("updatedAt").desc)
+					.group(Column("id"))
+					.fetchAll(db)
 
-					let mostRecentMessages = try DB.Message
-						.order(Column("createdAt").desc)
-						.group(Column("conversationID"))
-						.fetchAll(db)
-						.reduce([Int: DB.Message]()) { res, message in
-							var res = res
-							res[message.conversationID] = message
-							return res
-						}
+				let mostRecentMessages = try DB.Message
+					.select(AllColumns(), max(Column("createdAt")))
+					.group(Column("conversationID"))
+					.order(Column("id").desc)
+					.fetchAll(db)
 
-					let conversationsWithMostRecentMessages = conversations.map {
-						var conversation = $0
-
-						if let conversationID = conversation.id {
-							conversation.lastMessage = mostRecentMessages[conversationID]
-						}
-
-						return conversation
+				let mostRecentMessagesByConversationID = mostRecentMessages.reduce([Int: DB.Message]()) { res, message in
+						var res = res
+						res[message.conversationID] = message
+						return res
 					}
 
-					return conversationsWithMostRecentMessages
-				} catch {
-					fatalError("error in request: \(error)")
+				let conversationsWithMostRecentMessages = conversations.map {
+					var conversation = $0
+
+					if let conversationID = conversation.id {
+						conversation.lastMessage = mostRecentMessagesByConversationID[conversationID]
+					}
+
+					return conversation
 				}
+
+				return conversationsWithMostRecentMessages
 			}
 			// The `.immediate` scheduling feeds the view right on subscription,
 			// and avoids an initial rendering with an empty list:
 			.publisher(in: dbQueue, scheduling: .immediate)
+			.removeDuplicates()
 			.eraseToAnyPublisher()
 	}
 }

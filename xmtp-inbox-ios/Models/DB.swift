@@ -92,7 +92,7 @@ class DB {
 			try db.usePassphrase(passphrase)
 
 			#if DEBUG
-//				db.trace { print("SQL: \($0)") }
+				db.trace { print("SQL: \($0)") }
 				self.config.publicStatementArguments = true
 			#endif
 		}

@@ -23,7 +23,6 @@ struct ConversationListView: View {
 	@State private var status: LoadingStatus = .success
 	@State var isShowingNewMessage = false
 
-
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
 	@StateObject private var conversationLoader: ConversationLoader
 
