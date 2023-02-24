@@ -15,18 +15,32 @@ struct ConversationsRequest: Queryable {
 		ValueObservation
 			.tracking { db in
 				do {
-					//				try DB.Conversation.fetchAll(db)
-					return try DB.Conversation
-						.including(optional: DB.Conversation.lastMessage.forKey("lastMessage"))
+					let conversations = try DB.Conversation
 						.order(Column("updatedAt").desc)
 						.group(Column("id"))
-						.asRequest(of: ConversationWithLastMessage.self)
 						.fetchAll(db)
-						.map {
-							var conversation = $0.conversation
-							conversation.lastMessage = $0.lastMessage
-							return conversation
+
+					let mostRecentMessages = try DB.Message
+						.order(Column("createdAt").desc)
+						.group(Column("conversationID"))
+						.fetchAll(db)
+						.reduce([Int: DB.Message]()) { res, message in
+							var res = res
+							res[message.conversationID] = message
+							return res
 						}
+
+					let conversationsWithMostRecentMessages = conversations.map {
+						var conversation = $0
+
+						if let conversationID = conversation.id {
+							conversation.lastMessage = mostRecentMessages[conversationID]
+						}
+
+						return conversation
+					}
+
+					return conversationsWithMostRecentMessages
 				} catch {
 					fatalError("error in request: \(error)")
 				}

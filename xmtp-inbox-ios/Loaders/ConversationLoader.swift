@@ -68,7 +68,8 @@ class ConversationLoader: ObservableObject {
 					do {
 						var conversation = conversation
 						print("Fetching most recent message for \(conversation.title)")
-						try await conversation.loadMostRecentMessage(client: self.client)
+						try await conversation.loadMostRecentMessages(client: self.client)
+						print("Done fetching most recent message for \(conversation.title)")
 					} catch {
 						print("Error loading most recent message for \(conversation.peerAddress): \(error)")
 					}

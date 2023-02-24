@@ -143,7 +143,7 @@ struct ConversationListView: View {
 				where newConversation.peerAddress != client.address
 			{
 				var newConversation = try await DB.Conversation.from(newConversation)
-				try await newConversation.loadMostRecentMessage(client: client)
+				try await newConversation.loadMostRecentMessages(client: client)
 			}
 		} catch {
 			await MainActor.run {

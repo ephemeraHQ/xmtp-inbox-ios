@@ -116,17 +116,16 @@ extension DB {
 			return messages
 		}
 
-		mutating func loadMostRecentMessage(client: Client) async throws {
+		mutating func loadMostRecentMessages(client: Client) async throws {
 			let conversation = self
 
 			await withThrowingTaskGroup(of: Void.self) { group in
 				for topic in topics() {
 					group.addTask {
-						guard let lastMessageXMTP = try await topic.toXMTP(client: client).messages(limit: 1).first else {
-							return
+						let lastMessagesXMTP = try await topic.toXMTP(client: client).messages(limit: 10)
+						for lastMessageXMTP in lastMessagesXMTP {
+							try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress)
 						}
-
-						try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress)
 					}
 				}
 			}

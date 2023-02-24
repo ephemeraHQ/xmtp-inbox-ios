@@ -31,6 +31,8 @@ class Flash: ObservableObject {
 	static func add(_ type: FlashMessageType, position: FlashMessagePosition = .top) {
 		let message = FlashMessage(type: type, position: position)
 
+		print("Showing flash \(message)")
+
 		shared.messages.append(message)
 
 		Task {

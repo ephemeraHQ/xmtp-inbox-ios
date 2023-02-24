@@ -53,8 +53,17 @@ struct DebugView: View {
 	var body: some View {
 		NavigationStack {
 			List {
-				NavigationLink(destination: SQLDebuggerView()) {
-					Text("SQL Debugger")
+				Section("Local Storage") {
+					NavigationLink(destination: SQLDebuggerView()) {
+						Text("SQL Debugger")
+					}
+					Button("Clear DB") {
+						do {
+							try DB.clear()
+						} catch {
+							Flash.add(.error("Error clearing the DB: \(error)"))
+						}
+					}
 				}
 
 				Section("XMTP Environment") {
