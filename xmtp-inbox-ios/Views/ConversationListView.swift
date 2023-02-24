@@ -8,16 +8,21 @@
 import GRDBQuery
 import SwiftUI
 import XMTP
+import Combine
 
 struct ConversationListView: View {
 	enum LoadingStatus {
 		case loading, empty, success, error(String)
 	}
 
+	let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+	@State @MainActor var isLoading = false
+
 	let client: XMTP.Client
 
 	@State private var status: LoadingStatus = .success
 	@State var isShowingNewMessage = false
+
 
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
 	@StateObject private var conversationLoader: ConversationLoader
@@ -83,7 +88,20 @@ struct ConversationListView: View {
 			ConversationDetailView(client: client, conversation: conversation)
 		}
 		.onAppear {
+			timer.upstream.connect()
 			Task.detached {
+				await loadConversations()
+			}
+		}
+		.onDisappear {
+			timer.upstream.connect().cancel()
+		}
+		.onReceive(timer) { _ in
+			if isLoading {
+				return
+			}
+
+			Task {
 				await loadConversations()
 			}
 		}
@@ -97,12 +115,18 @@ struct ConversationListView: View {
 		}
 	}
 
-	func loadConversations(poll: Bool = false) async {
+	func loadConversations() async {
+		print("load conversations called")
+		if isLoading {
+			return
+		}
+
 		do {
 			await MainActor.run {
 				withAnimation {
 					if conversations.isEmpty {
 						self.status = .loading
+						self.isLoading = true
 					}
 				}
 			}
@@ -110,6 +134,7 @@ struct ConversationListView: View {
 			try await conversationLoader.load()
 
 			await MainActor.run {
+				self.isLoading = false
 				withAnimation {
 					if conversations.isEmpty {
 						self.status = .empty
@@ -123,17 +148,12 @@ struct ConversationListView: View {
 			await MainActor.run {
 				if conversations.isEmpty {
 					self.status = .error(error.localizedDescription)
+					self.isLoading = false
 				} else {
+					self.isLoading = false
 					Flash.add(.error("Error loading conversations: \(error)"))
 				}
 			}
-		}
-
-		if poll {
-			// swiftlint:disable no_optional_try
-			try? await Task.sleep(for: .seconds(5))
-
-			await loadConversations()
 		}
 	}
 

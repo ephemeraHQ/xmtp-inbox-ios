@@ -22,6 +22,12 @@ struct UpdatingRelativeTimestamp: View {
 			.onReceive(timer) { _ in
 				formatted = date.timeAgo
 			}
+			.onAppear {
+				timer.upstream.connect()
+			}
+			.onDisappear {
+				timer.upstream.connect().cancel()
+			}
 	}
 }
 
