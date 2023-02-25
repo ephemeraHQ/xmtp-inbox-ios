@@ -9,6 +9,8 @@ import SwiftUI
 
 struct EnvironmentToggleView: View {
 	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
+	@EnvironmentObject var auth: Auth
+
 	@Environment(\.dismiss) var dismiss
 
 	var body: some View {
@@ -28,7 +30,7 @@ struct EnvironmentToggleView: View {
 			XMTPEnvironmentManager.shared.environment = .production
 		}
 
-		environmentCoordinator.auth.signOut()
+		auth.signOut()
 		dismiss()
 	}
 

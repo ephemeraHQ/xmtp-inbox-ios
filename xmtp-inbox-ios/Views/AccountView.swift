@@ -16,6 +16,7 @@ struct AccountView: View {
 	private let privacyUrl = "https://xmtp.org/privacy"
 
 	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
+	@EnvironmentObject var auth: Auth
 
 	@State private var showSignOutAlert = false
 	@State private var isShowingDebug = false
@@ -185,7 +186,7 @@ struct AccountView: View {
 			.alert("disconnect-cta", isPresented: $showSignOutAlert) {
 				Button("cancel", role: .cancel) {}
 				Button("disconnect", role: .destructive) {
-					environmentCoordinator.auth.signOut()
+					auth.signOut()
 				}
 			}
 		}

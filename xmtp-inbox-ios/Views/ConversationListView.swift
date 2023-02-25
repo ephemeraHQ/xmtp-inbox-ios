@@ -19,6 +19,7 @@ struct ConversationListView: View {
 	@State @MainActor var isLoading = false
 
 	let client: XMTP.Client
+	@Binding var selectedConversation: DB.Conversation?
 
 	@State private var status: LoadingStatus = .success
 	@State var isShowingNewMessage = false
@@ -33,13 +34,22 @@ struct ConversationListView: View {
 
 		self.client = client
 		_conversationLoader = StateObject(wrappedValue: conversationLoader)
+		_selectedConversation = .constant(nil)
+	}
+
+	init(client: XMTP.Client, selectedConversation: Binding<DB.Conversation?>) {
+		let conversationLoader = ConversationLoader(client: client)
+
+		self.client = client
+		_conversationLoader = StateObject(wrappedValue: conversationLoader)
+		_selectedConversation = selectedConversation
 	}
 
 	var body: some View {
 		ZStack {
 			switch status {
 			case .loading:
-				ProgressView()
+				ProgressView("Loading…")
 			case .empty:
 				if let error = conversationLoader.error {
 					Text(error.localizedDescription)
@@ -52,17 +62,18 @@ struct ConversationListView: View {
 					.padding()
 			case .success:
 				List {
-					ForEach(conversations, id: \.id) { conversation in
-						Button(action: {
-							coordinator.path.append(conversation)
-						}) {
-							ConversationCellView(conversation: conversation)
-								.padding(.horizontal, 8)
-						}
+					ForEach(conversations) { conversation in
+						ConversationCellView(conversation: conversation)
+							.padding(.horizontal, 8)
+							.padding(.vertical)
+							.contentShape(Rectangle())
+							.listRowInsets(EdgeInsets())
+							.listRowBackground(conversation.title == selectedConversation?.title ? Color("BackgroundSecondary") : Color.clear)
+							.onTapGesture {
+								self.selectedConversation = conversation
+								coordinator.path.append(conversation)
+							}
 					}
-					.listRowBackground(Color.backgroundPrimary)
-					.listRowInsets(EdgeInsets())
-					.padding(.vertical)
 				}
 				.listStyle(.plain)
 				.scrollContentBackground(.hidden)
@@ -82,9 +93,6 @@ struct ConversationListView: View {
 			}
 			.frame(maxWidth: .infinity)
 			.frame(maxHeight: .infinity)
-		}
-		.navigationDestination(for: DB.Conversation.self) { conversation in
-			ConversationDetailView(client: client, conversation: conversation)
 		}
 		.onAppear {
 			timer.upstream.connect()

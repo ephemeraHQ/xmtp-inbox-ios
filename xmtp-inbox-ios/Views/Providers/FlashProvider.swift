@@ -19,6 +19,14 @@ struct FlashMessage: Identifiable {
 	var id = UUID()
 	var type: FlashMessageType
 	var position: FlashMessagePosition = .top
+
+	func meetsDismissThreshold(_ distance: CGFloat) -> Bool {
+		if position == .top {
+			return distance < -300
+		} else {
+			return distance > 300
+		}
+	}
 }
 
 class Flash: ObservableObject {
@@ -36,7 +44,7 @@ class Flash: ObservableObject {
 		shared.messages.append(message)
 
 		Task {
-			try? await Task.sleep(for: .seconds(3))
+			try? await Task.sleep(for: .seconds(5))
 
 			await MainActor.run {
 				withAnimation {
@@ -87,11 +95,11 @@ struct FlashMessageView: View {
 		.foregroundColor(Color.actionPrimaryText)
 		.cornerRadius(8)
 		.shadow(radius: 8)
-		.offset(x: offset)
+		.offset(y: offset)
 		.gesture(DragGesture().updating($offset) { event, state, _ in
-			state = event.translation.width
+			state = event.translation.height
 		}.onEnded { event in
-			if abs(event.predictedEndTranslation.width) > 300 {
+			if message.meetsDismissThreshold(event.predictedEndTranslation.height) {
 				withAnimation {
 					Flash.remove(message)
 				}
@@ -144,6 +152,22 @@ struct FlashProvider_Previews: PreviewProvider {
 		FlashProvider {
 			NavigationView {
 				List {
+					Button(action: {
+						Flash.add(.error("This is an error.\nDoes the text wrap? Hopefully! Ok cool."))
+					}) {
+						Text("Error")
+					}
+					Button(action: {
+						Flash.add(.info("This is an error.\nDoes the text wrap? Hopefully! Ok cool."))
+					}) {
+						Text("Info")
+					}
+					Button(action: {
+						Flash.add(.success("This is an error.\nDoes the text wrap? Hopefully! Ok cool."))
+					}) {
+						Text("Success")
+					}
+
 					Text("Some Content")
 				}
 				.task {

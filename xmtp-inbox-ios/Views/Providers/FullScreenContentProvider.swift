@@ -7,6 +7,7 @@
 
 import QuickLook
 import SDWebImageSwiftUI
+import UIKit
 import SwiftUI
 
 extension URL: Identifiable {
@@ -82,7 +83,7 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 
 		Task {
 			do {
-				let data = try await URLSession.shared.data(from: selectedURL).0
+				let data = try await URLSession.shared.data(from: self.selectedURL).0
 
 				// Give the file a name and append it to the file path
 				fileURL = URL.temporaryDirectory.appendingPathComponent(

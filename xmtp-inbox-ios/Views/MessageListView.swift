@@ -244,10 +244,15 @@ struct MessageListView: View {
 	}
 
 	var body: some View {
-		MessagesTableView(loader: messageLoader, messages: messages)
-			.task {
-				await messageLoader.streamMessages()
-			}
+		if messages.isEmpty {
+			Text("No messages yet…")
+				.foregroundColor(.secondary)
+		} else {
+			MessagesTableView(loader: messageLoader, messages: messages)
+				.task {
+					await messageLoader.streamMessages()
+				}
+		}
 	}
 
 	func loadMessages() async {
