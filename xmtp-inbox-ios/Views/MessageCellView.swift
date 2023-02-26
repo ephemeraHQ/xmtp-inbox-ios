@@ -149,6 +149,7 @@ struct MessageCellView: View {
 	}
 }
 
+#if DEBUG
 struct MessageCellView_Previews: PreviewProvider {
 	static var previews: some View {
 		FullScreenContentProvider {
@@ -174,3 +175,4 @@ struct MessageCellView_Previews: PreviewProvider {
 		}
 	}
 }
+#endif
