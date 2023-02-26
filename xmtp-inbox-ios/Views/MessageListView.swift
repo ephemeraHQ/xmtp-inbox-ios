@@ -247,6 +247,9 @@ struct MessageListView: View {
 		if messages.isEmpty {
 			Text("No messages yet…")
 				.foregroundColor(.secondary)
+				.task {
+					await messageLoader.streamMessages()
+				}
 		} else {
 			MessagesTableView(loader: messageLoader, messages: messages)
 				.task {

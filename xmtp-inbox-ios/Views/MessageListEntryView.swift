@@ -13,7 +13,7 @@ struct MessageListEntryView: View {
 	var body: some View {
 		switch messagelistEntry {
 		case let .message(message):
-			MessageCellView(message: message)
+			MessageCellView(presenter: message.presenter)
 		case let .timestamp(date):
 			HStack {
 				Spacer()

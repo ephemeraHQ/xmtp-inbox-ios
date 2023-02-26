@@ -81,6 +81,10 @@ extension DB {
 			return try await MessageCreator(client: client, conversation: conversation, topic: topic).create(xmtpMessage: xmtpMessage)
 		}
 
+		var presenter: MessagePresenter {
+			MessagePresenter(message: self)
+		}
+
 		func updateConversationTimestamps(conversation: DB.Conversation) throws {
 			var conversation = conversation
 

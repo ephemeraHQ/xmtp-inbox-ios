@@ -31,6 +31,7 @@ struct MessageComposerView: View {
 
 	@State private var text: String = ""
 	@State private var originalOffset = CGFloat()
+	@State private var isSending = false
 	@Binding var offset: CGFloat
 	@StateObject private var keyboardObserver = KeyboardObserver()
 
@@ -114,6 +115,19 @@ struct MessageComposerView: View {
 							.labelStyle(.iconOnly)
 							.foregroundColor(Color.actionPrimaryText)
 					}
+					.opacity(isSending ? 0 : 1)
+					.disabled(isSending)
+				}
+				.overlay {
+					if isSending {
+						ZStack {
+							Color.backgroundTertiary
+								.frame(width: 32, height: 32)
+								.roundCorners(16, corners: [.topLeft, .topRight, .bottomLeft])
+
+							ProgressView()
+						}
+					}
 				}
 			}
 		}
@@ -126,11 +140,16 @@ struct MessageComposerView: View {
 			return
 		}
 
+		withAnimation {
+			self.isSending = true
+		}
+
 		Task {
 			await onSend(text, attachment)
 			await MainActor.run {
 				self.text = ""
 				self.attachment = nil
+				self.isSending = false
 			}
 		}
 	}
