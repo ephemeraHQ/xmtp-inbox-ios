@@ -72,7 +72,7 @@ struct RemoteAttachmentMessageView: View {
 	}
 
 	func load() {
-		self.isLoading = true
+		isLoading = true
 
 		do {
 			let remoteAttachment = try RemoteAttachment(
@@ -118,7 +118,7 @@ struct RemoteAttachmentMessageView: View {
 			}
 		} catch {
 			print("ERROR LOADING ATTACHMENT \(error)")
-			self.isLoading = false
+			isLoading = false
 			self.error = error.localizedDescription
 		}
 	}

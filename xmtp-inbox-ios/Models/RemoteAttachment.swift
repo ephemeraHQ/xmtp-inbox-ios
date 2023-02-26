@@ -41,9 +41,9 @@ extension DB.RemoteAttachment: Model {
 }
 
 #if DEBUG
-extension DB.RemoteAttachment {
-	static var previewImage: DB.RemoteAttachment {
-		DB.RemoteAttachment(messageID: 1, url: "https://example.com", salt: Data(), nonce: Data(), secret: Data(), contentDigest: "HI", filename: "icon.png", contentLength: 12311)
+	extension DB.RemoteAttachment {
+		static var previewImage: DB.RemoteAttachment {
+			DB.RemoteAttachment(messageID: 1, url: "https://example.com", salt: Data(), nonce: Data(), secret: Data(), contentDigest: "HI", filename: "icon.png", contentLength: 12311)
+		}
 	}
-}
 #endif

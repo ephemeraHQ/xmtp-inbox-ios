@@ -19,7 +19,7 @@ extension DB {
 		var messageID: Int = -1
 		var mimeType: String
 		var filename: String
-		var uuid: UUID = UUID()
+		var uuid: UUID = .init()
 
 		var type: ContentType {
 			.image
