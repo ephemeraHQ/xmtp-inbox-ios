@@ -122,7 +122,7 @@ extension DB {
 			await withThrowingTaskGroup(of: Void.self) { group in
 				for topic in topics() {
 					group.addTask {
-						let lastMessagesXMTP = try await topic.toXMTP(client: client).messages(limit: 10)
+						let lastMessagesXMTP = try await topic.toXMTP(client: client).messages()
 						for lastMessageXMTP in lastMessagesXMTP {
 							try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, client: client)
 						}

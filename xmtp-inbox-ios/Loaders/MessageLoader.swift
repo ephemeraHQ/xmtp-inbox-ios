@@ -14,8 +14,6 @@ class MessageLoader: ObservableObject {
 	var client: XMTP.Client
 	var conversation: DB.Conversation
 
-	let fetchLimit = 10
-
 	@Published var mostRecentMessageID = ""
 	var messages: [DB.Message] = []
 
@@ -57,7 +55,7 @@ class MessageLoader: ObservableObject {
 	func fetchRemote() async throws {
 		for topic in conversation.topics() {
 			do {
-				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit)
+				let messages = try await topic.toXMTP(client: client).messages()
 				for message in messages {
 					do {
 						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client)
@@ -76,7 +74,7 @@ class MessageLoader: ObservableObject {
 
 		for topic in conversation.topics() {
 			do {
-				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit, before: before)
+				let messages = try await topic.toXMTP(client: client).messages(before: before)
 				for message in messages {
 					do {
 						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client)
