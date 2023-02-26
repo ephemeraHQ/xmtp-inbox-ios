@@ -158,7 +158,10 @@ struct MessageComposerView: View {
 struct MessageComposerView_Previews: PreviewProvider {
 	static var previews: some View {
 		VStack {
-			MessageComposerView(offset: .constant(0)) { _, _ in }
+			MessageComposerView(offset: .constant(0)) { _, _ in
+				try? await Task.sleep(for: .seconds(2))
+			}
+			.padding(.horizontal)
 		}
 	}
 }

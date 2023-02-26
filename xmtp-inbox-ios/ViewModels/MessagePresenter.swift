@@ -7,6 +7,9 @@
 
 import Foundation
 
+// Message presenter wraps a message that gets passed down
+// to swift views. By changing the message, we can let the
+// views update while keeping Message a struct.
 class MessagePresenter: ObservableObject {
 	@Published var message: DB.Message
 
