@@ -2,10 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>S3_BUCKET</key>
+	<string>$(S3_BUCKET)</string>
+	<key>AWS_ACCESS_KEY_ID</key>
+	<string>$(AWS_ACCESS_KEY_ID)</string>
 	<key>INFURA_KEY</key>
 	<string>$(INFURA_KEY)</string>
+	<key>AWS_SECRET_ACCESS_KEY_ID</key>
+	<string>$(AWS_SECRET_ACCESS_KEY_ID)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>AWS_REGION</key>
+	<string>$(AWS_REGION)</string>
+	<key>AWS_ENDPOINT</key>
+	<string>$(AWS_ENDPOINT)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>wc</string>

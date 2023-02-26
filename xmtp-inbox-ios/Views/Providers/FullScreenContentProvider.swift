@@ -7,8 +7,8 @@
 
 import QuickLook
 import SDWebImageSwiftUI
-import UIKit
 import SwiftUI
+import UIKit
 
 extension URL: Identifiable {
 	public var id: String {
@@ -98,7 +98,7 @@ class QuickLookPreviewController: UIViewController, QLPreviewControllerDataSourc
 				try data.write(to: fileUrl, options: .atomic)
 
 				// Make sure the file can be opened and then present the pdf
-				if QLPreviewController.canPreviewItem(fileUrl as QLPreviewItem) {
+				if QLPreviewController.canPreview(fileUrl as QLPreviewItem) {
 					quickLookController.currentPreviewItemIndex = 0
 					present(quickLookController, animated: true, completion: nil)
 				}

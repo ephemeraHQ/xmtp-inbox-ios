@@ -36,45 +36,84 @@ struct MessageComposerView: View {
 
 	@FocusState var isFocused
 
-	var onSend: (String) async -> Void
+	// Attachment properties
+	@State private var attachment: XMTP.Attachment?
+
+	var onSend: (String, XMTP.Attachment?) async -> Void
 
 	var body: some View {
-		HStack {
-			TextField("Type a message…", text: $text, axis: .vertical)
-				.introspectTextView { textField in
-					textField.inputAccessoryView = UIHostingController(rootView: GeometryReader { geo in
-						Color.clear
-							.onChange(of: geo.frame(in: .global)) { frame in
-								self.offset = max(0, frame.minY - originalOffset)
-							}
-							.onReceive(keyboardObserver.$isVisible) { isVisible in
-								withAnimation {
-									if isVisible {
-										self.originalOffset = geo.frame(in: .global).minY
-										self.offset = 0
-									} else {
-										self.originalOffset = geo.frame(in: .global).minY
-										self.offset = 0
+		VStack(alignment: .leading) {
+			if let attachment {
+				VStack(alignment: .leading) {
+					ZStack {
+						AttachmentPreviewView(attachment: attachment)
+							.padding(.top, 8)
+							.overlay {
+								VStack {
+									HStack {
+										Spacer()
+										Button(action: {
+											withAnimation {
+												self.attachment = nil
+											}
+										}) {
+											Image(systemName: "xmark.circle.fill")
+												.resizable()
+												.frame(width: 24, height: 24)
+												.foregroundColor(.backgroundTertiary)
+												.padding(8)
+												.contrast(10)
+										}
+										.padding(.top, 8)
 									}
+									Spacer()
 								}
 							}
-					}).view
+					}
+					Divider()
 				}
-				.lineLimit(4)
-				.padding(12)
-				.onSubmit {
-					send()
-				}
+				.transition(.scale(scale: 0, anchor: .bottomLeading).combined(with: .opacity))
+				.animation(.easeInOut, value: attachment)
+			}
 
-			ZStack {
-				Color.actionPrimary
-					.frame(width: 32, height: 32)
-					.roundCorners(16, corners: [.topLeft, .topRight, .bottomLeft])
-				Button(action: send) {
-					Label("Send", systemImage: "arrow.up")
-						.font(.system(size: 16))
-						.labelStyle(.iconOnly)
-						.foregroundColor(Color.actionPrimaryText)
+			HStack(spacing: 0) {
+				MessageAttachmentComposerButton(attachment: $attachment)
+				TextField("Type a message…", text: $text, axis: .vertical)
+					.introspectTextView { textField in
+						textField.inputAccessoryView = UIHostingController(rootView: GeometryReader { geo in
+							Color.clear
+								.onChange(of: geo.frame(in: .global)) { frame in
+									self.offset = max(0, frame.minY - originalOffset)
+								}
+								.onReceive(keyboardObserver.$isVisible) { isVisible in
+									withAnimation {
+										if isVisible {
+											self.originalOffset = geo.frame(in: .global).minY
+											self.offset = 0
+										} else {
+											self.originalOffset = geo.frame(in: .global).minY
+											self.offset = 0
+										}
+									}
+								}
+						}).view
+					}
+					.lineLimit(4)
+					.padding(12)
+					.onSubmit {
+						send()
+					}
+
+				ZStack {
+					Color.actionPrimary
+						.frame(width: 32, height: 32)
+						.roundCorners(16, corners: [.topLeft, .topRight, .bottomLeft])
+					Button(action: send) {
+						Label("Send", systemImage: "arrow.up")
+							.font(.system(size: 16))
+							.labelStyle(.iconOnly)
+							.foregroundColor(Color.actionPrimaryText)
+					}
 				}
 			}
 		}
@@ -83,14 +122,15 @@ struct MessageComposerView: View {
 	}
 
 	func send() {
-		if text.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+		if text.trimmingCharacters(in: .whitespacesAndNewlines) == "" && attachment == nil {
 			return
 		}
 
 		Task {
-			await onSend(text)
+			await onSend(text, attachment)
 			await MainActor.run {
 				self.text = ""
+				self.attachment = nil
 			}
 		}
 	}
@@ -99,7 +139,7 @@ struct MessageComposerView: View {
 struct MessageComposerView_Previews: PreviewProvider {
 	static var previews: some View {
 		VStack {
-			MessageComposerView(offset: .constant(0)) { _ in }
+			MessageComposerView(offset: .constant(0)) { _, _ in }
 		}
 	}
 }

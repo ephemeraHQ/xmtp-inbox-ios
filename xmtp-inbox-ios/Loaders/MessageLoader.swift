@@ -27,9 +27,13 @@ class MessageLoader: ObservableObject {
 	func streamTopic(topic: DB.ConversationTopic) async {
 		do {
 			for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
-				let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, isFromMe: client.address == xmtpMessage.senderAddress)
-				await MainActor.run {
-					mostRecentMessageID = message.xmtpID
+				do {
+					let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, client: client)
+					await MainActor.run {
+						mostRecentMessageID = message.xmtpID
+					}
+				} catch {
+					print("Error handling streaming message: \(error)")
 				}
 			}
 		} catch {
@@ -56,7 +60,7 @@ class MessageLoader: ObservableObject {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit)
 				for message in messages {
 					do {
-						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress)
+						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client)
 					} catch {
 						print("Error importing message: \(error)")
 					}
@@ -75,7 +79,7 @@ class MessageLoader: ObservableObject {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit, before: before)
 				for message in messages {
 					do {
-						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, isFromMe: client.address == message.senderAddress)
+						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client)
 					} catch {
 						print("Error importing message: \(error)")
 					}

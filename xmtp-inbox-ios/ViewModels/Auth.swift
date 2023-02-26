@@ -16,7 +16,6 @@ class Auth: ObservableObject {
 
 	@Published var status: AuthStatus = .loadingKeys {
 		didSet {
-			print("SET TO \(status)")
 			if case let .connected(client) = status {
 				self.isShowingQRCode = false
 

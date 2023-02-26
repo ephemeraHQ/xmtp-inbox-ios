@@ -42,11 +42,9 @@ class ConversationLoader: ObservableObject {
 		}
 
 		let addresses = conversations.map(\.peerAddress)
-		print("Got addresses: \(addresses)")
 
 		do {
 			let ensResults = try await ENS.shared.ens(addresses: addresses)
-			print("Got ENS results: \(ensResults)")
 
 			for conversation in conversations {
 				var conversation = conversation
