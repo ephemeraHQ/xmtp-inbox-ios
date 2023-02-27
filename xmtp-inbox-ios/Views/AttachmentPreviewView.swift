@@ -44,6 +44,8 @@ struct AttachmentPreviewView: View {
 		switch attachment.type {
 		case .image:
 			ImageAttachmentView(attachment: attachment)
+		case .unknown:
+			Text("Unknown Content Type")
 		}
 	}
 }

@@ -13,6 +13,8 @@ extension DB {
 	struct MessageAttachment: Codable {
 		enum ContentType {
 			case image, unknown
+
+			static var imageTypes = ["image/png", "image/jpg", "image/jpeg"]
 		}
 
 		var id: Int?
@@ -21,14 +23,14 @@ extension DB {
 		var filename: String
 		var uuid: UUID = .init()
 
-		var imageTypes = ["image/png", "image/jpg", "image/jpeg"]
+
 
 		enum CodingKeys: CodingKey {
 			case id, messageID, mimeType, filename, uuid
 		}
 
 		var type: ContentType {
-			if imageTypes.contains(mimeType) {
+			if MessageAttachment.ContentType.imageTypes.contains(mimeType) {
 				return .image
 			}
 
