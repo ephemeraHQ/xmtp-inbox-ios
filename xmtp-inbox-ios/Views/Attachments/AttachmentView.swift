@@ -14,6 +14,8 @@ struct AttachmentView: View {
 		switch attachment.type {
 		case .image:
 			AttachmentImageView(attachment: attachment)
+		case .unknown:
+			AttachmentUnknownView(attachment: attachment)
 		}
 	}
 }

@@ -12,7 +12,7 @@ import XMTP
 extension DB {
 	struct MessageAttachment: Codable {
 		enum ContentType {
-			case image
+			case image, unknown
 		}
 
 		var id: Int?
@@ -21,8 +21,14 @@ extension DB {
 		var filename: String
 		var uuid: UUID = .init()
 
+		var imageTypes = ["image/png", "image/jpg", "image/jpeg"]
+
 		var type: ContentType {
-			.image
+			if imageTypes.contains(mimeType) {
+				return .image
+			}
+
+			return .unknown
 		}
 
 		var toXMTP: XMTP.Attachment? {

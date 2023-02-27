@@ -156,6 +156,8 @@ struct MessageCellView_Previews: PreviewProvider {
 			List {
 				MessageCellView(presenter: DB.Message.preview.presenter)
 					.listRowSeparator(.hidden)
+				MessageCellView(presenter: DB.Message.previewTxt.presenter)
+					.listRowSeparator(.hidden)
 				MessageCellView(presenter: DB.Message.previewUnsavedImageAttachment.presenter)
 					.listRowSeparator(.hidden)
 				MessageCellView(presenter: DB.Message.previewSavedImageAttachment.presenter)

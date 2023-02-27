@@ -31,6 +31,10 @@ struct RemoteAttachmentMessageView: View {
 			.overlay {
 				if let error {
 					Text(error)
+						.fixedSize(horizontal: false, vertical: true)
+						.font(.caption)
+						.padding()
+						.background(.thickMaterial)
 				} else if isLoading {
 					ProgressView()
 						.padding(.bottom, 8)

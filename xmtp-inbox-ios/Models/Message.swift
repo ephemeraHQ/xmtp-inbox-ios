@@ -189,6 +189,15 @@ extension DB.Message {
 			DB.Message(xmtpID: UUID().uuidString, body: "hello there", contentType: XMTP.ContentTypeText, conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
 		}
 
+		static var previewTxt: DB.Message {
+			var message = DB.Message(xmtpID: UUID().uuidString, body: "", contentType: XMTP.ContentTypeAttachment, conversationID: 1, conversationTopicID: 1, senderAddress: "0x00000", createdAt: Date(), isFromMe: true)
+			var messageAttachment = DB.MessageAttachment(mimeType: "text/plain", filename: "hello.txt")
+			// swiftlint:disable force_try
+			try! messageAttachment.save(data: Data("Hello world!".utf8))
+			message.attachments = [messageAttachment]
+			return message
+		}
+
 		static var previewImage: DB.Message {
 			DB.Message(xmtpID: UUID().uuidString, body: "https://user-images.githubusercontent.com/483/219905054-3f7cc2c9-50e5-45b8-887c-82c863a01464.png", contentType: XMTP.ContentTypeText, conversationID: 1, conversationTopicID: 1, senderAddress: "0x000000000", createdAt: Date(), isFromMe: true)
 		}
