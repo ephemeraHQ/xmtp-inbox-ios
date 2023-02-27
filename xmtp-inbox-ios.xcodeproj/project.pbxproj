@@ -1711,7 +1711,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = "remote-attachment-proposal";
+				branch = "fix-fake-api-pagination";
 				kind = branch;
 			};
 		};
