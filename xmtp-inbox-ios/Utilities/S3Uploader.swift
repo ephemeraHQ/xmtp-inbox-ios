@@ -10,9 +10,20 @@ import AWSS3
 import ClientRuntime
 import Foundation
 
-struct S3Uploader: CredentialsProvider {
+protocol Uploader {
+	func upload(data: Data) async throws -> String
+}
+
+struct TestUploader: Uploader {
 	var uuid = UUID()
-	var data: Data
+
+	func upload(data: Data) async throws -> String {
+		"https://hi"
+	}
+}
+
+struct S3Uploader: CredentialsProvider, Uploader {
+	var uuid = UUID()
 
 	var accessKey: String {
 		Bundle.main.infoDictionary?["AWS_ACCESS_KEY_ID"] as? String ?? ""
@@ -34,7 +45,7 @@ struct S3Uploader: CredentialsProvider {
 		Bundle.main.infoDictionary?["S3_BUCKET"] as? String ?? ""
 	}
 
-	func upload() async throws -> String {
+	func upload(data: Data) async throws -> String {
 		let config = try S3Client.S3ClientConfiguration(credentialsProvider: self, endpoint: s3Endpoint, forcePathStyle: true, region: s3Region)
 		let client = S3Client(config: config)
 		var input = PutObjectInput()

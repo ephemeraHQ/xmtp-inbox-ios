@@ -98,8 +98,10 @@ struct RemoteAttachmentMessageView: View {
 						let savedMessageAttachment = messageAttachment
 						await MainActor.run {
 							var message = message
-							message.attachments.append(savedMessageAttachment)
-							presenter.message = message
+							withAnimation {
+								message.attachments.append(savedMessageAttachment)
+								presenter.message = message
+							}
 						}
 						print("SAVED MESSAGE ATTACHMENT")
 

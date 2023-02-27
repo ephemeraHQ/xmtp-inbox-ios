@@ -13,6 +13,7 @@ struct MessageCreator {
 	var client: Client
 	var conversation: DB.Conversation
 	var topic: DB.ConversationTopic
+	var uploader: Uploader = S3Uploader()
 
 	func send(text: String, attachment: XMTP.Attachment?) async throws -> DB.Message {
 		guard let topicID = topic.id else {
@@ -26,7 +27,7 @@ struct MessageCreator {
 		if let attachment {
 			do {
 				let encryptedEncoded = try RemoteAttachment.encodeEncrypted(content: attachment, codec: AttachmentCodec())
-				let uploadedURL = try await S3Uploader(data: encryptedEncoded.payload).upload()
+				let uploadedURL = try await uploader.upload(data: encryptedEncoded.payload)
 				var remoteAttachment = try RemoteAttachment(url: uploadedURL, encryptedEncodedContent: encryptedEncoded)
 				remoteAttachment.filename = attachment.filename
 				remoteAttachment.contentLength = attachment.data.count

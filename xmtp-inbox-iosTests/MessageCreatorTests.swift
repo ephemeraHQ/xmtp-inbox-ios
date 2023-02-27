@@ -20,11 +20,11 @@ class MessageCreatorTests: XCTestCase {
 	}
 
 	func testCreatesXMTPMessage() async throws {
-		let conversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
-		_ = try await conversation.send(text: "hello world")
-		let xmtpMessage = try await conversation.messages()[0]
+		let conversation = try! await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
+		_ = try! await conversation.send(text: "hello world")
+		let xmtpMessage = try! await conversation.messages()[0]
 
-		let dbConversation = try DB.Conversation.from(conversation)
+		let dbConversation = try! DB.Conversation.from(conversation)
 		let dbTopic = dbConversation.topics()[0]
 
 		let creator = MessageCreator(client: fixtures.aliceClient, conversation: dbConversation, topic: dbTopic)
@@ -99,7 +99,8 @@ class MessageCreatorTests: XCTestCase {
 		let dbConversation = try DB.Conversation.from(conversation)
 		let dbTopic = dbConversation.topics()[0]
 
-		let creator = MessageCreator(client: fixtures.aliceClient, conversation: dbConversation, topic: dbTopic)
+		var creator = MessageCreator(client: fixtures.aliceClient, conversation: dbConversation, topic: dbTopic)
+		creator.uploader = TestUploader()
 		let attachment = Attachment(filename: "icon.png", mimeType: "image/png", data: iconData)
 
 		let message = try await creator.send(text: "Hello again", attachment: attachment)

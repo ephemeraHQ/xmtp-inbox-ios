@@ -13,7 +13,7 @@ import XMTP
 
 class DB {
 	// If we need to totally blow away the DB, increment this
-	static let version = -24
+	static let version = -25
 
 	enum DBError: Error {
 		case badData(String)
@@ -26,8 +26,9 @@ class DB {
 	}
 
 	static func prepareTest(client _: XMTP.Client) throws {
-		shared.mode = .test
-		shared.queue = try DatabaseQueue()
+//		try? shared.queue.close()
+//		shared.mode = .test
+//		shared.queue = try DatabaseQueue(named: "TEST-\(version)")
 		try shared.prepare(passphrase: "TEST", reset: true)
 	}
 
