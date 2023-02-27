@@ -31,11 +31,11 @@ struct AttachmentUnknownView: View {
 }
 
 #if DEBUG
-struct AttachmentUnknownView_Previews: PreviewProvider {
-	static var previews: some View {
-		FullScreenContentProvider {
-			AttachmentUnknownView(attachment: DB.Message.previewTxt.attachments[0])
+	struct AttachmentUnknownView_Previews: PreviewProvider {
+		static var previews: some View {
+			FullScreenContentProvider {
+				AttachmentUnknownView(attachment: DB.Message.previewTxt.attachments[0])
+			}
 		}
 	}
-}
 #endif

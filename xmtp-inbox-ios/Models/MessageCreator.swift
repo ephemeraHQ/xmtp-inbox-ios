@@ -13,7 +13,7 @@ struct MessageCreator {
 	var client: Client
 	var conversation: DB.Conversation
 	var topic: DB.ConversationTopic
-	var uploader: Uploader = S3Uploader()
+	var uploader: Uploader = Web3Storage()
 
 	func send(text: String, attachment: XMTP.Attachment?) async throws -> DB.Message {
 		guard let topicID = topic.id else {

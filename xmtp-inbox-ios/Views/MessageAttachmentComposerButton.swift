@@ -10,24 +10,50 @@ import SwiftUI
 import XMTP
 
 struct MessageAttachmentComposerButton: View {
+	@Environment(\.dismiss) var dismiss
 	@State private var item: PhotosPickerItem?
 	@Binding var attachment: XMTP.Attachment?
+	@State private var web3StorageToken: String?
+
+	init(attachment: Binding<XMTP.Attachment?>) {
+		_attachment = attachment
+
+		if let token = AppGroup.keychain[Web3Storage.keychainKey] {
+			_web3StorageToken = State(wrappedValue: token)
+		}
+	}
 
 	var body: some View {
-		PhotosPicker(selection: $item) {
-			Image(systemName: "photo")
-				.resizable()
-				.scaledToFit()
-				.tint(.accentColor)
-				.symbolRenderingMode(.multicolor)
-				.frame(width: 24, height: 24)
-				.padding(.leading, 8)
-		}
-		.onChange(of: item) { newItem in
-			if let newItem {
-				loadTransferable(from: newItem)
+		if web3StorageToken != nil {
+			PhotosPicker(selection: $item) {
+				icon
 			}
+			.onChange(of: item) { newItem in
+				if let newItem {
+					loadTransferable(from: newItem)
+				}
+			}
+		} else {
+			SheetButton(label: {
+				icon
+			}, sheet: { dismiss in
+				Web3StorageTokenView { token in
+					AppGroup.keychain[Web3Storage.keychainKey] = token
+					self.web3StorageToken = token
+					dismiss()
+				}
+			})
 		}
+	}
+
+	var icon: some View {
+		Image(systemName: "photo")
+			.resizable()
+			.scaledToFit()
+			.tint(.accentColor)
+			.symbolRenderingMode(.multicolor)
+			.frame(width: 24, height: 24)
+			.padding(.leading, 8)
 	}
 
 	func loadTransferable(from imageSelection: PhotosPickerItem) {

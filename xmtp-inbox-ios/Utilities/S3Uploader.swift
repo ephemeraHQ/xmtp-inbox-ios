@@ -17,7 +17,7 @@ protocol Uploader {
 struct TestUploader: Uploader {
 	var uuid = UUID()
 
-	func upload(data: Data) async throws -> String {
+	func upload(data _: Data) async throws -> String {
 		"https://hi"
 	}
 }

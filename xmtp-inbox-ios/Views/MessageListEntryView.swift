@@ -33,9 +33,9 @@ struct MessageListEntryView: View {
 }
 
 #if DEBUG
-struct MessageListEntryView_Previews: PreviewProvider {
-	static var previews: some View {
-		MessageListEntryView(messagelistEntry: .message(DB.Message.preview))
+	struct MessageListEntryView_Previews: PreviewProvider {
+		static var previews: some View {
+			MessageListEntryView(messagelistEntry: .message(DB.Message.preview))
+		}
 	}
-}
 #endif

@@ -47,6 +47,12 @@
 		6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */; };
 		6AF033F4295504B70043FB6A /* Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F3295504B70043FB6A /* Print.swift */; };
 		7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A68BCB232995C256001159B8 /* Pods_xmtp_inbox_ios.framework */; };
+		A603569D29AD46C50026407B /* SheetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A603569C29AD46C50026407B /* SheetButton.swift */; };
+		A603569F29AD4B890026407B /* Web3StorageTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A603569E29AD4B890026407B /* Web3StorageTokenView.swift */; };
+		A60356A129AD4CD20026407B /* AutofocusProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60356A029AD4CD20026407B /* AutofocusProvider.swift */; };
+		A60356A329AD4DE50026407B /* Web3StorageVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60356A229AD4DE50026407B /* Web3StorageVerifier.swift */; };
+		A60356A529AD55950026407B /* Web3Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60356A429AD55950026407B /* Web3Storage.swift */; };
+		A60356A629AD69690026407B /* Web3Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60356A429AD55950026407B /* Web3Storage.swift */; };
 		A61B44F8299AAFD200F2CBEA /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F7299AAFD200F2CBEA /* DebugView.swift */; };
 		A61B44FA299AB3D800F2CBEA /* XMTPEnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */; };
 		A61B44FB299AB7E800F2CBEA /* XMTPEnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */; };
@@ -240,6 +246,11 @@
 		7E2FCF1D984B2A694A607529 /* Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests/Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8231B72E0F6265F7F4F5CE0C /* Pods_NotificationExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B491ED89471263D2CAFB3CB /* Pods-xmtp-inbox-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xmtp-inbox-ios.release.xcconfig"; path = "Target Support Files/Pods-xmtp-inbox-ios/Pods-xmtp-inbox-ios.release.xcconfig"; sourceTree = "<group>"; };
+		A603569C29AD46C50026407B /* SheetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetButton.swift; sourceTree = "<group>"; };
+		A603569E29AD4B890026407B /* Web3StorageTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3StorageTokenView.swift; sourceTree = "<group>"; };
+		A60356A029AD4CD20026407B /* AutofocusProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofocusProvider.swift; sourceTree = "<group>"; };
+		A60356A229AD4DE50026407B /* Web3StorageVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3StorageVerifier.swift; sourceTree = "<group>"; };
+		A60356A429AD55950026407B /* Web3Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Storage.swift; sourceTree = "<group>"; };
 		A61B44F7299AAFD200F2CBEA /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMTPEnvironmentManager.swift; sourceTree = "<group>"; };
 		A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLDebuggerView.swift; sourceTree = "<group>"; };
@@ -496,6 +507,7 @@
 				A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */,
 				A66F1F0129A98C460026EA6E /* AttachmentPreviewView.swift */,
 				A66F1F0529A991D60026EA6E /* MessageAttachmentComposerButton.swift */,
+				A603569E29AD4B890026407B /* Web3StorageTokenView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -522,6 +534,7 @@
 				A6324F7729A836E30040CBA4 /* Requests */,
 				6A4612FE298177B300346D68 /* Auth.swift */,
 				6A461308298191F700346D68 /* DisplayName.swift */,
+				A60356A229AD4DE50026407B /* Web3StorageVerifier.swift */,
 				A689078829A01A26006D9EC7 /* MessageListEntry.swift */,
 				A689078C29A0224C006D9EC7 /* ContactFinder.swift */,
 				A66F1F2B29AAF4D20026EA6E /* MessagePresenter.swift */,
@@ -557,6 +570,7 @@
 			children = (
 				A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */,
 				A6324F7029A81D170040CBA4 /* UpdatingRelativeTimestamp.swift */,
+				A603569C29AD46C50026407B /* SheetButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -596,6 +610,7 @@
 				A689079229A038B0006D9EC7 /* AvatarProvider.swift */,
 				A68907BE29A1BB94006D9EC7 /* FullScreenContentProvider.swift */,
 				A6324F7229A822F90040CBA4 /* FlashProvider.swift */,
+				A60356A029AD4CD20026407B /* AutofocusProvider.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -625,6 +640,7 @@
 				A66F1F1029A9B0220026EA6E /* MessageAttachment.swift */,
 				A66F1F1329A9B1BA0026EA6E /* MessageCreator.swift */,
 				A66F1F2229AAC3A40026EA6E /* RemoteAttachment.swift */,
+				A60356A429AD55950026407B /* Web3Storage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1027,6 +1043,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6324F7F29A841A30040CBA4 /* ConversationMessagesRequest.swift in Sources */,
+				A603569D29AD46C50026407B /* SheetButton.swift in Sources */,
+				A60356A129AD4CD20026407B /* AutofocusProvider.swift in Sources */,
 				6A40157A29529F85003A6659 /* HomeView.swift in Sources */,
 				A68907A729A19921006D9EC7 /* URLPreview.swift in Sources */,
 				A66F1F0829A9A56C0026EA6E /* S3Uploader.swift in Sources */,
@@ -1042,6 +1060,7 @@
 				6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */,
 				6A46132929831BD800346D68 /* AccountView.swift in Sources */,
 				A61B44F8299AAFD200F2CBEA /* DebugView.swift in Sources */,
+				A60356A529AD55950026407B /* Web3Storage.swift in Sources */,
 				A66F1F0229A98C460026EA6E /* AttachmentPreviewView.swift in Sources */,
 				6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */,
 				A6292C31299415E4004B5A27 /* SQLDebuggerView.swift in Sources */,
@@ -1086,6 +1105,8 @@
 				A6324F7929A836ED0040CBA4 /* ConversationsRequest.swift in Sources */,
 				6AE264F32975FD270055250A /* StringExtensions.swift in Sources */,
 				A689078F29A03618006D9EC7 /* Avatars.swift in Sources */,
+				A603569F29AD4B890026407B /* Web3StorageTokenView.swift in Sources */,
+				A60356A329AD4DE50026407B /* Web3StorageVerifier.swift in Sources */,
 				A68C8A53298C8BED003A9A95 /* Message.swift in Sources */,
 				A6324F7129A81D170040CBA4 /* UpdatingRelativeTimestamp.swift in Sources */,
 				6A1ABA7829773EA4001E0B41 /* Keystore.swift in Sources */,
@@ -1153,6 +1174,7 @@
 				A68BCB2E2995C37B001159B8 /* Keystore.swift in Sources */,
 				A68BCB272995C2D7001159B8 /* Constants.swift in Sources */,
 				A66F1F2429AAC3A40026EA6E /* RemoteAttachment.swift in Sources */,
+				A60356A629AD69690026407B /* Web3Storage.swift in Sources */,
 				A68907A129A19122006D9EC7 /* Settings.swift in Sources */,
 				A689079429A03A0C006D9EC7 /* AvatarProvider.swift in Sources */,
 				A68BCB2B2995C2E4001159B8 /* ColorExtensions.swift in Sources */,

@@ -150,31 +150,31 @@ struct MessageCellView: View {
 }
 
 #if DEBUG
-struct MessageCellView_Previews: PreviewProvider {
-	static var previews: some View {
-		FullScreenContentProvider {
-			List {
-				MessageCellView(presenter: DB.Message.preview.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewTxt.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewUnsavedImageAttachment.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewSavedImageAttachment.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewUnknown.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewImage.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewGIF.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewWebP.presenter)
-					.listRowSeparator(.hidden)
-				MessageCellView(presenter: DB.Message.previewMP4.presenter) // TODO: add a video player
-					.listRowSeparator(.hidden)
+	struct MessageCellView_Previews: PreviewProvider {
+		static var previews: some View {
+			FullScreenContentProvider {
+				List {
+					MessageCellView(presenter: DB.Message.preview.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewTxt.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewUnsavedImageAttachment.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewSavedImageAttachment.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewUnknown.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewImage.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewGIF.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewWebP.presenter)
+						.listRowSeparator(.hidden)
+					MessageCellView(presenter: DB.Message.previewMP4.presenter) // TODO: add a video player
+						.listRowSeparator(.hidden)
+				}
+				.listStyle(.plain)
 			}
-			.listStyle(.plain)
 		}
 	}
-}
 #endif

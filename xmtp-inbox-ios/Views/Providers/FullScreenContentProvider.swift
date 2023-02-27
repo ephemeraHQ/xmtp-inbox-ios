@@ -7,7 +7,6 @@
 
 import QuickLook
 import SDWebImageSwiftUI
-import UIKit
 import SwiftUI
 import UIKit
 

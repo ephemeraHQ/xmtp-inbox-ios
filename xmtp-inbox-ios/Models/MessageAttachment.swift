@@ -23,6 +23,10 @@ extension DB {
 
 		var imageTypes = ["image/png", "image/jpg", "image/jpeg"]
 
+		enum CodingKeys: CodingKey {
+			case id, messageID, mimeType, filename, uuid
+		}
+
 		var type: ContentType {
 			if imageTypes.contains(mimeType) {
 				return .image
