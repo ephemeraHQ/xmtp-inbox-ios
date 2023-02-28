@@ -60,6 +60,7 @@ struct RemoteAttachmentMessageView: View {
 				.foregroundColor(.secondary)
 				.font(.caption2)
 				.textSelection(.enabled)
+				.frame(maxWidth: .infinity)
 		}
 		.frame(maxWidth: 200, maxHeight: 200)
 		.padding()
