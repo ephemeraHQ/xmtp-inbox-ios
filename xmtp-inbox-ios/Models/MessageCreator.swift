@@ -32,10 +32,8 @@ struct MessageCreator {
 				remoteAttachment.filename = attachment.filename
 				remoteAttachment.contentLength = attachment.data.count
 
-				print("SENDING WITH ATTACHMENT \(remoteAttachment)")
 				contentType = ContentTypeRemoteAttachment
 				messageID = try await topic.toXMTP(client: client).send(content: remoteAttachment, options: .init(contentType: ContentTypeRemoteAttachment, contentFallback: text))
-				print("GOT MESSAGE ID BACK \(messageID)")
 			} catch {
 				print("ERROR SENDING REMOTE ATTACHMENT \(error)")
 				throw error
