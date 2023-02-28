@@ -43,8 +43,15 @@ struct ConversationCellView: View {
 							.padding(.horizontal, 4.0)
 							.padding(.bottom, 1.0)
 					}
-					if messagePreview.isEmpty {
+					if conversation.lastMessage == nil {
 						Text("no-message-preview")
+							.padding(.horizontal, 4.0)
+							.lineLimit(1)
+							.font(.Body2)
+							.foregroundColor(.textScondary)
+							.italic()
+					} else if let lastMessage = conversation.lastMessage, lastMessage.contentType != ContentTypeText {
+						Text("Attachment")
 							.padding(.horizontal, 4.0)
 							.lineLimit(1)
 							.font(.Body2)

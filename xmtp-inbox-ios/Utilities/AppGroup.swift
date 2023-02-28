@@ -27,9 +27,7 @@ struct AppGroup {
 		return defaults
 	}
 
-	static var keychain: Keychain {
-		return Keychain(service: "com.xmtplabs.inbox.ios", accessGroup: "FY4NZR34Z3.com.xmtplabs.inbox.ios")
-			.synchronizable(true)
-			.accessibility(.afterFirstUnlock)
-	}
+	static var keychain: Keychain = .init(service: "com.xmtplabs.inbox.ios", accessGroup: "FY4NZR34Z3.com.xmtplabs.inbox.ios")
+		.synchronizable(true)
+		.accessibility(.afterFirstUnlock)
 }

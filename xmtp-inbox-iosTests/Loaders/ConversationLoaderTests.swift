@@ -8,14 +8,14 @@
 import GRDB
 import XCTest
 import XMTP
-import XMTPTestHelpers
 @testable import xmtp_inbox_ios
+import XMTPTestHelpers
 
 final class ConversationLoaderTests: XCTestCase {
 	var fixtures: XMTPTestHelpers.Fixtures!
 
 	override func setUp() async throws {
-		self.fixtures = await fixtures()
+		fixtures = await fixtures()
 	}
 
 	func testGetsConversations() async throws {

@@ -42,10 +42,10 @@ struct RemoteMediaView: View {
 }
 
 #if DEBUG
-struct RemoteImageView_Previews: PreviewProvider {
-	static var previews: some View {
-		// swiftlint:disable force_unwrapping
-		RemoteMediaView(message: DB.Message.previewGIF, url: URL(string: DB.Message.previewGIF.body)!)
+	struct RemoteImageView_Previews: PreviewProvider {
+		static var previews: some View {
+			// swiftlint:disable force_unwrapping
+			RemoteMediaView(message: DB.Message.previewGIF, url: URL(string: DB.Message.previewGIF.body)!)
+		}
 	}
-}
 #endif

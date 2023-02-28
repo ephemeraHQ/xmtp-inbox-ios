@@ -10,7 +10,7 @@ import XMTP
 
 struct ContentView: View {
 	@StateObject private var environmentCoordinator = EnvironmentCoordinator()
-	@StateObject private var auth: Auth = Auth()
+	@StateObject private var auth: Auth = .init()
 
 	@State private var wcUrl: URL?
 

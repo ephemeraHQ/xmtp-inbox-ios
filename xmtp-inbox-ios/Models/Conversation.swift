@@ -124,7 +124,7 @@ extension DB {
 					group.addTask {
 						let lastMessagesXMTP = try await topic.toXMTP(client: client).messages(limit: 10)
 						for lastMessageXMTP in lastMessagesXMTP {
-							try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, isFromMe: client.address == lastMessageXMTP.senderAddress)
+							try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, client: client)
 						}
 					}
 				}
@@ -146,20 +146,13 @@ extension DB {
 			self.lastMessage = lastMessage
 		}
 
-		mutating func send(text: String, client: Client, topic: ConversationTopic? = nil) async throws {
-			guard let topic = topic ?? topics().last, let topicID = topic.id else {
+		mutating func send(text: String, attachment: XMTP.Attachment?, client: Client, topic: ConversationTopic? = nil) async throws {
+			guard let topic = topic ?? topics().last else {
 				throw ConversationError.noTopic
 			}
 
-			let date = Date()
-			let messageID = try await topic.toXMTP(client: client).send(text: text)
-
-			var message = DB.Message(xmtpID: messageID, body: text, conversationID: topic.conversationID, conversationTopicID: topicID, senderAddress: topic.peerAddress, createdAt: date, isFromMe: true)
-			try message.save()
-
-			if var conversation = DB.Conversation.find(id: topic.conversationID) {
-				try message.updateConversationTimestamps(conversation: conversation)
-			}
+			let creator = MessageCreator(client: client, conversation: self, topic: topic)
+			let message = try await creator.send(text: text, attachment: attachment)
 
 			lastMessage = message
 		}

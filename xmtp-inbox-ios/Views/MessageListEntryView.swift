@@ -13,7 +13,7 @@ struct MessageListEntryView: View {
 	var body: some View {
 		switch messagelistEntry {
 		case let .message(message):
-			MessageCellView(message: message)
+			MessageCellView(presenter: message.presenter)
 		case let .timestamp(date):
 			HStack {
 				Spacer()
@@ -33,9 +33,9 @@ struct MessageListEntryView: View {
 }
 
 #if DEBUG
-struct MessageListEntryView_Previews: PreviewProvider {
-	static var previews: some View {
-		MessageListEntryView(messagelistEntry: .message(DB.Message.preview))
+	struct MessageListEntryView_Previews: PreviewProvider {
+		static var previews: some View {
+			MessageListEntryView(messagelistEntry: .message(DB.Message.preview))
+		}
 	}
-}
 #endif
