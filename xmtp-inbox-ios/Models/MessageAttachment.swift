@@ -23,8 +23,6 @@ extension DB {
 		var filename: String
 		var uuid: UUID = .init()
 
-
-
 		enum CodingKeys: CodingKey {
 			case id, messageID, mimeType, filename, uuid
 		}
