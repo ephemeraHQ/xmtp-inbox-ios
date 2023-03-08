@@ -8,8 +8,39 @@
 import Foundation
 import web3
 
+protocol ENSService {
+	func ens(addresses: [String]) async throws -> [String: String?]
+	func ens(address: String) async -> String?
+	func address(ens: String) async -> String?
+}
+
+class TestENS: ENSService {
+	var domainsToAddresses: [String: String] = [:]
+	var addressesToDomains: [String: String] = [:]
+	var spy: ((Any) -> Void)?
+
+	func ens(addresses: [String]) async throws -> [String : String?] {
+		spy?(addresses)
+		return addresses.reduce([String: String?]()) { result, address in
+			var result = result
+			result[address] = addressesToDomains[address]
+			return result
+		}
+	}
+
+	func ens(address: String) async -> String? {
+		spy?(address)
+		return addressesToDomains[address]
+	}
+
+	func address(ens: String) async -> String? {
+		spy?(ens)
+		return domainsToAddresses[ens]
+	}
+}
+
 // Manages ENS lookups
-class ENS: ObservableObject {
+class ENS: ENSService, ObservableObject {
 	static let shared = ENS()
 
 	var observed: [String: String?] = [:]
