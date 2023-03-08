@@ -19,7 +19,7 @@ class TestENS: ENSService {
 	var addressesToDomains: [String: String] = [:]
 	var spy: ((Any) -> Void)?
 
-	func ens(addresses: [String]) async throws -> [String : String?] {
+	func ens(addresses: [String]) async throws -> [String: String?] {
 		spy?(addresses)
 		return addresses.reduce([String: String?]()) { result, address in
 			var result = result

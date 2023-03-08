@@ -22,13 +22,14 @@ class ConversationLoader: ObservableObject {
 			AppGroup.defaults.set(ensRefreshedAt, forKey: "ensRefreshedAt")
 		}
 	}
+
 	var ensService: ENSService = ENS.shared
 
 	@MainActor @Published var error: Error?
 
 	init(client: XMTP.Client) {
 		self.client = client
-		self.ensRefreshedAt = (AppGroup.defaults.object(forKey: "ensRefreshedAt") as? Date)
+		ensRefreshedAt = (AppGroup.defaults.object(forKey: "ensRefreshedAt") as? Date)
 	}
 
 	func load() async throws {
@@ -85,7 +86,7 @@ class ConversationLoader: ObservableObject {
 				}
 			}
 
-			self.ensRefreshedAt = Date()
+			ensRefreshedAt = Date()
 		} catch {
 			print("Error loading ENS: \(error)")
 		}
