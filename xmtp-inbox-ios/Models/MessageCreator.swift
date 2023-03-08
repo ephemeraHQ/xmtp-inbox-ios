@@ -15,6 +15,16 @@ struct MessageCreator {
 	var topic: DB.ConversationTopic
 	var uploader: Uploader = Web3Storage()
 
+	init(client: Client, conversation: DB.Conversation, topic: DB.ConversationTopic, uploader: Uploader = Web3Storage()) {
+		self.client = client
+		self.conversation = conversation
+		self.topic = topic
+		self.uploader = uploader
+
+		Client.register(codec: AttachmentCodec())
+		Client.register(codec: RemoteAttachmentCodec())
+	}
+
 	func send(text: String, attachment: XMTP.Attachment?) async throws -> DB.Message {
 		guard let topicID = topic.id else {
 			throw DB.Conversation.ConversationError.conversionError("no conversation/topic ID")
@@ -107,6 +117,10 @@ struct MessageCreator {
 	}
 
 	func handleRemoteAttachments(message: inout DB.Message, xmtpMessage: XMTP.DecodedMessage) {
+		if xmtpMessage.encodedContent.type != ContentTypeRemoteAttachment {
+			return
+		}
+
 		do {
 			let remoteAttachmentContent: RemoteAttachment = try xmtpMessage.content()
 
@@ -122,6 +136,7 @@ struct MessageCreator {
 
 			message.remoteAttachments = [remoteAttachment]
 		} catch {
+			print("hi \(xmtpMessage.encodedContent.type != ContentTypeRemoteAttachment)")
 			print("Error handling remote attachment: \(error)")
 		}
 	}

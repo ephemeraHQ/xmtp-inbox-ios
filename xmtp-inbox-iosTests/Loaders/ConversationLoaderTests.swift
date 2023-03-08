@@ -18,6 +18,42 @@ final class ConversationLoaderTests: XCTestCase {
 		fixtures = await fixtures()
 	}
 
+	func testENSRefreshesFirstTime() async throws {
+		AppGroup.defaults.removeObject(forKey: "ensRefreshedAt")
+		let loader = ConversationLoader(client: fixtures.aliceClient)
+		let ens = TestENS()
+
+		let expectation = expectation(description: "looked up ENS")
+		ens.spy = { _ in expectation.fulfill() }
+
+		loader.ensService = ens
+
+		try await loader.load()
+
+		await waitForExpectations(timeout: 3)
+	}
+
+	func testENSSkipsRefreshIfWithin1Hour() async throws {
+		AppGroup.defaults.removeObject(forKey: "ensRefreshedAt")
+		let loader = ConversationLoader(client: fixtures.aliceClient)
+		let ens = TestENS()
+
+		let expectation = expectation(description: "looked up ENS")
+		ens.spy = { _ in expectation.fulfill() }
+
+		loader.ensService = ens
+
+		try await loader.load()
+
+		AppGroup.defaults.set(Date().addingTimeInterval(-(60 * 2)), forKey: "ensRefreshedAt") // we checked two minutes ago
+
+		let loader2 = ConversationLoader(client: fixtures.aliceClient)
+		loader2.ensService = ens
+		try await loader2.load()
+
+		await waitForExpectations(timeout: 3)
+	}
+
 	func testGetsConversations() async throws {
 		try DB.prepareTest(client: fixtures.aliceClient)
 

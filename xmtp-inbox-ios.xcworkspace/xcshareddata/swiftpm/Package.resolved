@@ -329,8 +329,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xmtp/xmtp-ios",
       "state" : {
-        "branch" : "fix-fake-api-pagination",
-        "revision" : "0543990a50607a10b767144268ed147894944d4c"
+        "branch" : "main",
+        "revision" : "167aa5b0efa6e259d72aed68ce06261fb1dd6bb4"
       }
     }
   ],

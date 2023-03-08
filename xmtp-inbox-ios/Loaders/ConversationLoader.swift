@@ -17,11 +17,19 @@ struct ConversationWithLastMessage: Codable, FetchableRecord {
 
 class ConversationLoader: ObservableObject {
 	var client: XMTP.Client
+	var ensRefreshedAt: Date? {
+		didSet {
+			AppGroup.defaults.set(ensRefreshedAt, forKey: "ensRefreshedAt")
+		}
+	}
+
+	var ensService: ENSService = ENS.shared
 
 	@MainActor @Published var error: Error?
 
 	init(client: XMTP.Client) {
 		self.client = client
+		ensRefreshedAt = (AppGroup.defaults.object(forKey: "ensRefreshedAt") as? Date)
 	}
 
 	func load() async throws {
@@ -41,22 +49,7 @@ class ConversationLoader: ObservableObject {
 			try DB.Conversation.from($0)
 		}
 
-		let addresses = conversations.map(\.peerAddress)
-
-		do {
-			let ensResults = try await ENS.shared.ens(addresses: addresses)
-
-			for conversation in conversations {
-				var conversation = conversation
-
-				if let result = ensResults[conversation.peerAddress.lowercased()], let result {
-					conversation.ens = result
-					try conversation.save()
-				}
-			}
-		} catch {
-			print("Error loading ENS: \(error)")
-		}
+		await refreshENS(conversations: conversations)
 	}
 
 	func fetchRecentMessages() async throws {
@@ -71,6 +64,31 @@ class ConversationLoader: ObservableObject {
 					}
 				}
 			}
+		}
+	}
+
+	func refreshENS(conversations: [DB.Conversation]) async {
+		if let ensRefreshedAt, ensRefreshedAt > Date().addingTimeInterval(-60 * 60) {
+			return
+		}
+
+		let addresses = conversations.map(\.peerAddress)
+
+		do {
+			let ensResults = try await ensService.ens(addresses: addresses)
+
+			for conversation in conversations {
+				var conversation = conversation
+
+				if let result = ensResults[conversation.peerAddress.lowercased()], let result {
+					conversation.ens = result
+					try conversation.save()
+				}
+			}
+
+			ensRefreshedAt = Date()
+		} catch {
+			print("Error loading ENS: \(error)")
 		}
 	}
 }
