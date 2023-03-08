@@ -44,9 +44,7 @@ class ConversationLoader: ObservableObject {
 			try DB.Conversation.from($0)
 		}
 
-		Task {
-			await refreshENS(conversations: conversations)
-		}
+		await refreshENS(conversations: conversations)
 	}
 
 	func fetchRecentMessages() async throws {

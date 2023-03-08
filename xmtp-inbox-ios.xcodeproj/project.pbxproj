@@ -1711,7 +1711,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = "fix-fake-api-pagination";
+				branch = main;
 				kind = branch;
 			};
 		};
