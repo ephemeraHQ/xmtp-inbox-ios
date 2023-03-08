@@ -80,6 +80,8 @@ class ConversationLoader: ObservableObject {
 					try conversation.save()
 				}
 			}
+
+			AppGroup.defaults.set(Date(), forKey: "ensRefreshedAt")
 		} catch {
 			print("Error loading ENS: \(error)")
 		}
