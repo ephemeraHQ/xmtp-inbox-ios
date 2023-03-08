@@ -17,7 +17,11 @@ struct ConversationWithLastMessage: Codable, FetchableRecord {
 
 class ConversationLoader: ObservableObject {
 	var client: XMTP.Client
-	var ensRefreshedAt: Date?
+	var ensRefreshedAt: Date? {
+		didSet {
+			AppGroup.defaults.set(ensRefreshedAt, forKey: "ensRefreshedAt")
+		}
+	}
 	var ensService: ENSService = ENS.shared
 
 	@MainActor @Published var error: Error?
@@ -81,7 +85,7 @@ class ConversationLoader: ObservableObject {
 				}
 			}
 
-			AppGroup.defaults.set(Date(), forKey: "ensRefreshedAt")
+			self.ensRefreshedAt = Date()
 		} catch {
 			print("Error loading ENS: \(error)")
 		}
