@@ -132,8 +132,10 @@ struct RemoteAttachmentMessageView: View {
 	}
 }
 
+#if DEBUG
 struct RemoteAttachmentMessageView_Previews: PreviewProvider {
 	static var previews: some View {
 		RemoteAttachmentMessageView(presenter: MessagePresenter(message: DB.Message.previewImage), message: DB.Message.previewImage, attachment: DB.RemoteAttachment.previewImage)
 	}
 }
+#endif
