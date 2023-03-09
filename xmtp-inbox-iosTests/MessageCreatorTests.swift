@@ -15,6 +15,8 @@ class MessageCreatorTests: XCTestCase {
 	var fixtures: XMTPTestHelpers.Fixtures!
 
 	override func setUp() async throws {
+		Client.register(codec: AttachmentCodec())
+		Client.register(codec: RemoteAttachmentCodec())
 		fixtures = await fixtures()
 		try DB.prepareTest(client: fixtures.aliceClient)
 	}
@@ -39,12 +41,10 @@ class MessageCreatorTests: XCTestCase {
 
 	func testCreatesXMTPMessageWithRemoteAttachment() async throws {
 		let conversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
-		let enecryptedEncodedContent = try RemoteAttachment.encodeEncrypted(content: "Hello", codec: TextCodec())
+		let enecryptedEncodedContent = try RemoteAttachment.encodeEncrypted(content: Attachment(filename: "hi.txt", mimeType: "text/plain", data: Data("hi".utf8)), codec: AttachmentCodec())
 		var remoteAttachmentContent = try RemoteAttachment(url: "https://example.com", encryptedEncodedContent: enecryptedEncodedContent)
-		remoteAttachmentContent.filename = "hello.txt"
+		remoteAttachmentContent.filename = "hi.txt"
 		remoteAttachmentContent.contentLength = 5
-
-		print("CONVERSATION \(conversation)")
 
 		_ = try await conversation.send(content: remoteAttachmentContent, options: .init(contentType: ContentTypeRemoteAttachment, contentFallback: "hey"))
 		let xmtpMessage = try await conversation.messages()[0]
@@ -65,7 +65,7 @@ class MessageCreatorTests: XCTestCase {
 
 		XCTAssertEqual(remoteAttachment.url, "https://example.com")
 		XCTAssertEqual(remoteAttachment.contentLength, 5)
-		XCTAssertEqual(remoteAttachment.filename, "hello.txt")
+		XCTAssertEqual(remoteAttachment.filename, "hi.txt")
 
 		XCTAssertEqual(message.xmtpID, xmtpMessage.id)
 		XCTAssertEqual(message.fallbackContent, "hey")
