@@ -35,8 +35,10 @@ struct AttachmentImageView: View {
 	}
 }
 
+#if DEBUG
 struct AttachmentImageView_Previews: PreviewProvider {
 	static var previews: some View {
 		AttachmentImageView(attachment: DB.MessageAttachment.previewImage)
 	}
 }
+#endif
