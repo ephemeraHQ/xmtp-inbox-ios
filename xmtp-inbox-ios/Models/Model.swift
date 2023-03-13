@@ -15,9 +15,9 @@ protocol Model: Identifiable, Codable, Hashable, MutablePersistableRecord, Fetch
 }
 
 extension Model {
-	static func `where`(_ predicate: SQLSpecificExpressible) -> [Self] {
+	static func `where`(_ predicate: SQLSpecificExpressible) async -> [Self] {
 		do {
-			return try DB.read { db in
+			return try await DB.read { db in
 				try filter(predicate).fetchAll(db)
 			}
 		} catch {
@@ -26,9 +26,9 @@ extension Model {
 		}
 	}
 
-	static func list() -> [Self] {
+	static func list() async -> [Self] {
 		do {
-			return try DB.read { db in
+			return try await DB.read { db in
 				try fetchAll(db)
 			}
 		} catch {
@@ -37,9 +37,9 @@ extension Model {
 		}
 	}
 
-	static func list(order: SQLOrderingTerm) -> [Self] {
+	static func list(order: SQLOrderingTerm) async -> [Self] {
 		do {
-			return try DB.read { db in
+			return try await DB.read { db in
 				try self
 					.order([order])
 					.fetchAll(db)
@@ -50,9 +50,9 @@ extension Model {
 		}
 	}
 
-	static func find(id: Int) -> Self? {
+	static func find(id: Int) async -> Self? {
 		do {
-			return try DB.read { db in
+			return try await DB.read { db in
 				try find(db, key: id)
 			}
 		} catch {
@@ -61,9 +61,9 @@ extension Model {
 		}
 	}
 
-	static func find(_ predicate: SQLSpecificExpressible) -> Self? {
+	static func find(_ predicate: SQLSpecificExpressible) async -> Self? {
 		do {
-			return try DB.read { db in
+			return try await DB.read { db in
 				try filter(predicate).fetchOne(db)
 			}
 		} catch {
@@ -72,9 +72,9 @@ extension Model {
 		}
 	}
 
-	mutating func save() throws {
+	mutating func save() async throws {
 		do {
-			try DB.write { db in
+			try await DB.write { db in
 				try insert(db, onConflict: .replace)
 			}
 		} catch {

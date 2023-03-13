@@ -5,6 +5,7 @@
 //  Created by Pat Nakajima on 2/2/23.
 //
 
+import AsyncAlgorithms
 import Foundation
 import GRDB
 import SwiftUI
@@ -45,8 +46,10 @@ class ConversationLoader: ObservableObject {
 	}
 
 	func fetchRemote() async throws {
-		let conversations = try await client.conversations.list().map {
-			try DB.Conversation.from($0)
+		var conversations: [DB.Conversation] = []
+
+		for conversation in try await client.conversations.list() {
+			conversations.append(try await DB.Conversation.from(conversation))
 		}
 
 		await refreshENS(conversations: conversations)
@@ -54,7 +57,7 @@ class ConversationLoader: ObservableObject {
 
 	func fetchRecentMessages() async throws {
 		await withTaskGroup(of: Void.self) { group in
-			for conversation in DB.Conversation.list() {
+			for conversation in await DB.Conversation.list() {
 				group.addTask {
 					do {
 						var conversation = conversation
@@ -82,7 +85,7 @@ class ConversationLoader: ObservableObject {
 
 				if let result = ensResults[conversation.peerAddress.lowercased()], let result {
 					conversation.ens = result
-					try conversation.save()
+					try await conversation.save()
 				}
 			}
 

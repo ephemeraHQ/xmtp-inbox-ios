@@ -18,7 +18,7 @@ class MessageCreatorTests: XCTestCase {
 		Client.register(codec: AttachmentCodec())
 		Client.register(codec: RemoteAttachmentCodec())
 		fixtures = await fixtures()
-		try DB.prepareTest(client: fixtures.aliceClient)
+		try await DB.prepareTest(client: fixtures.aliceClient)
 	}
 
 	func testCreatesXMTPMessage() async throws {
@@ -26,8 +26,8 @@ class MessageCreatorTests: XCTestCase {
 		_ = try! await conversation.send(text: "hello world")
 		let xmtpMessage = try! await conversation.messages()[0]
 
-		let dbConversation = try! DB.Conversation.from(conversation)
-		let dbTopic = dbConversation.topics()[0]
+		let dbConversation = try! await DB.Conversation.from(conversation)
+		let dbTopic =  (await dbConversation.topics())[0]
 
 		let creator = MessageCreator(client: fixtures.aliceClient, conversation: dbConversation, topic: dbTopic)
 
@@ -49,8 +49,8 @@ class MessageCreatorTests: XCTestCase {
 		_ = try await conversation.send(content: remoteAttachmentContent, options: .init(contentType: ContentTypeRemoteAttachment, contentFallback: "hey"))
 		let xmtpMessage = try await conversation.messages()[0]
 
-		let dbConversation = try DB.Conversation.from(conversation)
-		let dbTopic = dbConversation.topics()[0]
+		let dbConversation = try await DB.Conversation.from(conversation)
+		let dbTopic = (await dbConversation.topics())[0]
 
 		let creator = MessageCreator(client: fixtures.aliceClient, conversation: dbConversation, topic: dbTopic)
 
@@ -76,8 +76,8 @@ class MessageCreatorTests: XCTestCase {
 	func testSendsXMTPMessage() async throws {
 		let conversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
 
-		let dbConversation = try DB.Conversation.from(conversation)
-		let dbTopic = dbConversation.topics()[0]
+		let dbConversation = try await DB.Conversation.from(conversation)
+		let dbTopic = (await dbConversation.topics())[0]
 
 		let creator = MessageCreator(client: fixtures.aliceClient, conversation: dbConversation, topic: dbTopic)
 
@@ -96,8 +96,8 @@ class MessageCreatorTests: XCTestCase {
 
 		let conversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
 
-		let dbConversation = try DB.Conversation.from(conversation)
-		let dbTopic = dbConversation.topics()[0]
+		let dbConversation = try await DB.Conversation.from(conversation)
+		let dbTopic = (await dbConversation.topics())[0]
 
 		var creator = MessageCreator(client: fixtures.aliceClient, conversation: dbConversation, topic: dbTopic)
 		creator.uploader = TestUploader()

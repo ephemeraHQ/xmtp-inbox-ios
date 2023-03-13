@@ -149,6 +149,8 @@
 		A69C92752994286C00E49F9B /* XMTP in Frameworks */ = {isa = PBXBuildFile; productRef = A69C92742994286C00E49F9B /* XMTP */; };
 		A69C928129942DD300E49F9B /* XMTPTestHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = A69C928029942DD300E49F9B /* XMTPTestHelpers */; };
 		A6A5AB7A29941DC6004F5006 /* ConversationLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */; };
+		A6B2BD7329BFC6450082F876 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = A6B2BD7229BFC6450082F876 /* AsyncAlgorithms */; };
+		A6B2BD7529BFC90F0082F876 /* DBQueueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B2BD7429BFC90F0082F876 /* DBQueueProvider.swift */; };
 		A6C18C37299993EE001E00CA /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = A6C18C36299993EE001E00CA /* Introspect */; };
 		A6D80E33299C3313002E8117 /* connect.html in Resources */ = {isa = PBXBuildFile; fileRef = A6D80E32299C3313002E8117 /* connect.html */; };
 		A6FCA31B299AECCF00EFB39D /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */; };
@@ -313,6 +315,7 @@
 		A68C8A4E298C6CC1003A9A95 /* ConversationLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoader.swift; sourceTree = "<group>"; };
 		A68C8A52298C8BED003A9A95 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoaderTests.swift; sourceTree = "<group>"; };
+		A6B2BD7429BFC90F0082F876 /* DBQueueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBQueueProvider.swift; sourceTree = "<group>"; };
 		A6D80E32299C3313002E8117 /* connect.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = connect.html; sourceTree = "<group>"; };
 		A6FCA318299AEC9900EFB39D /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
@@ -340,6 +343,7 @@
 				A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */,
 				F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 				7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
+				A6B2BD7329BFC6450082F876 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,6 +615,7 @@
 				A68907BE29A1BB94006D9EC7 /* FullScreenContentProvider.swift */,
 				A6324F7229A822F90040CBA4 /* FlashProvider.swift */,
 				A60356A029AD4CD20026407B /* AutofocusProvider.swift */,
+				A6B2BD7429BFC90F0082F876 /* DBQueueProvider.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -719,6 +724,7 @@
 				A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */,
 				A6324F7529A836B80040CBA4 /* GRDBQuery */,
 				A66F1F0A29A9A61E0026EA6E /* AWSS3 */,
+				A6B2BD7229BFC6450082F876 /* AsyncAlgorithms */,
 			);
 			productName = "xmtp-inbox-ios";
 			productReference = 6A40154329526795003A6659 /* xmtp-inbox-ios.app */;
@@ -844,6 +850,7 @@
 				A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
 				A6324F7429A836B80040CBA4 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
 				A66F1F0929A9A61E0026EA6E /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
+				A6B2BD7129BFC6440082F876 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
 			projectDirPath = "";
@@ -1042,6 +1049,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6B2BD7529BFC90F0082F876 /* DBQueueProvider.swift in Sources */,
 				A6324F7F29A841A30040CBA4 /* ConversationMessagesRequest.swift in Sources */,
 				A603569D29AD46C50026407B /* SheetButton.swift in Sources */,
 				A60356A129AD4CD20026407B /* AutofocusProvider.swift in Sources */,
@@ -1715,6 +1723,14 @@
 				kind = branch;
 			};
 		};
+		A6B2BD7129BFC6440082F876 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-async-algorithms";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		A6C18C35299993EE001E00CA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
@@ -1835,6 +1851,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A69C92732994286C00E49F9B /* XCRemoteSwiftPackageReference "xmtp-ios" */;
 			productName = XMTPTestHelpers;
+		};
+		A6B2BD7229BFC6450082F876 /* AsyncAlgorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6B2BD7129BFC6440082F876 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
+			productName = AsyncAlgorithms;
 		};
 		A6C18C36299993EE001E00CA /* Introspect */ = {
 			isa = XCSwiftPackageProductDependency;

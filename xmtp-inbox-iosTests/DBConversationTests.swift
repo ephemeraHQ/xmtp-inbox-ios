@@ -16,7 +16,7 @@ final class DBConversationTests: XCTestCase {
 
 	override func setUp() async throws {
 		fixtures = await fixtures()
-		try DB.prepareTest(client: fixtures.aliceClient)
+		try await DB.prepareTest(client: fixtures.aliceClient)
 	}
 
 	func testCanSaveAConversation() async throws {
@@ -24,13 +24,13 @@ final class DBConversationTests: XCTestCase {
 
 		var conversation = DB.Conversation(peerAddress: "0xffffffffffffffffffffffffffffffffffffff", createdAt: date)
 
-		try conversation.save()
+		try await conversation.save()
 		guard let id = conversation.id else {
 			XCTFail("no id")
 			return
 		}
 
-		guard let loadedConversation = DB.Conversation.find(id: id) else {
+		guard let loadedConversation = await DB.Conversation.find(id: id) else {
 			XCTFail("did not load conversation")
 			return
 		}

@@ -99,7 +99,7 @@ struct RemoteAttachmentMessageView: View {
 						var messageAttachment = DB.MessageAttachment(messageID: message.id ?? -1, mimeType: attachment.mimeType, filename: attachment.filename)
 
 						try messageAttachment.save(data: attachment.data)
-						try messageAttachment.save()
+						try await messageAttachment.save()
 
 						let savedMessageAttachment = messageAttachment
 						await MainActor.run {
@@ -133,9 +133,9 @@ struct RemoteAttachmentMessageView: View {
 }
 
 #if DEBUG
-struct RemoteAttachmentMessageView_Previews: PreviewProvider {
-	static var previews: some View {
-		RemoteAttachmentMessageView(presenter: MessagePresenter(message: DB.Message.previewImage), message: DB.Message.previewImage, attachment: DB.RemoteAttachment.previewImage)
+	struct RemoteAttachmentMessageView_Previews: PreviewProvider {
+		static var previews: some View {
+			RemoteAttachmentMessageView(presenter: MessagePresenter(message: DB.Message.previewImage), message: DB.Message.previewImage, attachment: DB.RemoteAttachment.previewImage)
+		}
 	}
-}
 #endif

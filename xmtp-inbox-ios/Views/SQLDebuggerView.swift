@@ -20,14 +20,18 @@ struct SQLDebuggerView: View {
 				.autocorrectionDisabled(true)
 				.lineLimit(4, reservesSpace: true)
 			Button("Run") {
-				do {
-					let results = try DB.read { db in
-						try Row.fetchAll(db, sql: sql)
-					}
+				Task {
+					do {
+						let results = try await DB.read { db in
+							try Row.fetchAll(db, sql: sql)
+						}
 
-					self.results = results.map(\.debugDescription)
-				} catch {
-					print("Error running query: \(error)")
+						await MainActor.run {
+							self.results = results.map(\.debugDescription)
+						}
+					} catch {
+						print("Error running query: \(error)")
+					}
 				}
 			}
 			Section {

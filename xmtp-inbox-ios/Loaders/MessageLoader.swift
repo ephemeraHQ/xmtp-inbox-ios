@@ -43,7 +43,7 @@ class MessageLoader: ObservableObject {
 	}
 
 	func streamMessages() async {
-		for topic in conversation.topics() {
+		for topic in await conversation.topics() {
 			Task {
 				await streamTopic(topic: topic)
 			}
@@ -55,7 +55,7 @@ class MessageLoader: ObservableObject {
 	}
 
 	func fetchRemote() async throws {
-		for topic in conversation.topics() {
+		for topic in await conversation.topics() {
 			do {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit)
 				for message in messages {
@@ -74,7 +74,7 @@ class MessageLoader: ObservableObject {
 	func fetchEarlier() async throws {
 		let before = await MainActor.run { messages.first?.createdAt }
 
-		for topic in conversation.topics() {
+		for topic in await conversation.topics() {
 			do {
 				let messages = try await topic.toXMTP(client: client).messages(limit: 10, before: before)
 				for message in messages {

@@ -11,7 +11,7 @@ import Foundation
 import GRDB
 import XMTP
 
-class DB {
+actor DB {
 	// If we need to totally blow away the DB, increment this
 	static let version = -25
 
@@ -22,46 +22,45 @@ class DB {
 	private static let shared = DB()
 
 	static var _queue: DatabaseQueue {
-		shared.queue
+		get async {
+			await shared.queue
+		}
 	}
 
-	static func prepareTest(client _: XMTP.Client) throws {
-//		try? shared.queue.close()
-//		shared.mode = .test
-//		shared.queue = try DatabaseQueue(named: "TEST-\(version)")
-		try shared.prepare(passphrase: "TEST", reset: true)
+	static func prepareTest(client _: XMTP.Client) async throws {
+		try await shared.prepare(passphrase: "TEST", reset: true)
 	}
 
-	static func prepare(client: XMTP.Client, reset: Bool = false, isRetry: Bool = false) throws {
+	static func prepare(client: XMTP.Client, reset: Bool = false, isRetry: Bool = false) async throws {
 		let dbVersion = AppGroup.defaults.integer(forKey: "dbVersion")
 
 		let passphraseData = try client.privateKeyBundle.serializedData()
 		let passphrase = Data(SHA256.hash(data: passphraseData)).toHex
 
 		do {
-			try shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
+			try await shared.prepare(passphrase: passphrase, reset: reset || (dbVersion != DB.version))
 		} catch {
 			if isRetry {
 				throw error
 			} else {
 				print("ERROR PREPARE: \(error). Retrying with reset...")
-				try DB.prepare(client: client, reset: true, isRetry: true)
+				try await DB.prepare(client: client, reset: true, isRetry: true)
 			}
 		}
 
 		AppGroup.defaults.set(DB.version, forKey: "dbVersion")
 	}
 
-	static func read<T>(perform: (Database) throws -> T) throws -> T {
-		try shared.queue.read(perform)
+	static func read<T>(perform: (Database) throws -> T) async throws -> T {
+		try await shared.queue.read(perform)
 	}
 
-	static func write<T>(perform: (Database) throws -> T) throws -> T {
-		try shared.queue.write(perform)
+	static func write<T>(perform: (Database) throws -> T) async throws -> T {
+		try await shared.queue.write(perform)
 	}
 
-	static func clear() throws {
-		try shared.clear()
+	static func clear() async throws {
+		try await shared.clear()
 	}
 
 	enum Mode {
@@ -79,7 +78,7 @@ class DB {
 	// It's a singleton
 	private init() {}
 
-	func prepare(passphrase: String, mode: Mode = .normal, reset: Bool = false) throws {
+	func prepare(passphrase: String, mode: Mode = .normal, reset: Bool = false) async throws {
 		self.mode = mode
 
 		if reset {
@@ -101,11 +100,11 @@ class DB {
 
 		queue = try DatabaseQueue(path: location.absoluteString, configuration: config)
 
-		try createTables()
+		try await createTables()
 	}
 
-	func createTables() throws {
-		try queue.write { db in
+	func createTables() async throws {
+		try await queue.write { db in
 			try DB.Conversation.createTable(db: db)
 			try DB.ConversationTopic.createTable(db: db)
 			try DB.Message.createTable(db: db)
@@ -114,8 +113,8 @@ class DB {
 		}
 	}
 
-	func clear() throws {
-		try queue.write { db in
+	func clear() async throws {
+		try await queue.write { db in
 			try DB.ConversationTopic.deleteAll(db)
 			try DB.Conversation.deleteAll(db)
 			try DB.RemoteAttachment.deleteAll(db)
