@@ -30,7 +30,10 @@ struct EnvironmentToggleView: View {
 			XMTPEnvironmentManager.shared.environment = .production
 		}
 
-		auth.signOut()
+		Task {
+			await auth.signOut()
+		}
+
 		dismiss()
 	}
 
@@ -61,7 +64,9 @@ struct DebugView: View {
 					}
 					Button("Clear DB") {
 						do {
-							try DB.clear()
+							Task {
+								try await DB.clear()
+							}
 						} catch {
 							Flash.add(.error("Error clearing the DB: \(error)"))
 						}

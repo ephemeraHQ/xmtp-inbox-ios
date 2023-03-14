@@ -5,12 +5,16 @@
 //  Created by Elise Alix on 12/20/22.
 //
 
+import GRDB
 import SwiftUI
 import XMTP
+
+// swiftlint:disable force_try
 
 struct SingleColumnView: View {
 	let client: XMTP.Client
 	@State var isShowingAccount = false
+	@State var dbQueue: DatabaseQueue = try! DatabaseQueue(named: "single")
 
 	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
 
@@ -43,7 +47,6 @@ struct SingleColumnView: View {
 				}
 			}
 		}
-		.environment(\.dbQueue, DB._queue)
 		.accentColor(.textPrimary)
 		.sheet(isPresented: $isShowingAccount) {
 			AccountView(client: client)
@@ -53,6 +56,7 @@ struct SingleColumnView: View {
 
 struct SplitColumnView: View {
 	let client: XMTP.Client
+	@State var dbQueue: DatabaseQueue = try! DatabaseQueue(named: "split")
 	@State var selectedConversation: DB.Conversation?
 	@State var isShowingAccount = false
 
@@ -82,7 +86,6 @@ struct SplitColumnView: View {
 			}
 		})
 		.navigationBarTitleDisplayMode(.inline)
-		.environment(\.dbQueue, DB._queue)
 		.accentColor(.textPrimary)
 		.sheet(isPresented: $isShowingAccount) {
 			AccountView(client: client)
@@ -98,15 +101,17 @@ struct HomeView: View {
 	let client: XMTP.Client
 
 	var body: some View {
-		ViewThatFits {
-			SplitColumnView(client: client)
-			SingleColumnView(client: client)
-		}
-		.task {
-			do {
-				try await XMTPPush.shared.request()
-			} catch {
-				print("Error request push notification access")
+		DBQueueProvider {
+			ViewThatFits {
+				SplitColumnView(client: client)
+				SingleColumnView(client: client)
+			}
+			.task {
+				do {
+					try await XMTPPush.shared.request()
+				} catch {
+					print("Error request push notification access")
+				}
 			}
 		}
 	}

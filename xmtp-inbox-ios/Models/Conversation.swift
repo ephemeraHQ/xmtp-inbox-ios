@@ -40,10 +40,10 @@ extension DB {
 			self.viewedAt = viewedAt
 		}
 
-		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation, ens: String? = nil) throws -> DB.Conversation {
+		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation, ens: String? = nil) async throws -> DB.Conversation {
 			do {
-				if let conversation = DB.Conversation.find(Column("peerAddress") == xmtpConversation.peerAddress) {
-					try conversation.createTopic(from: xmtpConversation)
+				if let conversation = await DB.Conversation.find(Column("peerAddress") == xmtpConversation.peerAddress) {
+					try await conversation.createTopic(from: xmtpConversation)
 
 					return conversation
 				}
@@ -55,8 +55,8 @@ extension DB {
 
 				conversation.ens = ens
 
-				try conversation.save()
-				try conversation.createTopic(from: xmtpConversation)
+				try await conversation.save()
+				try await conversation.createTopic(from: xmtpConversation)
 
 				Task {
 					try await XMTPPush.shared.subscribe(topics: [xmtpConversation.topic])
@@ -69,8 +69,8 @@ extension DB {
 			}
 		}
 
-		@discardableResult func createTopic(from xmtpConversation: XMTP.Conversation) throws -> ConversationTopic {
-			if let topic = DB.ConversationTopic.find(Column("topic") == xmtpConversation.topic) {
+		@discardableResult func createTopic(from xmtpConversation: XMTP.Conversation) async throws -> ConversationTopic {
+			if let topic = await DB.ConversationTopic.find(Column("topic") == xmtpConversation.topic) {
 				return topic
 			}
 
@@ -88,7 +88,7 @@ extension DB {
 				conversationTopic.version = .v1
 			}
 
-			try conversationTopic.save()
+			try await conversationTopic.save()
 
 			return conversationTopic
 		}
@@ -98,18 +98,22 @@ extension DB {
 		}
 
 		mutating func markViewed() {
-			do {
-				viewedAt = Date()
-				try save()
-			} catch {
-				print("Error marking conversation viewed: \(error)")
+			let copy = self
+			Task {
+				do {
+					var copy = copy
+					copy.viewedAt = Date()
+					try await copy.save()
+				} catch {
+					print("Error marking conversation viewed: \(error)")
+				}
 			}
 		}
 
 		func messages(client: Client) async throws -> [DecodedMessage] {
 			var messages: [DecodedMessage] = []
 
-			for topic in topics() {
+			for topic in await topics() {
 				messages.append(contentsOf: try await topic.toXMTP(client: client).messages())
 			}
 
@@ -120,7 +124,7 @@ extension DB {
 			let conversation = self
 
 			await withThrowingTaskGroup(of: Void.self) { group in
-				for topic in topics() {
+				for topic in await topics() {
 					group.addTask {
 						let lastMessagesXMTP = try await topic.toXMTP(client: client).messages(limit: 10)
 						for lastMessageXMTP in lastMessagesXMTP {
@@ -130,7 +134,7 @@ extension DB {
 				}
 			}
 
-			let lastMessage = try DB.read { db in
+			let lastMessage = try await DB.read { db in
 				try DB.Message.filter(Column("conversationID") == id).order(Column("createdAt").desc).fetchOne(db)
 			}
 
@@ -140,14 +144,16 @@ extension DB {
 
 			if updatedAt < lastMessage.createdAt {
 				updatedAt = lastMessage.createdAt
-				try save()
+				try await save()
 			}
 
 			self.lastMessage = lastMessage
 		}
 
 		mutating func send(text: String, attachment: XMTP.Attachment?, client: Client, topic: ConversationTopic? = nil) async throws {
-			guard let topic = topic ?? topics().last else {
+			let topics = await topics()
+
+			guard let topic = topic ?? topics.last else {
 				throw ConversationError.noTopic
 			}
 
@@ -157,9 +163,9 @@ extension DB {
 			lastMessage = message
 		}
 
-		func topics() -> [ConversationTopic] {
+		func topics() async -> [ConversationTopic] {
 			do {
-				return try DB.read { db in
+				return try await DB.read { db in
 					try DB.ConversationTopic.filter(Column("conversationID") == id).fetchAll(db)
 				}
 			} catch {

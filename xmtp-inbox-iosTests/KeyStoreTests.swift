@@ -12,8 +12,8 @@ import XMTP
 @testable import xmtp_inbox_ios
 
 final class KeystoreTests: XCTestCase {
-	func testNoKeysByDefault() throws {
-		Auth.signOut()
+	func testNoKeysByDefault() async throws {
+		await Auth.signOut()
 		XCTAssertEqual(nil, try Keystore.readKeys())
 	}
 
