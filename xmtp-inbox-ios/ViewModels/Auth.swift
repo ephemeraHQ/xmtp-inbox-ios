@@ -16,14 +16,17 @@ class Auth: ObservableObject {
 
 	@Published var status: AuthStatus = .loadingKeys {
 		didSet {
-			print("SET TO \(status)")
-			if case let .connected(client) = status {
-				self.isShowingQRCode = false
+			Task {
+				if case let .connected(client) = status {
+					await MainActor.run {
+						self.isShowingQRCode = false
+					}
 
-				do {
-					try DB.prepare(client: client)
-				} catch {
-					print("Error preparing DB: \(error)")
+					do {
+						try await DB.prepare(client: client)
+					} catch {
+						print("Error preparing DB: \(error)")
+					}
 				}
 			}
 		}
@@ -31,17 +34,17 @@ class Auth: ObservableObject {
 
 	@Published var isShowingQRCode = false
 
-	static func signOut() {
+	static func signOut() async {
 		do {
 			try Keystore.deleteKeys()
-			try DB.clear()
+			try await DB.clear()
 		} catch {
 			print("Error signing out: \(error)")
 		}
 	}
 
-	func signOut() {
-		Auth.signOut()
+	func signOut() async {
+		await Auth.signOut()
 		withAnimation {
 			self.status = .signedOut
 		}

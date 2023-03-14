@@ -85,7 +85,7 @@ extension DB {
 			MessagePresenter(message: self)
 		}
 
-		func updateConversationTimestamps(conversation: DB.Conversation) throws {
+		func updateConversationTimestamps(conversation: DB.Conversation) async throws {
 			var conversation = conversation
 
 			if createdAt > conversation.updatedAt {
@@ -93,7 +93,7 @@ extension DB {
 			}
 
 			if isFromMe {
-				try conversation.save()
+				try await conversation.save()
 				return
 			}
 
@@ -103,12 +103,12 @@ extension DB {
 				conversation.updatedByPeerAt = createdAt
 			}
 
-			try conversation.save()
+			try await conversation.save()
 		}
 
-		mutating func save() throws {
+		mutating func save() async throws {
 			do {
-				try DB.write { db in
+				try await DB.write { db in
 					try insert(db, onConflict: .replace)
 
 					guard let messageID = id else {

@@ -186,7 +186,9 @@ struct AccountView: View {
 			.alert("disconnect-cta", isPresented: $showSignOutAlert) {
 				Button("cancel", role: .cancel) {}
 				Button("disconnect", role: .destructive) {
-					auth.signOut()
+					Task {
+						await auth.signOut()
+					}
 				}
 			}
 		}

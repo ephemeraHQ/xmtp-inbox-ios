@@ -77,8 +77,8 @@ struct MessageCreator {
 	}
 
 	func create(xmtpMessage: XMTP.DecodedMessage) async throws -> DB.Message {
-		if let existing = DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
-			try existing.updateConversationTimestamps(conversation: conversation)
+		if let existing = await DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
+			try await existing.updateConversationTimestamps(conversation: conversation)
 			return existing
 		}
 
@@ -112,8 +112,8 @@ struct MessageCreator {
 	func finish(message: inout DB.Message) async throws {
 		await loadPreview(message: &message)
 
-		try message.save()
-		try message.updateConversationTimestamps(conversation: conversation)
+		try await message.save()
+		try await message.updateConversationTimestamps(conversation: conversation)
 	}
 
 	func handleRemoteAttachments(message: inout DB.Message, xmtpMessage: XMTP.DecodedMessage) {
@@ -136,7 +136,6 @@ struct MessageCreator {
 
 			message.remoteAttachments = [remoteAttachment]
 		} catch {
-			print("hi \(xmtpMessage.encodedContent.type != ContentTypeRemoteAttachment)")
 			print("Error handling remote attachment: \(error)")
 		}
 	}

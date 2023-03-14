@@ -55,11 +55,11 @@ final class ConversationLoaderTests: XCTestCase {
 	}
 
 	func testGetsConversations() async throws {
-		try DB.prepareTest(client: fixtures.aliceClient)
+		try await DB.prepareTest(client: fixtures.aliceClient)
 
 		let loader = ConversationLoader(client: fixtures.aliceClient)
 
-		var conversations = DB.Conversation.list()
+		var conversations = await DB.Conversation.list()
 		XCTAssert(conversations.isEmpty, "had conversations for some reason??")
 
 		let conversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
@@ -68,13 +68,18 @@ final class ConversationLoaderTests: XCTestCase {
 		XCTAssertEqual(1, clientConversations.count)
 
 		try await loader.load()
-		conversations = DB.Conversation.list()
+		conversations = await DB.Conversation.list()
 
-		XCTAssertEqual([conversation.topic], conversations.flatMap { $0.topics().map(\.topic) })
+		XCTAssertEqual(1, conversations.count)
+
+		let loadedConversation = conversations[0]
+		let topics = await loadedConversation.topics()
+
+		XCTAssertEqual([conversation.topic], topics.map(\.topic))
 	}
 
 	func testCreatesOneConversationForMultipleTopicsWithSamePeerAddress() async throws {
-		try DB.prepareTest(client: fixtures.aliceClient)
+		try await DB.prepareTest(client: fixtures.aliceClient)
 
 		let aliceConversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
 		let bobConversation = try await fixtures.bobClient.conversations.newConversation(with: fixtures.aliceClient.address)
@@ -90,7 +95,7 @@ final class ConversationLoaderTests: XCTestCase {
 		let xmtpConversations = try await fixtures.aliceClient.conversations.list()
 		XCTAssertEqual(2, xmtpConversations.count)
 
-		let conversations = DB.Conversation.list()
+		let conversations = await DB.Conversation.list()
 		XCTAssertEqual(1, conversations.count)
 
 		print("\(conversations)")
@@ -98,6 +103,8 @@ final class ConversationLoaderTests: XCTestCase {
 		XCTAssertEqual(1, conversations.count)
 		let conversation = conversations[0]
 		XCTAssertEqual(conversation.peerAddress, fixtures.bobClient.address)
-		XCTAssertEqual(2, conversation.topics().count)
+
+		let topics = await conversation.topics()
+		XCTAssertEqual(2, topics.count)
 	}
 }

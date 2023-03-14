@@ -17,57 +17,59 @@ class NotificationService: UNNotificationServiceExtension {
 		self.contentHandler = contentHandler
 		bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
 
-		do {
-			guard let encryptedMessage = request.content.userInfo["encryptedMessage"] as? String,
-			      let topic = request.content.userInfo["topic"] as? String,
-			      let encryptedMessageData = Data(base64Encoded: Data(encryptedMessage.utf8))
-			else {
-				print("Did not get correct message data from push")
-				return
-			}
-
-			guard let keys = try Keystore.readKeys() else {
-				return
-			}
-
-			let client = try Client.from(v1Bundle: keys)
-
-			try DB.prepare(client: client)
-
-			guard let conversationTopic = DB.ConversationTopic.find(Column("topic") == topic) else {
-				return
-			}
-
-			let envelope = XMTP.Envelope.with { envelope in
-				envelope.message = encryptedMessageData
-				envelope.contentTopic = topic
-			}
-
-			if let bestAttemptContent = bestAttemptContent {
-				let decodedMessage = try conversationTopic.toXMTP(client: client).decode(envelope)
-
-				var conversation = DB.Conversation.find(id: conversationTopic.conversationID)
-
-				// Don't notify when we're the sender
-				if decodedMessage.senderAddress == client.address {
-					contentHandler(UNNotificationContent())
+		Task {
+			do {
+				guard let encryptedMessage = request.content.userInfo["encryptedMessage"] as? String,
+				      let topic = request.content.userInfo["topic"] as? String,
+				      let encryptedMessageData = Data(base64Encoded: Data(encryptedMessage.utf8))
+				else {
+					print("Did not get correct message data from push")
 					return
 				}
 
-				conversation?.updatedByPeerAt = decodedMessage.sent
-				conversation?.updatedAt = decodedMessage.sent
-				try conversation?.save()
-
-				if let conversation {
-					bestAttemptContent.title = conversation.title
+				guard let keys = try Keystore.readKeys() else {
+					return
 				}
-				bestAttemptContent.body = (try? decodedMessage.content()) ?? "no content"
-				bestAttemptContent.threadIdentifier = conversationTopic.peerAddress
 
-				contentHandler(bestAttemptContent)
+				let client = try Client.from(v1Bundle: keys)
+
+				try await DB.prepare(client: client)
+
+				guard let conversationTopic = await DB.ConversationTopic.find(Column("topic") == topic) else {
+					return
+				}
+
+				let envelope = XMTP.Envelope.with { envelope in
+					envelope.message = encryptedMessageData
+					envelope.contentTopic = topic
+				}
+
+				if let bestAttemptContent = bestAttemptContent {
+					let decodedMessage = try conversationTopic.toXMTP(client: client).decode(envelope)
+
+					var conversation = await DB.Conversation.find(id: conversationTopic.conversationID)
+
+					// Don't notify when we're the sender
+					if decodedMessage.senderAddress == client.address {
+						contentHandler(UNNotificationContent())
+						return
+					}
+
+					conversation?.updatedByPeerAt = decodedMessage.sent
+					conversation?.updatedAt = decodedMessage.sent
+					try await conversation?.save()
+
+					if let conversation {
+						bestAttemptContent.title = conversation.title
+					}
+					bestAttemptContent.body = (try? decodedMessage.content()) ?? "no content"
+					bestAttemptContent.threadIdentifier = conversationTopic.peerAddress
+
+					contentHandler(bestAttemptContent)
+				}
+			} catch {
+				print("Error receiving notification: \(error)")
 			}
-		} catch {
-			print("Error receiving notification: \(error)")
 		}
 	}
 

@@ -20,7 +20,9 @@ class XMTPEnvironmentManager: ObservableObject {
 				environment = .production
 			}
 
-			Auth.signOut()
+			Task {
+				await Auth.signOut()
+			}
 		}
 	}
 
