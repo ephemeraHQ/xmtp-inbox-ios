@@ -26,7 +26,7 @@ struct DBProvider<Content: View>: View {
 				.onAppear {
 					do {
 //						self.db = try DB.prepare(client: client)
-						self.db = (try DB.load(client: client)) ?? (try DB.prepare(client: client))
+						self.db = try (try DB.load(client: client)) ?? (try DB.prepare(client: client))
 					} catch {
 //						self.db = try! DB.prepare(client: client, reset: true)
 						print("Error preparing db: \(error)")

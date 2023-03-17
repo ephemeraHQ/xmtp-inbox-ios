@@ -37,7 +37,7 @@ struct DB {
 
 	static func prepareTest() -> DB {
 		// swiftlint:disable force_try
-		let queue = try! DatabaseQueue(named: ":memory:")
+		let queue = try! DatabaseQueue(named: UUID().uuidString)
 		let db = DB(queue: queue)
 		try! db.createTables()
 		// swiftlint:enable force_try

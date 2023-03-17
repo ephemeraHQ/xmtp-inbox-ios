@@ -13,14 +13,16 @@ import XMTPTestHelpers
 
 final class ConversationLoaderTests: XCTestCase {
 	var fixtures: XMTPTestHelpers.Fixtures!
+	var db: DB!
 
 	override func setUp() async throws {
 		fixtures = await fixtures()
+		db = DB.prepareTest()
 	}
 
 	func testENSRefreshesFirstTime() async throws {
 		AppGroup.defaults.removeObject(forKey: "ensRefreshedAt")
-		let loader = ConversationLoader(client: fixtures.aliceClient)
+		let loader = ConversationLoader(client: fixtures.aliceClient, db: db)
 		let ens = TestENS()
 
 		let expectation = expectation(description: "looked up ENS")
@@ -35,7 +37,7 @@ final class ConversationLoaderTests: XCTestCase {
 
 	func testENSSkipsRefreshIfWithin1Hour() async throws {
 		AppGroup.defaults.removeObject(forKey: "ensRefreshedAt")
-		let loader = ConversationLoader(client: fixtures.aliceClient)
+		let loader = ConversationLoader(client: fixtures.aliceClient, db: db)
 		let ens = TestENS()
 
 		let expectation = expectation(description: "looked up ENS")
@@ -47,7 +49,7 @@ final class ConversationLoaderTests: XCTestCase {
 
 		AppGroup.defaults.set(Date().addingTimeInterval(-(60 * 2)), forKey: "ensRefreshedAt") // we checked two minutes ago
 
-		let loader2 = ConversationLoader(client: fixtures.aliceClient)
+		let loader2 = ConversationLoader(client: fixtures.aliceClient, db: db)
 		loader2.ensService = ens
 		try await loader2.load()
 
@@ -55,11 +57,14 @@ final class ConversationLoaderTests: XCTestCase {
 	}
 
 	func testGetsConversations() async throws {
-		try await DB.prepareTest(client: fixtures.aliceClient)
+		let db = DB.prepareTest()
+		try db.clear()
+		try db.createTables()
+		let fixtures = await fixtures()
+		let loader = ConversationLoader(client: fixtures.aliceClient, db: db)
 
-		let loader = ConversationLoader(client: fixtures.aliceClient)
-
-		var conversations = await DB.Conversation.list()
+		var conversations = DB.Conversation.using(db: db).list()
+		print("CONVERSATIONS: \(conversations)")
 		XCTAssert(conversations.isEmpty, "had conversations for some reason??")
 
 		let conversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
@@ -68,19 +73,17 @@ final class ConversationLoaderTests: XCTestCase {
 		XCTAssertEqual(1, clientConversations.count)
 
 		try await loader.load()
-		conversations = await DB.Conversation.list()
+		conversations = DB.Conversation.using(db: db).list()
 
 		XCTAssertEqual(1, conversations.count)
 
 		let loadedConversation = conversations[0]
-		let topics = await loadedConversation.topics()
+		let topics = loadedConversation.topics(db: db)
 
 		XCTAssertEqual([conversation.topic], topics.map(\.topic))
 	}
 
 	func testCreatesOneConversationForMultipleTopicsWithSamePeerAddress() async throws {
-		try await DB.prepareTest(client: fixtures.aliceClient)
-
 		let aliceConversation = try await fixtures.aliceClient.conversations.newConversation(with: fixtures.bobClient.address)
 		let bobConversation = try await fixtures.bobClient.conversations.newConversation(with: fixtures.aliceClient.address)
 
@@ -89,13 +92,13 @@ final class ConversationLoaderTests: XCTestCase {
 		_ = try await aliceConversation.send(text: "hi from alice")
 		_ = try await bobConversation.send(text: "hi from bob")
 
-		let loader = ConversationLoader(client: fixtures.aliceClient)
+		let loader = ConversationLoader(client: fixtures.aliceClient, db: db)
 		try await loader.load()
 
 		let xmtpConversations = try await fixtures.aliceClient.conversations.list()
 		XCTAssertEqual(2, xmtpConversations.count)
 
-		let conversations = await DB.Conversation.list()
+		let conversations = DB.Conversation.using(db: db).list()
 		XCTAssertEqual(1, conversations.count)
 
 		print("\(conversations)")
@@ -104,7 +107,7 @@ final class ConversationLoaderTests: XCTestCase {
 		let conversation = conversations[0]
 		XCTAssertEqual(conversation.peerAddress, fixtures.bobClient.address)
 
-		let topics = await conversation.topics()
+		let topics = conversation.topics(db: db)
 		XCTAssertEqual(2, topics.count)
 	}
 }
