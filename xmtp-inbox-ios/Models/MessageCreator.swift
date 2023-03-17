@@ -70,14 +70,15 @@ struct MessageCreator {
 			message.attachments = [messageAttachment]
 		}
 
-		try await finish(message: &message)
-
-		return message
+		return try await finish(message: message)
 	}
 
 	func create(xmtpMessage: XMTP.DecodedMessage) async throws -> DB.Message {
 		if let existing = DB.Message.using(db: db).find(Column("xmtpID") == xmtpMessage.id) {
-			try await existing.updateConversationTimestamps(conversation: conversation, db: db)
+			try await MainActor.run {
+				try existing.updateConversationTimestamps(conversation: conversation, db: db)
+			}
+
 			return existing
 		}
 
@@ -89,7 +90,7 @@ struct MessageCreator {
 			throw DB.DBError.badData("Missing XMTP ID")
 		}
 
-		var message = DB.Message(
+		let message = DB.Message(
 			xmtpID: xmtpMessage.id,
 			body: (try? xmtpMessage.content()) ?? "",
 			contentType: xmtpMessage.encodedContent.type,
@@ -101,24 +102,33 @@ struct MessageCreator {
 			fallbackContent: xmtpMessage.fallbackContent
 		)
 
-		handleRemoteAttachments(message: &message, xmtpMessage: xmtpMessage)
+		let messageWithAttachments = handleRemoteAttachments(message: message, xmtpMessage: xmtpMessage)
 
-		try await finish(message: &message)
+		return try await finish(message: messageWithAttachments)
+	}
+
+	func finish(message: DB.Message) async throws -> DB.Message {
+		do {
+			let message = await loadPreview(message: message)
+
+			try await MainActor.run {
+				var message = message
+				try message.save(db: db)
+				try message.updateConversationTimestamps(conversation: conversation, db: db)
+			}
+		} catch {
+			print("Error saving: \(error)")
+		}
 
 		return message
 	}
 
-	func finish(message: inout DB.Message) async throws {
-		await loadPreview(message: &message)
-
-		try await message.save(db: db)
-		try await message.updateConversationTimestamps(conversation: conversation, db: db)
-	}
-
-	func handleRemoteAttachments(message: inout DB.Message, xmtpMessage: XMTP.DecodedMessage) {
+	func handleRemoteAttachments(message: DB.Message, xmtpMessage: XMTP.DecodedMessage) -> DB.Message {
 		if xmtpMessage.encodedContent.type != ContentTypeRemoteAttachment {
-			return
+			return message
 		}
+
+		var message = message
 
 		do {
 			let remoteAttachmentContent: RemoteAttachment = try xmtpMessage.content()
@@ -137,9 +147,13 @@ struct MessageCreator {
 		} catch {
 			print("Error handling remote attachment: \(error)")
 		}
+
+		return message
 	}
 
-	func loadPreview(message: inout DB.Message) async {
+	func loadPreview(message: DB.Message) async -> DB.Message {
+		var message = message
+
 		do {
 			if Settings.shared.showLinkPreviews,
 			   message.body.isValidURL,
@@ -164,5 +178,7 @@ struct MessageCreator {
 		} catch {
 			print("Error loading link preview: \(error)")
 		}
+
+		return message
 	}
 }

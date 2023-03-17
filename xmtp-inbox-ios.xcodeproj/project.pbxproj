@@ -46,7 +46,6 @@
 		6AF033F02954F62A0043FB6A /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033EF2954F62A0043FB6A /* ConversationListView.swift */; };
 		6AF033F22954F8560043FB6A /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F12954F8560043FB6A /* PreviewClientProvider.swift */; };
 		6AF033F4295504B70043FB6A /* Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF033F3295504B70043FB6A /* Print.swift */; };
-		7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A68BCB232995C256001159B8 /* Pods_xmtp_inbox_ios.framework */; };
 		A603569D29AD46C50026407B /* SheetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A603569C29AD46C50026407B /* SheetButton.swift */; };
 		A603569F29AD4B890026407B /* Web3StorageTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A603569E29AD4B890026407B /* Web3StorageTokenView.swift */; };
 		A60356A129AD4CD20026407B /* AutofocusProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60356A029AD4CD20026407B /* AutofocusProvider.swift */; };
@@ -329,6 +328,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 				A66F1F0B29A9A61E0026EA6E /* AWSS3 in Frameworks */,
 				A6393EF529A2A1BC009BCE38 /* SDWebImageSwiftUI in Frameworks */,
 				A68907A529A1946E006D9EC7 /* OpenGraph in Frameworks */,
@@ -341,8 +341,6 @@
 				6A1C37DE2971A3C900AF6559 /* web3.swift in Frameworks */,
 				A6C18C37299993EE001E00CA /* Introspect in Frameworks */,
 				A6393EF829A2A2BB009BCE38 /* SDWebImageWebPCoder in Frameworks */,
-				F1BB0538CF0E2195050C8888 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
-				7B64A5C6D3C770004C79B5E8 /* Pods_xmtp_inbox_ios.framework in Frameworks */,
 				A6B2BD7329BFC6450082F876 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
