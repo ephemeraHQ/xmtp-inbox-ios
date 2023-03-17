@@ -15,7 +15,7 @@ struct DB {
 	var queue: DatabaseQueue
 
 	// If we need to totally blow away the DB, increment this
-	static let version = 30
+	static let version = 31
 
 	enum DBError: Error {
 		case badData(String)
