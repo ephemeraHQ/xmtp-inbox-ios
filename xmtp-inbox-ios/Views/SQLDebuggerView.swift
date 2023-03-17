@@ -12,6 +12,8 @@ struct SQLDebuggerView: View {
 	@State private var sql: String = "select * from conversation"
 	@State private var results: [String] = []
 
+	@Environment(\.db) var db
+
 	var body: some View {
 		List {
 			TextEditor(text: $sql)
@@ -22,7 +24,7 @@ struct SQLDebuggerView: View {
 			Button("Run") {
 				Task {
 					do {
-						let results = try await DB.read { db in
+						let results = try await db.queue.read { db in
 							try Row.fetchAll(db, sql: sql)
 						}
 

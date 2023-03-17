@@ -17,6 +17,7 @@ struct ConversationWithLastMessage: Codable, FetchableRecord {
 }
 
 class ConversationLoader: ObservableObject {
+	var db: DB
 	var client: XMTP.Client
 	var ensRefreshedAt: Date? {
 		didSet {
@@ -28,8 +29,9 @@ class ConversationLoader: ObservableObject {
 
 	@MainActor @Published var error: Error?
 
-	init(client: XMTP.Client) {
+	init(client: XMTP.Client, db: DB) {
 		self.client = client
+		self.db = db
 		ensRefreshedAt = (AppGroup.defaults.object(forKey: "ensRefreshedAt") as? Date)
 	}
 
@@ -49,7 +51,7 @@ class ConversationLoader: ObservableObject {
 		var conversations: [DB.Conversation] = []
 
 		for conversation in try await client.conversations.list() {
-			conversations.append(try await DB.Conversation.from(conversation))
+			conversations.append(try await DB.Conversation.from(conversation, db: db))
 		}
 
 		await refreshENS(conversations: conversations)
@@ -57,11 +59,11 @@ class ConversationLoader: ObservableObject {
 
 	func fetchRecentMessages() async throws {
 		await withTaskGroup(of: Void.self) { group in
-			for conversation in await DB.Conversation.list() {
+			for conversation in await DB.Conversation.using(db: db).list() {
 				group.addTask {
 					do {
 						var conversation = conversation
-						try await conversation.loadMostRecentMessages(client: self.client)
+						try await conversation.loadMostRecentMessages(client: self.client, db: self.db)
 					} catch {
 						print("Error loading most recent message for \(conversation.peerAddress): \(error)")
 					}
@@ -85,7 +87,7 @@ class ConversationLoader: ObservableObject {
 
 				if let result = ensResults[conversation.peerAddress.lowercased()], let result {
 					conversation.ens = result
-					try await conversation.save()
+					try conversation.save(db: db)
 				}
 			}
 

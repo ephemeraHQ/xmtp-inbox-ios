@@ -10,19 +10,18 @@ import OpenGraph
 import XMTP
 
 struct MessageCreator {
+	var db: DB
 	var client: Client
 	var conversation: DB.Conversation
 	var topic: DB.ConversationTopic
 	var uploader: Uploader = Web3Storage()
 
-	init(client: Client, conversation: DB.Conversation, topic: DB.ConversationTopic, uploader: Uploader = Web3Storage()) {
+	init(db: DB, client: Client, conversation: DB.Conversation, topic: DB.ConversationTopic, uploader: Uploader = Web3Storage()) {
+		self.db = db
 		self.client = client
 		self.conversation = conversation
 		self.topic = topic
 		self.uploader = uploader
-
-		Client.register(codec: AttachmentCodec())
-		Client.register(codec: RemoteAttachmentCodec())
 	}
 
 	func send(text: String, attachment: XMTP.Attachment?) async throws -> DB.Message {
@@ -77,8 +76,8 @@ struct MessageCreator {
 	}
 
 	func create(xmtpMessage: XMTP.DecodedMessage) async throws -> DB.Message {
-		if let existing = await DB.Message.find(Column("xmtpID") == xmtpMessage.id) {
-			try await existing.updateConversationTimestamps(conversation: conversation)
+		if let existing = DB.Message.using(db: db).find(Column("xmtpID") == xmtpMessage.id) {
+			try await existing.updateConversationTimestamps(conversation: conversation, db: db)
 			return existing
 		}
 
@@ -112,8 +111,8 @@ struct MessageCreator {
 	func finish(message: inout DB.Message) async throws {
 		await loadPreview(message: &message)
 
-		try await message.save()
-		try await message.updateConversationTimestamps(conversation: conversation)
+		try await message.save(db: db)
+		try await message.updateConversationTimestamps(conversation: conversation, db: db)
 	}
 
 	func handleRemoteAttachments(message: inout DB.Message, xmtpMessage: XMTP.DecodedMessage) {
@@ -124,7 +123,7 @@ struct MessageCreator {
 		do {
 			let remoteAttachmentContent: RemoteAttachment = try xmtpMessage.content()
 
-			var remoteAttachment = DB.RemoteAttachment(
+			let remoteAttachment = DB.RemoteAttachment(
 				url: remoteAttachmentContent.url,
 				salt: remoteAttachmentContent.salt,
 				nonce: remoteAttachmentContent.nonce,

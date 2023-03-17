@@ -231,15 +231,17 @@ struct MessagesTableView: UIViewControllerRepresentable {
 
 struct MessageListView: View {
 	let client: Client
+	let db: DB
 	let conversation: DB.Conversation
 
 	@StateObject private var messageLoader: MessageLoader
 	@Query(ConversationMessagesRequest(conversationID: -1), in: \.dbQueue) var messages
 
-	init(client: Client, conversation: DB.Conversation) {
+	init(client: Client, conversation: DB.Conversation, db: DB) {
 		self.client = client
+		self.db = db
 		self.conversation = conversation
-		_messageLoader = StateObject(wrappedValue: MessageLoader(client: client, conversation: conversation))
+		_messageLoader = StateObject(wrappedValue: MessageLoader(client: client, db: db, conversation: conversation))
 		_messages = Query(ConversationMessagesRequest(conversationID: conversation.id ?? -1), in: \.dbQueue)
 	}
 

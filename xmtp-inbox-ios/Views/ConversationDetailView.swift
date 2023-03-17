@@ -15,9 +15,11 @@ struct ConversationDetailView: View {
 	// For interactive keyboard dismiss
 	@State private var offset = CGFloat()
 
+	@Environment(\.db) var db
+
 	var body: some View {
 		VStack {
-			MessageListView(client: client, conversation: conversation)
+			MessageListView(client: client, conversation: conversation, db: db)
 				.frame(maxHeight: .infinity)
 				.backgroundStyle(.blue)
 			MessageComposerView(offset: $offset, onSend: sendMessage)
@@ -30,13 +32,13 @@ struct ConversationDetailView: View {
 		.navigationBarTitleDisplayMode(.inline)
 		.toolbarBackground(.visible, for: .navigationBar)
 		.onAppear {
-			conversation.markViewed()
+			conversation.markViewed(db: db)
 		}
 	}
 
 	func sendMessage(text: String, attachment: XMTP.Attachment?) async {
 		do {
-			try await conversation.send(text: text, attachment: attachment, client: client)
+			try await conversation.send(text: text, attachment: attachment, client: client, db: db)
 		} catch {
 			await MainActor.run {
 				Flash.add(.error("Error sending message: \(error)"))

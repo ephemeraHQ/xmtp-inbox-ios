@@ -10,21 +10,6 @@ import XMTP
 
 class XMTPEnvironmentManager: ObservableObject {
 	let key = "xmtpEnvironment"
-	var environmentOverride: String? {
-		didSet {
-			if environmentOverride == "dev" {
-				AppGroup.defaults.set("dev", forKey: key)
-				environment = .dev
-			} else {
-				AppGroup.defaults.set("production", forKey: key)
-				environment = .production
-			}
-
-			Task {
-				await Auth.signOut()
-			}
-		}
-	}
 
 	@Published var environment: XMTPEnvironment
 
@@ -36,7 +21,5 @@ class XMTPEnvironmentManager: ObservableObject {
 		#else
 			environment = .production
 		#endif
-
-		environmentOverride = AppGroup.defaults.string(forKey: key)
 	}
 }

@@ -12,6 +12,7 @@ import XMTP
 
 class MessageLoader: ObservableObject {
 	var client: XMTP.Client
+	var db: DB
 	var conversation: DB.Conversation
 
 	let fetchLimit = 10
@@ -19,8 +20,9 @@ class MessageLoader: ObservableObject {
 	@Published var mostRecentMessageID = ""
 	var messages: [DB.Message] = []
 
-	init(client: XMTP.Client, conversation: DB.Conversation) {
+	init(client: XMTP.Client, db: DB, conversation: DB.Conversation) {
 		self.client = client
+		self.db = db
 		self.conversation = conversation
 	}
 
@@ -28,7 +30,7 @@ class MessageLoader: ObservableObject {
 		do {
 			for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
 				do {
-					let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, client: client)
+					let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, client: client, db: self.db)
 					await MainActor.run {
 						mostRecentMessageID = message.xmtpID
 					}
@@ -43,7 +45,7 @@ class MessageLoader: ObservableObject {
 	}
 
 	func streamMessages() async {
-		for topic in await conversation.topics() {
+		for topic in await conversation.topics(db: db) {
 			Task {
 				await streamTopic(topic: topic)
 			}
@@ -55,12 +57,12 @@ class MessageLoader: ObservableObject {
 	}
 
 	func fetchRemote() async throws {
-		for topic in await conversation.topics() {
+		for topic in conversation.topics(db: db) {
 			do {
 				let messages = try await topic.toXMTP(client: client).messages(limit: fetchLimit)
 				for message in messages {
 					do {
-						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client)
+						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client, db: db)
 					} catch {
 						print("Error importing message: \(error)")
 					}
@@ -74,12 +76,12 @@ class MessageLoader: ObservableObject {
 	func fetchEarlier() async throws {
 		let before = await MainActor.run { messages.first?.createdAt }
 
-		for topic in await conversation.topics() {
+		for topic in conversation.topics(db: db) {
 			do {
 				let messages = try await topic.toXMTP(client: client).messages(limit: 10, before: before)
 				for message in messages {
 					do {
-						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client)
+						_ = try await DB.Message.from(message, conversation: conversation, topic: topic, client: client, db: db)
 					} catch {
 						print("Error importing message: \(error)")
 					}

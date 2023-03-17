@@ -14,11 +14,13 @@ protocol Model: Identifiable, Codable, Hashable, MutablePersistableRecord, Fetch
 	var id: Int? { get set }
 }
 
-extension Model {
-	static func `where`(_ predicate: SQLSpecificExpressible) async -> [Self] {
+struct StaticModelProxy<T: Model> {
+	var db: DB
+
+	func `where`(_ predicate: SQLSpecificExpressible) -> [T] {
 		do {
-			return try await DB.read { db in
-				try filter(predicate).fetchAll(db)
+			return try db.queue.read { db in
+				try T.filter(predicate).fetchAll(db)
 			}
 		} catch {
 			print("Error finding \(predicate) : \(error)")
@@ -26,34 +28,34 @@ extension Model {
 		}
 	}
 
-	static func list() async -> [Self] {
+	func list() -> [T] {
 		do {
-			return try await DB.read { db in
-				try fetchAll(db)
+			return try db.queue.read { db in
+				try T.fetchAll(db)
 			}
 		} catch {
-			print("Error loading all \(databaseTableName): \(error)")
+			print("Error loading all \(T.databaseTableName): \(error)")
 			return []
 		}
 	}
 
-	static func list(order: SQLOrderingTerm) async -> [Self] {
+	func list(order: SQLOrderingTerm) -> [T] {
 		do {
-			return try await DB.read { db in
-				try self
+			return try db.queue.read { db in
+				try T
 					.order([order])
 					.fetchAll(db)
 			}
 		} catch {
-			print("Error loading all \(databaseTableName): \(error)")
+			print("Error loading all \(T.databaseTableName): \(error)")
 			return []
 		}
 	}
 
-	static func find(id: Int) async -> Self? {
+	func find(id: Int) -> T? {
 		do {
-			return try await DB.read { db in
-				try find(db, key: id)
+			return try db.queue.read { db in
+				try T.find(db, key: id)
 			}
 		} catch {
 			print("Error finding by ID (\(id)): \(error)")
@@ -61,20 +63,31 @@ extension Model {
 		}
 	}
 
-	static func find(_ predicate: SQLSpecificExpressible) async -> Self? {
+	func find(_ predicate: SQLSpecificExpressible) -> T? {
 		do {
-			return try await DB.read { db in
-				try filter(predicate).fetchOne(db)
+			return try db.queue.read { db in
+				try T.filter(predicate).fetchOne(db)
 			}
 		} catch {
 			print("Error finding \(predicate) : \(error)")
 			return nil
 		}
 	}
+}
 
-	mutating func save() async throws {
+extension Model {
+	static func using(db: DB) -> StaticModelProxy<Self> {
+		StaticModelProxy(db: db)
+	}
+
+	static func clear(db: Database) throws {
+		try deleteAll(db)
+		try db.drop(table: databaseTableName)
+	}
+
+	mutating func save(db: DB) throws {
 		do {
-			try await DB.write { db in
+			try db.queue.write { db in
 				try insert(db, onConflict: .replace)
 			}
 		} catch {

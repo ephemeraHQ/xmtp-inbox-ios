@@ -40,10 +40,10 @@ extension DB {
 			self.viewedAt = viewedAt
 		}
 
-		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation, ens: String? = nil) async throws -> DB.Conversation {
+		@discardableResult static func from(_ xmtpConversation: XMTP.Conversation, ens: String? = nil, db: DB) async throws -> DB.Conversation {
 			do {
-				if let conversation = await DB.Conversation.find(Column("peerAddress") == xmtpConversation.peerAddress) {
-					try await conversation.createTopic(from: xmtpConversation)
+				if let conversation = DB.Conversation.using(db: db).find(Column("peerAddress") == xmtpConversation.peerAddress) {
+					try await conversation.createTopic(from: xmtpConversation, db: db)
 
 					return conversation
 				}
@@ -55,8 +55,8 @@ extension DB {
 
 				conversation.ens = ens
 
-				try await conversation.save()
-				try await conversation.createTopic(from: xmtpConversation)
+				try conversation.save(db: db)
+				try conversation.createTopic(from: xmtpConversation, db: db)
 
 				Task {
 					try await XMTPPush.shared.subscribe(topics: [xmtpConversation.topic])
@@ -69,8 +69,8 @@ extension DB {
 			}
 		}
 
-		@discardableResult func createTopic(from xmtpConversation: XMTP.Conversation) async throws -> ConversationTopic {
-			if let topic = await DB.ConversationTopic.find(Column("topic") == xmtpConversation.topic) {
+		@discardableResult func createTopic(from xmtpConversation: XMTP.Conversation, db: DB) throws -> ConversationTopic {
+			if let topic = DB.ConversationTopic.using(db: db).find(Column("topic") == xmtpConversation.topic) {
 				return topic
 			}
 
@@ -88,7 +88,7 @@ extension DB {
 				conversationTopic.version = .v1
 			}
 
-			try await conversationTopic.save()
+			try conversationTopic.save(db: db)
 
 			return conversationTopic
 		}
@@ -97,44 +97,45 @@ extension DB {
 			ens ?? peerAddress.truncatedAddress()
 		}
 
-		mutating func markViewed() {
+		mutating func markViewed(db: DB) {
 			let copy = self
 			Task {
 				do {
 					var copy = copy
 					copy.viewedAt = Date()
-					try await copy.save()
+					try copy.save(db: db)
 				} catch {
 					print("Error marking conversation viewed: \(error)")
 				}
 			}
 		}
 
-		func messages(client: Client) async throws -> [DecodedMessage] {
+		func messages(client: Client, db: DB) async throws -> [DecodedMessage] {
 			var messages: [DecodedMessage] = []
 
-			for topic in await topics() {
+			for topic in topics(db: db) {
 				messages.append(contentsOf: try await topic.toXMTP(client: client).messages())
 			}
 
 			return messages
 		}
 
-		mutating func loadMostRecentMessages(client: Client) async throws {
+		mutating func loadMostRecentMessages(client: Client, db: DB) async throws {
 			let conversation = self
 
 			await withThrowingTaskGroup(of: Void.self) { group in
-				for topic in await topics() {
+				for topic in topics(db: db) {
 					group.addTask {
 						let lastMessagesXMTP = try await topic.toXMTP(client: client).messages(limit: 10)
 						for lastMessageXMTP in lastMessagesXMTP {
-							try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, client: client)
+							try await DB.Message.from(lastMessageXMTP, conversation: conversation, topic: topic, client: client, db: db)
 						}
 					}
 				}
 			}
 
-			let lastMessage = try await DB.read { db in
+			let id = id
+			let lastMessage = try await db.queue.read { db in
 				try DB.Message.filter(Column("conversationID") == id).order(Column("createdAt").desc).fetchOne(db)
 			}
 
@@ -144,28 +145,28 @@ extension DB {
 
 			if updatedAt < lastMessage.createdAt {
 				updatedAt = lastMessage.createdAt
-				try await save()
+				try save(db: db)
 			}
 
 			self.lastMessage = lastMessage
 		}
 
-		mutating func send(text: String, attachment: XMTP.Attachment?, client: Client, topic: ConversationTopic? = nil) async throws {
-			let topics = await topics()
+		mutating func send(text: String, attachment: XMTP.Attachment?, client: Client, topic: ConversationTopic? = nil, db: DB) async throws {
+			let topics = topics(db: db)
 
 			guard let topic = topic ?? topics.last else {
 				throw ConversationError.noTopic
 			}
 
-			let creator = MessageCreator(client: client, conversation: self, topic: topic)
+			let creator = MessageCreator(db: db, client: client, conversation: self, topic: topic)
 			let message = try await creator.send(text: text, attachment: attachment)
 
 			lastMessage = message
 		}
 
-		func topics() async -> [ConversationTopic] {
+		func topics(db: DB) -> [ConversationTopic] {
 			do {
-				return try await DB.read { db in
+				return try db.queue.read { db in
 					try DB.ConversationTopic.filter(Column("conversationID") == id).fetchAll(db)
 				}
 			} catch {

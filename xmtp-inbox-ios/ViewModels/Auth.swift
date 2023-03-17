@@ -34,17 +34,17 @@ class Auth: ObservableObject {
 
 	@Published var isShowingQRCode = false
 
-	static func signOut() async {
+	static func signOut(db: DB) {
 		do {
 			try Keystore.deleteKeys()
-			try await DB.clear()
+			try db.clear()
 		} catch {
 			print("Error signing out: \(error)")
 		}
 	}
 
-	func signOut() async {
-		await Auth.signOut()
+	func signOut(db: DB) {
+		Auth.signOut(db: db)
 		withAnimation {
 			self.status = .signedOut
 		}

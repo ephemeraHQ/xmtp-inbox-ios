@@ -77,15 +77,15 @@ extension DB {
 			}
 		}
 
-		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, client: XMTP.Client) async throws -> DB.Message {
-			return try await MessageCreator(client: client, conversation: conversation, topic: topic).create(xmtpMessage: xmtpMessage)
+		@discardableResult static func from(_ xmtpMessage: XMTP.DecodedMessage, conversation: Conversation, topic: ConversationTopic, client: XMTP.Client, db: DB) async throws -> DB.Message {
+			return try await MessageCreator(db: db, client: client, conversation: conversation, topic: topic).create(xmtpMessage: xmtpMessage)
 		}
 
 		var presenter: MessagePresenter {
 			MessagePresenter(message: self)
 		}
 
-		func updateConversationTimestamps(conversation: DB.Conversation) async throws {
+		func updateConversationTimestamps(conversation: DB.Conversation, db: DB) throws {
 			var conversation = conversation
 
 			if createdAt > conversation.updatedAt {
@@ -93,7 +93,7 @@ extension DB {
 			}
 
 			if isFromMe {
-				try await conversation.save()
+				try conversation.save(db: db)
 				return
 			}
 
@@ -103,12 +103,12 @@ extension DB {
 				conversation.updatedByPeerAt = createdAt
 			}
 
-			try await conversation.save()
+			try conversation.save(db: db)
 		}
 
-		mutating func save() async throws {
+		mutating func save(db: DB) throws {
 			do {
-				try await DB.write { db in
+				try db.queue.write { db in
 					try insert(db, onConflict: .replace)
 
 					guard let messageID = id else {

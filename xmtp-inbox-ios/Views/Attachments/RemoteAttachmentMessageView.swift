@@ -16,6 +16,8 @@ struct RemoteAttachmentMessageView: View {
 	@State private var isLoading = false
 	@State private var error: String?
 
+	@Environment(\.db) var db
+
 	var body: some View {
 		VStack {
 			Button("Tap to Load Attachment") {
@@ -99,7 +101,7 @@ struct RemoteAttachmentMessageView: View {
 						var messageAttachment = DB.MessageAttachment(messageID: message.id ?? -1, mimeType: attachment.mimeType, filename: attachment.filename)
 
 						try messageAttachment.save(data: attachment.data)
-						try await messageAttachment.save()
+						try messageAttachment.save(db: db)
 
 						let savedMessageAttachment = messageAttachment
 						await MainActor.run {

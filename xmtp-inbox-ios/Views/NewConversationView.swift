@@ -14,6 +14,7 @@ struct NewConversationView: View {
 	var onCreate: (DB.Conversation) -> Void
 	let searchTextPublisher = PassthroughSubject<String, Never>()
 
+	@Environment(\.db) var db
 	@Environment(\.dismiss) var dismiss
 	@FocusState var isFocused
 
@@ -83,7 +84,7 @@ struct NewConversationView: View {
 			do {
 				let client = client
 				let conversation = try await client.conversations.newConversation(with: result.address)
-				let newConversation = try await DB.Conversation.from(conversation, ens: result.ens)
+				let newConversation = try await DB.Conversation.from(conversation, ens: result.ens, db: db)
 				await MainActor.run {
 					dismiss()
 					onCreate(newConversation)

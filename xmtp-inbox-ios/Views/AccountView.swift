@@ -22,6 +22,7 @@ struct AccountView: View {
 	@State private var isShowingDebug = false
 
 	@Environment(\.dismiss) var dismiss
+	@Environment(\.db) var db
 
 	@ObservedObject var settings = Settings.shared
 
@@ -187,7 +188,7 @@ struct AccountView: View {
 				Button("cancel", role: .cancel) {}
 				Button("disconnect", role: .destructive) {
 					Task {
-						await auth.signOut()
+						await auth.signOut(db: db)
 					}
 				}
 			}

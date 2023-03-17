@@ -150,7 +150,7 @@
 		A69C928129942DD300E49F9B /* XMTPTestHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = A69C928029942DD300E49F9B /* XMTPTestHelpers */; };
 		A6A5AB7A29941DC6004F5006 /* ConversationLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */; };
 		A6B2BD7329BFC6450082F876 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = A6B2BD7229BFC6450082F876 /* AsyncAlgorithms */; };
-		A6B2BD7529BFC90F0082F876 /* DBQueueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B2BD7429BFC90F0082F876 /* DBQueueProvider.swift */; };
+		A6B2BD7529BFC90F0082F876 /* DBProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B2BD7429BFC90F0082F876 /* DBProvider.swift */; };
 		A6C18C37299993EE001E00CA /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = A6C18C36299993EE001E00CA /* Introspect */; };
 		A6D80E33299C3313002E8117 /* connect.html in Resources */ = {isa = PBXBuildFile; fileRef = A6D80E32299C3313002E8117 /* connect.html */; };
 		A6FCA31B299AECCF00EFB39D /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */; };
@@ -187,7 +187,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		A68BCB0A2995BF2B001159B8 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
@@ -315,7 +315,7 @@
 		A68C8A4E298C6CC1003A9A95 /* ConversationLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoader.swift; sourceTree = "<group>"; };
 		A68C8A52298C8BED003A9A95 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A6A5AB7929941DC6004F5006 /* ConversationLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationLoaderTests.swift; sourceTree = "<group>"; };
-		A6B2BD7429BFC90F0082F876 /* DBQueueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBQueueProvider.swift; sourceTree = "<group>"; };
+		A6B2BD7429BFC90F0082F876 /* DBProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBProvider.swift; sourceTree = "<group>"; };
 		A6D80E32299C3313002E8117 /* connect.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = connect.html; sourceTree = "<group>"; };
 		A6FCA318299AEC9900EFB39D /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/CryptoKit.framework; sourceTree = DEVELOPER_DIR; };
 		A6FCA31A299AECCF00EFB39D /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
@@ -615,7 +615,7 @@
 				A68907BE29A1BB94006D9EC7 /* FullScreenContentProvider.swift */,
 				A6324F7229A822F90040CBA4 /* FlashProvider.swift */,
 				A60356A029AD4CD20026407B /* AutofocusProvider.swift */,
-				A6B2BD7429BFC90F0082F876 /* DBQueueProvider.swift */,
+				A6B2BD7429BFC90F0082F876 /* DBProvider.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -1049,7 +1049,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A6B2BD7529BFC90F0082F876 /* DBQueueProvider.swift in Sources */,
+				A6B2BD7529BFC90F0082F876 /* DBProvider.swift in Sources */,
 				A6324F7F29A841A30040CBA4 /* ConversationMessagesRequest.swift in Sources */,
 				A603569D29AD46C50026407B /* SheetButton.swift in Sources */,
 				A60356A129AD4CD20026407B /* AutofocusProvider.swift in Sources */,
@@ -1532,13 +1532,14 @@
 				INFOPLIST_FILE = NotificationExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xmtplabs.inbox.ios.NotificationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1565,7 +1566,7 @@
 				INFOPLIST_FILE = NotificationExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

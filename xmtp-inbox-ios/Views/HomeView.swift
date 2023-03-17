@@ -17,12 +17,13 @@ struct SingleColumnView: View {
 	@State var dbQueue: DatabaseQueue = try! DatabaseQueue(named: "single")
 
 	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
+	@Environment(\.db) var db
 
 	var body: some View {
 		NavigationStack(path: $environmentCoordinator.path) {
 			ZStack {
 				Color.backgroundPrimary.edgesIgnoringSafeArea(.all)
-				ConversationListView(client: client)
+				ConversationListView(client: client, db: db)
 			}
 			.navigationDestination(for: DB.Conversation.self) { conversation in
 				ConversationDetailView(client: client, conversation: conversation)
@@ -61,10 +62,11 @@ struct SplitColumnView: View {
 	@State var isShowingAccount = false
 
 	@EnvironmentObject var environmentCoordinator: EnvironmentCoordinator
+	@Environment(\.db) var db
 
 	var body: some View {
 		NavigationSplitView(sidebar: {
-			ConversationListView(client: client, selectedConversation: $selectedConversation)
+			ConversationListView(client: client, selectedConversation: $selectedConversation, db: db)
 				.toolbar {
 					ToolbarItem(placement: .automatic) {
 						HapticButton {
@@ -100,8 +102,14 @@ class EnvironmentCoordinator: ObservableObject {
 struct HomeView: View {
 	let client: XMTP.Client
 
+	@Environment(\.db) var db
+
+	init(client: XMTP.Client) {
+		self.client = client
+	}
+
 	var body: some View {
-		DBQueueProvider {
+		DBProvider(client: client) {
 			ViewThatFits {
 				SplitColumnView(client: client)
 				SingleColumnView(client: client)

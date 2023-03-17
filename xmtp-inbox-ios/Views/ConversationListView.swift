@@ -19,6 +19,7 @@ struct ConversationListView: View {
 	@State @MainActor var isLoading = false
 
 	let client: XMTP.Client
+	let db: DB
 	@Binding var selectedConversation: DB.Conversation?
 
 	@State private var status: LoadingStatus = .success
@@ -29,18 +30,20 @@ struct ConversationListView: View {
 
 	@Query(ConversationsRequest(), in: \.dbQueue) var conversations: [DB.Conversation]
 
-	init(client: XMTP.Client) {
-		let conversationLoader = ConversationLoader(client: client)
+	init(client: XMTP.Client, db: DB) {
+		let conversationLoader = ConversationLoader(client: client, db: db)
 
 		self.client = client
+		self.db = db
 		_conversationLoader = StateObject(wrappedValue: conversationLoader)
 		_selectedConversation = .constant(nil)
 	}
 
-	init(client: XMTP.Client, selectedConversation: Binding<DB.Conversation?>) {
-		let conversationLoader = ConversationLoader(client: client)
+	init(client: XMTP.Client, selectedConversation: Binding<DB.Conversation?>, db: DB) {
+		let conversationLoader = ConversationLoader(client: client, db: db)
 
 		self.client = client
+		self.db = db
 		_conversationLoader = StateObject(wrappedValue: conversationLoader)
 		_selectedConversation = selectedConversation
 	}
@@ -169,8 +172,8 @@ struct ConversationListView: View {
 			for try await newConversation in client.conversations.stream()
 				where newConversation.peerAddress != client.address
 			{
-				var newConversation = try await DB.Conversation.from(newConversation)
-				try await newConversation.loadMostRecentMessages(client: client)
+				var newConversation = try await DB.Conversation.from(newConversation, db: db)
+				try await newConversation.loadMostRecentMessages(client: client, db: db)
 			}
 		} catch {
 			await MainActor.run {
@@ -189,7 +192,7 @@ struct ConversationListView_Previews: PreviewProvider {
 		VStack {
 			PreviewClientProvider { client in
 				NavigationView {
-					ConversationListView(client: client)
+					ConversationListView(client: client, db: DB.prepareTest())
 				}
 			}
 		}
