@@ -48,7 +48,7 @@ struct DB {
 		client: XMTP.Client,
 		name: String = "db-\(DB.version).sqlite",
 		reset: Bool = false,
-		isRetry: Bool = false
+		isRetry _: Bool = false
 	) throws -> DB {
 		let location = AppGroup.containerURL.appendingPathComponent(name)
 

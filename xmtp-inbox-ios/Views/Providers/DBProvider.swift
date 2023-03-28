@@ -6,8 +6,8 @@
 //
 
 import GRDB
-import XMTP
 import SwiftUI
+import XMTP
 
 struct DBProvider<Content: View>: View {
 	var client: XMTP.Client
@@ -43,6 +43,5 @@ struct DBQueueProvider_Previews: PreviewProvider {
 				Text("Hi")
 			}
 		}
-
 	}
 }

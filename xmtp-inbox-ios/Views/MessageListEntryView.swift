@@ -22,6 +22,11 @@ struct MessageListEntryView: View {
 					.foregroundColor(.secondary)
 				Spacer()
 			}
+		case .typing:
+			TypingIndicator()
+				.padding()
+				.background(Color.backgroundSecondary.roundCorners(16, corners: [.topRight, .bottomLeft, .bottomRight]))
+
 		}
 	}
 
@@ -36,6 +41,7 @@ struct MessageListEntryView: View {
 	struct MessageListEntryView_Previews: PreviewProvider {
 		static var previews: some View {
 			MessageListEntryView(messagelistEntry: .message(DB.Message.preview))
+			MessageListEntryView(messagelistEntry: .typing)
 		}
 	}
 #endif

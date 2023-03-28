@@ -60,7 +60,8 @@ struct EnvironmentToggleView: View {
 
 struct DebugView: View {
 	@Environment(\.db) var db
-	
+	@AppStorage("typingNotificationsServer", store: AppGroup.defaults) var typingNotificationsServer: String = ""
+
 	var body: some View {
 		NavigationStack {
 			List {
@@ -81,6 +82,10 @@ struct DebugView: View {
 
 				Section("XMTP Environment") {
 					EnvironmentToggleView()
+				}
+
+				Section("Typing notifications server") {
+					TextField("Enter a URL (wss://...)", text: $typingNotificationsServer)
 				}
 
 				Section("Request Push Notification Access") {

@@ -66,8 +66,16 @@ struct RemoteAttachmentMessageView: View {
 		}
 		.frame(maxWidth: 200, maxHeight: 200)
 		.padding()
-		.background(.ultraThinMaterial)
+		.background(background)
 		.cornerRadius(8)
+	}
+
+	var background: some View {
+		if message.isFromMe {
+			return Color.actionPrimary.roundCorners(16, corners: [.topLeft, .topRight, .bottomLeft])
+		} else {
+			return Color.backgroundSecondary.roundCorners(16, corners: [.topRight, .bottomLeft, .bottomRight])
+		}
 	}
 
 	func formattedContentLength(_ contentLength: Int?) -> String? {
