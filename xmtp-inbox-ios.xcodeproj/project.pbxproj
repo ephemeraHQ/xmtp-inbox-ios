@@ -72,6 +72,7 @@
 		A6393EFA29A2A4C5009BCE38 /* RemoteMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */; };
 		A6393EFC29A2ACB0009BCE38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */; };
 		A6393EFE29A2ACBF009BCE38 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */; };
+		A64C7E8F29D34386003F8E76 /* ConversationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64C7E8E29D34386003F8E76 /* ConversationPresenter.swift */; };
 		A66339A02989D14400477E2E /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A663399F2989D14400477E2E /* QRCode.swift */; };
 		A66339A22989D1FE00477E2E /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66339A12989D1FE00477E2E /* QRCodeView.swift */; };
 		A66F1F0229A98C460026EA6E /* AttachmentPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0129A98C460026EA6E /* AttachmentPreviewView.swift */; };
@@ -267,6 +268,7 @@
 		A6324F7E29A841A30040CBA4 /* ConversationMessagesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessagesRequest.swift; sourceTree = "<group>"; };
 		A6393EF129A29C0B009BCE38 /* URLPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLPreviewView.swift; sourceTree = "<group>"; };
 		A6393EF929A2A4C5009BCE38 /* RemoteMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMediaView.swift; sourceTree = "<group>"; };
+		A64C7E8E29D34386003F8E76 /* ConversationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationPresenter.swift; sourceTree = "<group>"; };
 		A65544A5298C5AA8005337C3 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A663399E2989CF1600477E2E /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		A663399F2989D14400477E2E /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
@@ -546,6 +548,7 @@
 				A689078829A01A26006D9EC7 /* MessageListEntry.swift */,
 				A689078C29A0224C006D9EC7 /* ContactFinder.swift */,
 				A66F1F2B29AAF4D20026EA6E /* MessagePresenter.swift */,
+				A64C7E8E29D34386003F8E76 /* ConversationPresenter.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1110,6 +1113,7 @@
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
 				A68BCB0C2995C02F001159B8 /* AppGroup.swift in Sources */,
 				A6324F7B29A837C50040CBA4 /* EnvironmentValueExtensions.swift in Sources */,
+				A64C7E8F29D34386003F8E76 /* ConversationPresenter.swift in Sources */,
 				A66F1F1429A9B1BA0026EA6E /* MessageCreator.swift in Sources */,
 				A68907B829A1AE64006D9EC7 /* MessageTextView.swift in Sources */,
 				A68C8A4F298C6CC1003A9A95 /* ConversationLoader.swift in Sources */,
