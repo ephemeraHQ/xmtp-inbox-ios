@@ -27,15 +27,10 @@ class TypingListener: ObservableObject {
 	var error: Error?
 
 	init(websocketURL: String?, topics: [String], myAddress: String) {
-		print("WEBSOCKET URL IS \(websocketURL)")
-
 		if let websocketURL,
 			 let url = URL(string: websocketURL) {
 			session = URLSession(configuration: .ephemeral)
 			websocket = session?.webSocketTask(with: url)
-			print("GOT WEBSOCKET URL AND MADE ONE")
-		} else {
-			print("DID NOT GET WEBSOCKET URL")
 		}
 
 		self.topics = topics
@@ -88,7 +83,6 @@ class TypingListener: ObservableObject {
 					@unknown default:
 						print("??")
 					}
-					print("message")
 				case let .failure(error):
 					throw error
 				}
@@ -129,8 +123,6 @@ class TypingListener: ObservableObject {
 			}
 			let message = try jsonDecoder.decode(Message.self, from: data)
 
-			print("HANDLING MESSAGE: \(message)")
-
 			if message.kind != "typing" || message.sender == myAddress {
 				return
 			}
@@ -146,7 +138,6 @@ class TypingListener: ObservableObject {
 			await MainActor.run {
 				// swiftlint:disable force_unwrapping
 				self.isTyping = self.lastTypedAt != nil && (Date().addingTimeInterval(-1) < self.lastTypedAt!)
-				print("[in task] \(self.lastTypedAt != nil && (Date().addingTimeInterval(-1) < self.lastTypedAt!))")
 				// swiftlint:enable force_unwrapping
 			}
 		}
