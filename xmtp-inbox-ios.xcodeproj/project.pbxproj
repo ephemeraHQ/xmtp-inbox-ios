@@ -78,7 +78,7 @@
 		A66F1F0229A98C460026EA6E /* AttachmentPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0129A98C460026EA6E /* AttachmentPreviewView.swift */; };
 		A66F1F0429A98E2A0026EA6E /* AttachmentExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0329A98E2A0026EA6E /* AttachmentExtensions.swift */; };
 		A66F1F0629A991D60026EA6E /* MessageAttachmentComposerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0529A991D60026EA6E /* MessageAttachmentComposerButton.swift */; };
-		A66F1F0829A9A56C0026EA6E /* S3Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0729A9A56C0026EA6E /* S3Uploader.swift */; };
+		A66F1F0829A9A56C0026EA6E /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0729A9A56C0026EA6E /* Uploader.swift */; };
 		A66F1F1129A9B0220026EA6E /* MessageAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1029A9B0220026EA6E /* MessageAttachment.swift */; };
 		A66F1F1229A9B0220026EA6E /* MessageAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1029A9B0220026EA6E /* MessageAttachment.swift */; };
 		A66F1F1429A9B1BA0026EA6E /* MessageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1329A9B1BA0026EA6E /* MessageCreator.swift */; };
@@ -90,7 +90,7 @@
 		A66F1F2129AABAEE0026EA6E /* AttachmentImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2029AABAEE0026EA6E /* AttachmentImageView.swift */; };
 		A66F1F2329AAC3A40026EA6E /* RemoteAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2229AAC3A40026EA6E /* RemoteAttachment.swift */; };
 		A66F1F2429AAC3A40026EA6E /* RemoteAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2229AAC3A40026EA6E /* RemoteAttachment.swift */; };
-		A66F1F2529AADAD70026EA6E /* S3Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0729A9A56C0026EA6E /* S3Uploader.swift */; };
+		A66F1F2529AADAD70026EA6E /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0729A9A56C0026EA6E /* Uploader.swift */; };
 		A66F1F2929AAEDE60026EA6E /* RemoteAttachmentMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2829AAEDE60026EA6E /* RemoteAttachmentMessageView.swift */; };
 		A66F1F2C29AAF4D20026EA6E /* MessagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2B29AAF4D20026EA6E /* MessagePresenter.swift */; };
 		A671F71A2992C01900C0F36D /* KeyStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671F7192992C01900C0F36D /* KeyStoreTests.swift */; };
@@ -273,7 +273,7 @@
 		A66F1F0129A98C460026EA6E /* AttachmentPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPreviewView.swift; sourceTree = "<group>"; };
 		A66F1F0329A98E2A0026EA6E /* AttachmentExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentExtensions.swift; sourceTree = "<group>"; };
 		A66F1F0529A991D60026EA6E /* MessageAttachmentComposerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAttachmentComposerButton.swift; sourceTree = "<group>"; };
-		A66F1F0729A9A56C0026EA6E /* S3Uploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3Uploader.swift; sourceTree = "<group>"; };
+		A66F1F0729A9A56C0026EA6E /* Uploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uploader.swift; sourceTree = "<group>"; };
 		A66F1F1029A9B0220026EA6E /* MessageAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAttachment.swift; sourceTree = "<group>"; };
 		A66F1F1329A9B1BA0026EA6E /* MessageCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCreator.swift; sourceTree = "<group>"; };
 		A66F1F1829AA95480026EA6E /* MessageCreatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCreatorTests.swift; sourceTree = "<group>"; };
@@ -565,7 +565,7 @@
 				A677CE9E298CADF000055697 /* ENS.swift */,
 				A68BCB0B2995C02F001159B8 /* AppGroup.swift */,
 				A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */,
-				A66F1F0729A9A56C0026EA6E /* S3Uploader.swift */,
+				A66F1F0729A9A56C0026EA6E /* Uploader.swift */,
 				A6F00C4B29D2703500B3D7A9 /* TypingListener.swift */,
 			);
 			path = Utilities;
@@ -1054,7 +1054,7 @@
 				A60356A129AD4CD20026407B /* AutofocusProvider.swift in Sources */,
 				6A40157A29529F85003A6659 /* HomeView.swift in Sources */,
 				A68907A729A19921006D9EC7 /* URLPreview.swift in Sources */,
-				A66F1F0829A9A56C0026EA6E /* S3Uploader.swift in Sources */,
+				A66F1F0829A9A56C0026EA6E /* Uploader.swift in Sources */,
 				6A4613032981831D00346D68 /* ConversationDetailView.swift in Sources */,
 				A66F1F1B29AAB1490026EA6E /* ContentTypeExtensions.swift in Sources */,
 				A66F1F2329AAC3A40026EA6E /* RemoteAttachment.swift in Sources */,
@@ -1180,7 +1180,7 @@
 				A66F1F1229A9B0220026EA6E /* MessageAttachment.swift in Sources */,
 				A68BCB0D2995C02F001159B8 /* AppGroup.swift in Sources */,
 				A68BCB172995C107001159B8 /* DB.swift in Sources */,
-				A66F1F2529AADAD70026EA6E /* S3Uploader.swift in Sources */,
+				A66F1F2529AADAD70026EA6E /* Uploader.swift in Sources */,
 				A68BCB2E2995C37B001159B8 /* Keystore.swift in Sources */,
 				A68BCB272995C2D7001159B8 /* Constants.swift in Sources */,
 				A66F1F2429AAC3A40026EA6E /* RemoteAttachment.swift in Sources */,
