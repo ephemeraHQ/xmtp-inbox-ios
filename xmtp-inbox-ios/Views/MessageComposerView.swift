@@ -144,7 +144,7 @@ struct MessageComposerView: View {
 			self.isSending = true
 		}
 
-		Task {
+		Task.detached(priority: .userInitiated) {
 			await onSend(text, attachment)
 			await MainActor.run {
 				self.text = ""

@@ -8,5 +8,5 @@
 import Foundation
 
 enum MessageListEntry {
-	case message(DB.Message), timestamp(Date)
+	case message(DB.Message), timestamp(Date), typing
 }

@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 import GRDB
 import GRDBQuery
 import SwiftUI
@@ -33,7 +34,7 @@ class MessagesTableViewController: UITableViewController {
 
 	init(loader: MessageLoader, messages: [DB.Message]) {
 		self.loader = loader
-		timeline = MessagesTableViewController.generateTimeline(messages: messages)
+		timeline = MessagesTableViewController.generateTimeline(messages: messages, isTyping: false)
 
 		super.init(style: .plain)
 
@@ -56,7 +57,7 @@ class MessagesTableViewController: UITableViewController {
 		initScrollToBottomObserver()
 	}
 
-	static func generateTimeline(messages: [DB.Message]) -> [MessageListEntry] {
+	static func generateTimeline(messages: [DB.Message], isTyping: Bool) -> [MessageListEntry] {
 		var result: [MessageListEntry] = []
 		var lastTimestamp: Date?
 
@@ -75,6 +76,10 @@ class MessagesTableViewController: UITableViewController {
 			result.append(.message(message))
 		}
 		// swiftlint:enable force_unwrapping
+
+		if isTyping {
+			result.append(.typing)
+		}
 
 		return result
 	}
@@ -204,6 +209,7 @@ class MessagesTableViewController: UITableViewController {
 struct MessagesTableView: UIViewControllerRepresentable {
 	var loader: MessageLoader
 	var messages: [DB.Message]
+	var isTyping: Bool
 
 	struct Coordinator {
 		var loader: MessageLoader
@@ -224,8 +230,9 @@ struct MessagesTableView: UIViewControllerRepresentable {
 	}
 
 	func updateUIViewController(_ controller: MessagesTableViewController, context _: Context) {
-		controller.timeline = MessagesTableViewController.generateTimeline(messages: messages)
+		controller.timeline = MessagesTableViewController.generateTimeline(messages: messages, isTyping: isTyping)
 		controller.tableView.reloadData()
+		controller.scrollToBottom()
 	}
 }
 
@@ -235,6 +242,7 @@ struct MessageListView: View {
 	let conversation: DB.Conversation
 
 	@StateObject private var messageLoader: MessageLoader
+	@StateObject private var typingListener: TypingListener
 	@Query(ConversationMessagesRequest(conversationID: -1), in: \.dbQueue) var messages
 
 	init(client: Client, conversation: DB.Conversation, db: DB) {
@@ -243,6 +251,11 @@ struct MessageListView: View {
 		self.conversation = conversation
 		_messageLoader = StateObject(wrappedValue: MessageLoader(client: client, db: db, conversation: conversation))
 		_messages = Query(ConversationMessagesRequest(conversationID: conversation.id ?? -1), in: \.dbQueue)
+		_typingListener = StateObject(wrappedValue: TypingListener(
+				websocketURL: AppGroup.defaults.string(forKey: "typingNotificationsServer"),
+				topics: conversation.topics(db: db).map(\.topic),
+				myAddress: client.address
+			))
 	}
 
 	var body: some View {
@@ -253,10 +266,44 @@ struct MessageListView: View {
 					await messageLoader.streamMessages()
 				}
 		} else {
-			MessagesTableView(loader: messageLoader, messages: messages)
+			MessagesTableView(loader: messageLoader, messages: messages, isTyping: isTyping)
+				.onChange(of: messages) { _ in
+					typingListener.isTyping = false
+				}
+				.task(priority: .background) {
+					await listenForTyping()
+				}
+				.onDisappear {
+					typingListener.cancel()
+				}
 				.task(priority: .high) {
 					await messageLoader.streamMessages()
 				}
+		}
+	}
+
+	var isTyping: Bool {
+		guard let lastTypedAt = typingListener.lastTypedAt else {
+			return false
+		}
+
+		if !typingListener.isTyping {
+			return false
+		}
+
+		if let createdAt = messages.last?.createdAt {
+			return lastTypedAt > createdAt
+		}
+
+		return true
+	}
+
+	func listenForTyping() async {
+		do {
+			try await typingListener.stream()
+		} catch {
+			print("Error listening for typing: \(error)")
+			await listenForTyping()
 		}
 	}
 

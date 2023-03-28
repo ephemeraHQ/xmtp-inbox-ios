@@ -30,7 +30,7 @@ class MessageLoader: ObservableObject {
 		do {
 			for try await xmtpMessage in try topic.toXMTP(client: client).streamMessages() {
 				do {
-					let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, client: client, db: self.db)
+					let message = try await DB.Message.from(xmtpMessage, conversation: conversation, topic: topic, client: client, db: db)
 					await MainActor.run {
 						mostRecentMessageID = message.xmtpID
 					}

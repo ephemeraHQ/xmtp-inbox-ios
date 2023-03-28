@@ -19,8 +19,8 @@ class NotificationService: UNNotificationServiceExtension {
 
 		do {
 			guard let encryptedMessage = request.content.userInfo["encryptedMessage"] as? String,
-						let topic = request.content.userInfo["topic"] as? String,
-						let encryptedMessageData = Data(base64Encoded: Data(encryptedMessage.utf8))
+			      let topic = request.content.userInfo["topic"] as? String,
+			      let encryptedMessageData = Data(base64Encoded: Data(encryptedMessage.utf8))
 			else {
 				print("Did not get correct message data from push")
 				return
