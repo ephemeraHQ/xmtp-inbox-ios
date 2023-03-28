@@ -1,24 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "aws-crt-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/awslabs/aws-crt-swift",
-      "state" : {
-        "revision" : "6feec6c3787877807aa9a00fad09591b96752376",
-        "version" : "0.6.1"
-      }
-    },
-    {
-      "identity" : "aws-sdk-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/awslabs/aws-sdk-swift",
-      "state" : {
-        "branch" : "main",
-        "revision" : "d1d18eefb7457ed27d416b372573a1f815004eb1"
-      }
-    },
-    {
       "identity" : "bigint",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/attaswift/BigInt.git",
@@ -68,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDBQuery",
       "state" : {
-        "revision" : "df514f2bd74548f94e082f3233022190e594fce4",
-        "version" : "0.5.1"
+        "revision" : "be64298b4f9d70510226fa7e698aef84f41cec02",
+        "version" : "0.7.0"
       }
     },
     {
@@ -169,15 +151,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "5a162be81f45d6972c0b30022a4ca3dbd49541ff"
-      }
-    },
-    {
-      "identity" : "smithy-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/awslabs/smithy-swift",
-      "state" : {
-        "revision" : "4d843d4aed2f7223e18f0832e0f5e3ac38684a8d",
-        "version" : "0.12.0"
       }
     },
     {
@@ -322,15 +295,6 @@
       "state" : {
         "revision" : "2d9d2188a08eef4a869d368daab21b3c08510991",
         "version" : "2.6.1"
-      }
-    },
-    {
-      "identity" : "xmlcoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MaxDesiatov/XMLCoder.git",
-      "state" : {
-        "revision" : "c438dad94f6a243b411b70a4b4bac54595064808",
-        "version" : "0.15.0"
       }
     },
     {
