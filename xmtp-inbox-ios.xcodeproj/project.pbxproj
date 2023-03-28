@@ -79,12 +79,10 @@
 		A66F1F0429A98E2A0026EA6E /* AttachmentExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0329A98E2A0026EA6E /* AttachmentExtensions.swift */; };
 		A66F1F0629A991D60026EA6E /* MessageAttachmentComposerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0529A991D60026EA6E /* MessageAttachmentComposerButton.swift */; };
 		A66F1F0829A9A56C0026EA6E /* S3Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0729A9A56C0026EA6E /* S3Uploader.swift */; };
-		A66F1F0B29A9A61E0026EA6E /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = A66F1F0A29A9A61E0026EA6E /* AWSS3 */; };
 		A66F1F1129A9B0220026EA6E /* MessageAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1029A9B0220026EA6E /* MessageAttachment.swift */; };
 		A66F1F1229A9B0220026EA6E /* MessageAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1029A9B0220026EA6E /* MessageAttachment.swift */; };
 		A66F1F1429A9B1BA0026EA6E /* MessageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1329A9B1BA0026EA6E /* MessageCreator.swift */; };
 		A66F1F1529A9B1BA0026EA6E /* MessageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1329A9B1BA0026EA6E /* MessageCreator.swift */; };
-		A66F1F1729AA93980026EA6E /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = A66F1F1629AA93980026EA6E /* AWSS3 */; };
 		A66F1F1929AA95480026EA6E /* MessageCreatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1829AA95480026EA6E /* MessageCreatorTests.swift */; };
 		A66F1F1B29AAB1490026EA6E /* ContentTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1A29AAB1490026EA6E /* ContentTypeExtensions.swift */; };
 		A66F1F1C29AAB49B0026EA6E /* ContentTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F1A29AAB1490026EA6E /* ContentTypeExtensions.swift */; };
@@ -93,7 +91,6 @@
 		A66F1F2329AAC3A40026EA6E /* RemoteAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2229AAC3A40026EA6E /* RemoteAttachment.swift */; };
 		A66F1F2429AAC3A40026EA6E /* RemoteAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2229AAC3A40026EA6E /* RemoteAttachment.swift */; };
 		A66F1F2529AADAD70026EA6E /* S3Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F0729A9A56C0026EA6E /* S3Uploader.swift */; };
-		A66F1F2729AADB310026EA6E /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = A66F1F2629AADB310026EA6E /* AWSS3 */; };
 		A66F1F2929AAEDE60026EA6E /* RemoteAttachmentMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2829AAEDE60026EA6E /* RemoteAttachmentMessageView.swift */; };
 		A66F1F2C29AAF4D20026EA6E /* MessagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66F1F2B29AAF4D20026EA6E /* MessagePresenter.swift */; };
 		A671F71A2992C01900C0F36D /* KeyStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671F7192992C01900C0F36D /* KeyStoreTests.swift */; };
@@ -335,7 +332,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A66F1F0B29A9A61E0026EA6E /* AWSS3 in Frameworks */,
 				A6393EF529A2A1BC009BCE38 /* SDWebImageSwiftUI in Frameworks */,
 				A68907A529A1946E006D9EC7 /* OpenGraph in Frameworks */,
 				6AE264EB2974F62B0055250A /* IGIdenticon in Frameworks */,
@@ -357,7 +353,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A66F1F1729AA93980026EA6E /* AWSS3 in Frameworks */,
 				A6393EFC29A2ACB0009BCE38 /* SDWebImageSwiftUI in Frameworks */,
 				CF1B45F2A383A42721D7B5B6 /* Pods_xmtp_inbox_iosTests.framework in Frameworks */,
 				A6393EFE29A2ACBF009BCE38 /* SDWebImageWebPCoder in Frameworks */,
@@ -383,7 +378,6 @@
 				A68BCB262995C2C4001159B8 /* XMTP in Frameworks */,
 				A68BCB342995C538001159B8 /* KeychainAccess in Frameworks */,
 				A689079C29A03A89006D9EC7 /* web3.swift in Frameworks */,
-				A66F1F2729AADB310026EA6E /* AWSS3 in Frameworks */,
 				A689079A29A03A74006D9EC7 /* IGIdenticon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -732,7 +726,6 @@
 				A6393EF429A2A1BC009BCE38 /* SDWebImageSwiftUI */,
 				A6393EF729A2A2BB009BCE38 /* SDWebImageWebPCoder */,
 				A6324F7529A836B80040CBA4 /* GRDBQuery */,
-				A66F1F0A29A9A61E0026EA6E /* AWSS3 */,
 				A6B2BD7229BFC6450082F876 /* AsyncAlgorithms */,
 			);
 			productName = "xmtp-inbox-ios";
@@ -758,7 +751,6 @@
 				A69C928029942DD300E49F9B /* XMTPTestHelpers */,
 				A6393EFB29A2ACB0009BCE38 /* SDWebImageSwiftUI */,
 				A6393EFD29A2ACBF009BCE38 /* SDWebImageWebPCoder */,
-				A66F1F1629AA93980026EA6E /* AWSS3 */,
 			);
 			productName = "xmtp-inbox-iosTests";
 			productReference = 6A40155429526796003A6659 /* xmtp-inbox-iosTests.xctest */;
@@ -805,7 +797,6 @@
 				A689079929A03A74006D9EC7 /* IGIdenticon */,
 				A689079B29A03A89006D9EC7 /* web3.swift */,
 				A68907A929A19A86006D9EC7 /* OpenGraph */,
-				A66F1F2629AADB310026EA6E /* AWSS3 */,
 			);
 			productName = NotificationExtension;
 			productReference = A68BCAFF2995BF2A001159B8 /* NotificationExtension.appex */;
@@ -858,7 +849,6 @@
 				A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
 				A6324F7429A836B80040CBA4 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
-				A66F1F0929A9A61E0026EA6E /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
 				A6B2BD7129BFC6440082F876 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 			);
 			productRefGroup = 6A40154429526795003A6659 /* Products */;
@@ -1704,14 +1694,6 @@
 				minimumVersion = 0.9.1;
 			};
 		};
-		A66F1F0929A9A61E0026EA6E /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		A68907A329A1946E006D9EC7 /* XCRemoteSwiftPackageReference "OpenGraph" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/satoshi-takano/OpenGraph";
@@ -1799,21 +1781,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A6393EF629A2A2BB009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
 			productName = SDWebImageWebPCoder;
-		};
-		A66F1F0A29A9A61E0026EA6E /* AWSS3 */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A66F1F0929A9A61E0026EA6E /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
-			productName = AWSS3;
-		};
-		A66F1F1629AA93980026EA6E /* AWSS3 */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A66F1F0929A9A61E0026EA6E /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
-			productName = AWSS3;
-		};
-		A66F1F2629AADB310026EA6E /* AWSS3 */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A66F1F0929A9A61E0026EA6E /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
-			productName = AWSS3;
 		};
 		A689079729A03A68006D9EC7 /* ENSKit */ = {
 			isa = XCSwiftPackageProductDependency;
