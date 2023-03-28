@@ -1681,7 +1681,7 @@
 			repositoryURL = "https://github.com/groue/GRDBQuery";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.1;
+				minimumVersion = 0.7.0;
 			};
 		};
 		A6393EF329A2A1BC009BCE38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
