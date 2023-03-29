@@ -1,6 +1,0 @@
-framework module Pods_xmtp_inbox_ios_xmtp_inbox_iosUITests {
-  umbrella header "Pods-xmtp-inbox-ios-xmtp-inbox-iosUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}
