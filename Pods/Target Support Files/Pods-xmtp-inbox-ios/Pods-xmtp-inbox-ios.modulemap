@@ -1,0 +1,6 @@
+framework module Pods_xmtp_inbox_ios {
+  umbrella header "Pods-xmtp-inbox-ios-umbrella.h"
+
+  export *
+  module * { export * }
+}
