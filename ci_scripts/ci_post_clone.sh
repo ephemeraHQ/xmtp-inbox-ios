@@ -8,4 +8,5 @@
 
 echo "INFURA_KEY = $INFURA_KEY" > "$CI_WORKSPACE/Secrets.xcconfig"
 
+brew install cocoapods
 pod install
