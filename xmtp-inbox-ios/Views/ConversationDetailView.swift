@@ -22,7 +22,7 @@ struct ConversationDetailView: View {
 			MessageListView(client: client, conversation: conversation, db: db)
 				.frame(maxHeight: .infinity)
 				.backgroundStyle(.blue)
-			MessageComposerView(offset: $offset, onSend: sendMessage)
+			MessageComposerView(offset: $offset, onSend: sendMessage, onTyping: onTyping)
 				.padding(.horizontal)
 				.padding(.bottom)
 		}
@@ -39,10 +39,24 @@ struct ConversationDetailView: View {
 	func sendMessage(text: String, attachment: XMTP.Attachment?) async {
 		do {
 			try await conversation.send(text: text, attachment: attachment, client: client, db: db)
+
+			let notification = TypingNotification(timestamp: Date(), typerAddress: client.address, isFinished: true)
+			let conversation = try? conversation.topics(db: db)[0].toXMTP(client: client)
+			try await conversation?.sendEphemeral(content: notification, options: .init(contentType: ContentTypeTypingNotification))
 		} catch {
 			await MainActor.run {
 				Flash.add(.error("Error sending message: \(error)"))
 			}
+		}
+	}
+
+	func onTyping() async {
+		do {
+			let conversation = try? conversation.topics(db: db)[0].toXMTP(client: client)
+			let notification = TypingNotification(timestamp: Date(), typerAddress: client.address, isFinished: false)
+			try await conversation?.sendEphemeral(content: notification, options: .init(contentType: ContentTypeTypingNotification))
+		} catch {
+			print("Error on typing: \(error)")
 		}
 	}
 }

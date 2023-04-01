@@ -16,6 +16,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 		Client.register(codec: AttachmentCodec())
 		Client.register(codec: RemoteAttachmentCodec())
+		Client.register(codec: TypingNotificationCodec())
 		SDImageCodersManager.shared.addCoder(SDImageWebPCoder.shared)
 
 		return true

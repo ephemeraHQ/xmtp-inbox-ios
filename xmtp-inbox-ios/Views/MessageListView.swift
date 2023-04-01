@@ -251,11 +251,14 @@ struct MessageListView: View {
 		self.conversation = conversation
 		_messageLoader = StateObject(wrappedValue: MessageLoader(client: client, db: db, conversation: conversation))
 		_messages = Query(ConversationMessagesRequest(conversationID: conversation.id ?? -1), in: \.dbQueue)
-		_typingListener = StateObject(wrappedValue: TypingListener(
-				websocketURL: AppGroup.defaults.string(forKey: "typingNotificationsServer"),
-				topics: conversation.topics(db: db).map(\.topic),
-				myAddress: client.address
-			))
+		_typingListener = StateObject(
+			wrappedValue: TypingListener(
+				client: client,
+				// swiftlint:disable force_try
+				conversation: try! conversation.topics(db: db)[0].toXMTP(client: client)
+				// swiftlint:enable force_try
+			)
+		)
 	}
 
 	var body: some View {
@@ -268,13 +271,14 @@ struct MessageListView: View {
 		} else {
 			MessagesTableView(loader: messageLoader, messages: messages, isTyping: isTyping)
 				.onChange(of: messages) { _ in
+					typingListener.lastMessageSentAt = messages.last?.createdAt
 					typingListener.isTyping = false
+				}
+				.onAppear {
+					typingListener.lastMessageSentAt = messages.last?.createdAt
 				}
 				.task(priority: .background) {
 					await listenForTyping()
-				}
-				.onDisappear {
-					typingListener.cancel()
 				}
 				.task(priority: .high) {
 					await messageLoader.streamMessages()
@@ -309,10 +313,8 @@ struct MessageListView: View {
 
 	func loadMessages() async {
 		do {
-			print("loading messages!")
 			try await messageLoader.load()
 		} catch {
-			print("ERROR LOADING MESSAGSE: \(error)")
 			await MainActor.run {
 				Flash.add(.error("Error loading messages: \(error)"))
 			}

@@ -6,10 +6,15 @@
 //
 
 import Foundation
+import XMTP
+import Combine
 
 class TypingListener: ObservableObject {
 	@Published var isTyping = false
 	@Published var lastTypedAt: Date?
+	@Published var lastMessageSentAt: Date?
+	var publisher = PassthroughSubject<TypingNotification?, Never>()
+	var cancellable: AnyCancellable?
 
 	struct Message: Codable {
 		var kind: String
@@ -18,128 +23,70 @@ class TypingListener: ObservableObject {
 		var timestamp: Date
 	}
 
-	var websocket: URLSessionWebSocketTask?
-	var topics: [String]
-	var myAddress: String
-	var task: Task<Void, Never>?
-	var isSubscribed: Bool = false
-	var session: URLSession?
+	var client: Client
+	var conversation: XMTP.Conversation
 	var error: Error?
 
-	init(websocketURL: String?, topics: [String], myAddress: String) {
-		if let websocketURL,
-			 let url = URL(string: websocketURL) {
-			session = URLSession(configuration: .ephemeral)
-			websocket = session?.webSocketTask(with: url)
+	init(client: Client, conversation: XMTP.Conversation) {
+		self.client = client
+		self.conversation = conversation
+
+		Task {
+			self.cancellable = publisher.debounce(
+				for: .seconds(0.5),
+				scheduler: DispatchQueue.main
+			).sink { notification in
+				if let notification {
+					if notification.typerAddress == conversation.clientAddress {
+						return
+					}
+
+					if notification.isFinished {
+						self.lastMessageSentAt = notification.timestamp
+						self.isTyping = false
+						return
+					}
+
+					self.lastTypedAt = notification.timestamp
+
+					if let lastMessageSentAt = self.lastMessageSentAt, let lastTypedAt = self.lastTypedAt {
+						print("First \(lastMessageSentAt < lastTypedAt)")
+						self.isTyping = lastMessageSentAt < lastTypedAt
+					} else {
+						print("is typing is true")
+						self.isTyping = true
+					}
+
+					Task {
+						try? await Task.sleep(for: .seconds(1))
+						await MainActor.run {
+							self.publisher.send(nil)
+						}
+					}
+				} else {
+					self.isTyping = false
+				}
+			}
 		}
-
-		self.topics = topics
-		self.myAddress = myAddress
-	}
-
-	func subscribe() async throws {
-		guard let websocket else {
-			return
-		}
-
-		if isSubscribed {
-			return
-		}
-
-		let encoder = JSONEncoder()
-		encoder.dateEncodingStrategy = .iso8601
-
-		for topic in topics {
-			let data = try encoder.encode(Message(
-				kind: "subscribe",
-				sender: "",
-				topic: topic,
-				timestamp: Date()
-			))
-
-			try await websocket.send(.data(data))
-		}
-
-		isSubscribed = true
 	}
 
 	func stream() async throws {
-		guard let websocket else {
+		guard let stream = conversation.streamEphemeral() else {
 			return
 		}
 
-		websocket.resume()
-
-		try await subscribe()
-		websocket.receive { [weak self] result in
-			do {
-				switch result {
-				case let .success(message):
-					switch message {
-					case let .data(data):
-						try self?.handle(data: data)
-					case let .string(string):
-						try self?.handle(data: Data(string.utf8))
-					@unknown default:
-						print("??")
-					}
-				case let .failure(error):
-					throw error
-				}
-			} catch {
-				self?.error = error
+		for try await envelope in stream {
+			if let message = try? conversation.decode(envelope) {
+				try? handle(message: message)
 			}
-		}
-
-		if error == nil {
-			try await stream()
 		}
 	}
 
-	func cancel() {
-		guard let websocket else {
+	func handle(message: DecodedMessage) throws {
+		if message.encodedContent.type != ContentTypeTypingNotification {
 			return
 		}
 
-		websocket.cancel(with: .normalClosure, reason: nil)
-	}
-
-	func handle(data: Data) throws {
-		Task {
-			let jsonDecoder = JSONDecoder()
-
-			let dateFormatter = ISO8601DateFormatter()
-			dateFormatter.formatOptions.insert(.withFractionalSeconds)
-
-			jsonDecoder.dateDecodingStrategy = .custom { decoder -> Date in
-				let container = try decoder.singleValueContainer()
-				let dateString = try container.decode(String.self)
-
-				if let date = dateFormatter.date(from: dateString) {
-					return date
-				} else {
-					throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date format")
-				}
-			}
-			let message = try jsonDecoder.decode(Message.self, from: data)
-
-			if message.kind != "typing" || message.sender == myAddress {
-				return
-			}
-
-			await MainActor.run {
-				self.isTyping = true
-				self.lastTypedAt = message.timestamp
-			}
-
-			// swiftlint:disable force_try
-			try! await Task.sleep(for: .seconds(1))
-
-			await MainActor.run {
-				// swiftlint:disable force_unwrapping
-				self.isTyping = self.lastTypedAt != nil && (Date().addingTimeInterval(-1) < self.lastTypedAt!)
-				// swiftlint:enable force_unwrapping
-			}
-		}
+		publisher.send(try message.content())
 	}
 }
