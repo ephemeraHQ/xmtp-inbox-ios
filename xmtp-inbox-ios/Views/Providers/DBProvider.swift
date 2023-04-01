@@ -25,10 +25,12 @@ struct DBProvider<Content: View>: View {
 			ProgressView("Preparing database…")
 				.onAppear {
 					do {
-//						self.db = try DB.prepare(client: client)
-						self.db = try (try DB.load(client: client)) ?? (try DB.prepare(client: client))
+						if let db = try? DB.load(client: client) {
+							self.db = db
+						} else {
+							self.db = try DB.prepare(client: client, reset: true)
+						}
 					} catch {
-//						self.db = try! DB.prepare(client: client, reset: true)
 						print("Error preparing db: \(error)")
 					}
 				}
