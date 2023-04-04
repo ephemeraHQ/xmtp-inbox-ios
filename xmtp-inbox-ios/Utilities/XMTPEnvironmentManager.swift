@@ -17,7 +17,7 @@ class XMTPEnvironmentManager: ObservableObject {
 
 	private init() {
 		#if DEBUG
-			environment = .local
+			environment = .dev
 		#else
 			environment = .production
 		#endif
