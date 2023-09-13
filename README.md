@@ -1,6 +1,12 @@
-#  xmtp-inbox-ios
+#  ARCHIVED: xmtp-inbox-ios
 
-## Getting Started
+![Status](https://img.shields.io/badge/Project_Status-Archived-lightgrey)
+
+This **archived** repo provides the XMTP Inbox iOS app, which is no longer supported.
+
+For an alternative solution, see the [example app](https://github.com/xmtp/xmtp-ios/tree/main/XMTPiOSExample) provided by the `xmtp-ios` SDK.
+
+## Getting started
 
 ### Configure Infura
 
@@ -10,7 +16,7 @@ Add your Infura Key as a [build configuration setting](https://help.apple.com/xc
 File -> New -> File... -> Configuration Settings File -> **Secrets.xcconfig**
 ```
 
-Then add the following as a [static environment varaible](https://help.apple.com/xcode/#/dev745c5c974).
+Then add the following as a [static environment variable](https://help.apple.com/xcode/#/dev745c5c974).
 
 ```
 INFURA_KEY = {REPLACE_WITH_YOUR_KEY}
