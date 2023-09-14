@@ -61,7 +61,7 @@ struct ContentView: View {
 				}
 				return
 			}
-			let client = try Client.from(v1Bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv)))
+			let client = try Client.from(v1Bundle: keys, options: .init(api: .init(env: Constants.xmtpEnv, isSecure: Constants.xmtpEnv != .local)))
 			await MainActor.run {
 				print("Connected")
 				auth.status = .connected(client)
@@ -93,7 +93,7 @@ struct ContentView: View {
 		Task {
 			do {
 				let account = try PrivateKey.generate()
-				let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv)))
+				let client = try await Client.create(account: account, options: .init(api: .init(env: Constants.xmtpEnv, isSecure: Constants.xmtpEnv != .local)))
 				let keys = client.v1keys
 				try Keystore.saveKeys(address: client.address, keys: keys)
 

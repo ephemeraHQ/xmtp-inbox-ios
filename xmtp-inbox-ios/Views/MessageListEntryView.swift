@@ -26,7 +26,6 @@ struct MessageListEntryView: View {
 			TypingIndicator()
 				.padding()
 				.background(Color.backgroundSecondary.roundCorners(16, corners: [.topRight, .bottomLeft, .bottomRight]))
-
 		}
 	}
 

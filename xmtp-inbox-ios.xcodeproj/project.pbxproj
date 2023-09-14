@@ -60,6 +60,7 @@
 		A61B44FB299AB7E800F2CBEA /* XMTPEnvironmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */; };
 		A61B44FC299AB88300F2CBEA /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4612FE298177B300346D68 /* Auth.swift */; };
 		A6292C31299415E4004B5A27 /* SQLDebuggerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */; };
+		A631FB7329D8DA390033941A /* TypingNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A631FB7229D8DA390033941A /* TypingNotification.swift */; };
 		A6324F6F29A817EA0040CBA4 /* TextFieldWithLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */; };
 		A6324F7129A81D170040CBA4 /* UpdatingRelativeTimestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7029A81D170040CBA4 /* UpdatingRelativeTimestamp.swift */; };
 		A6324F7329A822F90040CBA4 /* FlashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6324F7229A822F90040CBA4 /* FlashProvider.swift */; };
@@ -254,6 +255,7 @@
 		A61B44F7299AAFD200F2CBEA /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		A61B44F9299AB3D800F2CBEA /* XMTPEnvironmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMTPEnvironmentManager.swift; sourceTree = "<group>"; };
 		A6292C30299415E4004B5A27 /* SQLDebuggerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLDebuggerView.swift; sourceTree = "<group>"; };
+		A631FB7229D8DA390033941A /* TypingNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingNotification.swift; sourceTree = "<group>"; };
 		A6324F6E29A817EA0040CBA4 /* TextFieldWithLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithLoader.swift; sourceTree = "<group>"; };
 		A6324F7029A81D170040CBA4 /* UpdatingRelativeTimestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatingRelativeTimestamp.swift; sourceTree = "<group>"; };
 		A6324F7229A822F90040CBA4 /* FlashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashProvider.swift; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 		6A40154529526795003A6659 /* xmtp-inbox-ios */ = {
 			isa = PBXGroup;
 			children = (
+				A631FB7129D8DA290033941A /* ContentTypes */,
 				A6D80E31299C32FD002E8117 /* HTML */,
 				A68C8A4D298C6CA6003A9A95 /* Loaders */,
 				A68C8A42298C5D8D003A9A95 /* Models */,
@@ -563,6 +566,14 @@
 				A6F00C4B29D2703500B3D7A9 /* TypingListener.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A631FB7129D8DA290033941A /* ContentTypes */ = {
+			isa = PBXGroup;
+			children = (
+				A631FB7229D8DA390033941A /* TypingNotification.swift */,
+			);
+			path = ContentTypes;
 			sourceTree = "<group>";
 		};
 		A6324F6D29A817CF0040CBA4 /* Components */ = {
@@ -832,10 +843,10 @@
 			);
 			mainGroup = 6A40153A29526795003A6659;
 			packageReferences = (
-				6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3.swift" */,
-				6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit.git" */,
-				6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon.git" */,
-				6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift.git" */,
+				6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */,
+				6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit" */,
+				6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */,
+				6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift" */,
 				A69C92732994286C00E49F9B /* XCRemoteSwiftPackageReference "xmtp-ios" */,
 				A68BCB302995C4EE001159B8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				A6C18C35299993EE001E00CA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
@@ -1097,6 +1108,7 @@
 				6A4613012981826B00346D68 /* MessageComposerView.swift in Sources */,
 				A68BCB0C2995C02F001159B8 /* AppGroup.swift in Sources */,
 				A6324F7B29A837C50040CBA4 /* EnvironmentValueExtensions.swift in Sources */,
+				A631FB7329D8DA390033941A /* TypingNotification.swift in Sources */,
 				A64C7E8F29D34386003F8E76 /* ConversationPresenter.swift in Sources */,
 				A66F1F1429A9B1BA0026EA6E /* MessageCreator.swift in Sources */,
 				A68907B829A1AE64006D9EC7 /* MessageTextView.swift in Sources */,
@@ -1632,7 +1644,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3.swift" */ = {
+		6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/argentlabs/web3.swift";
 			requirement = {
@@ -1640,7 +1652,7 @@
 				version = 1.4.1;
 			};
 		};
-		6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift.git" */ = {
+		6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WalletConnect/WalletConnectSwift.git";
 			requirement = {
@@ -1648,7 +1660,7 @@
 				version = 1.7.0;
 			};
 		};
-		6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit.git" */ = {
+		6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Planetable/ENSKit.git";
 			requirement = {
@@ -1656,7 +1668,7 @@
 				kind = branch;
 			};
 		};
-		6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon.git" */ = {
+		6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/seaburg/IGIdenticon.git";
 			requirement = {
@@ -1708,7 +1720,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xmtp/xmtp-ios";
 			requirement = {
-				branch = main;
+				branch = "ephemeral-topics";
 				kind = branch;
 			};
 		};
@@ -1733,22 +1745,22 @@
 /* Begin XCSwiftPackageProductDependency section */
 		6A1C37DD2971A3C900AF6559 /* web3.swift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3.swift" */;
+			package = 6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */;
 			productName = web3.swift;
 		};
 		6AA65964297B2A2200E980AD /* WalletConnectSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift.git" */;
+			package = 6AA65963297B2A2200E980AD /* XCRemoteSwiftPackageReference "WalletConnectSwift" */;
 			productName = WalletConnectSwift;
 		};
 		6AE264E72974E63F0055250A /* ENSKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit.git" */;
+			package = 6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit" */;
 			productName = ENSKit;
 		};
 		6AE264EA2974F62B0055250A /* IGIdenticon */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon.git" */;
+			package = 6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */;
 			productName = IGIdenticon;
 		};
 		A6324F7529A836B80040CBA4 /* GRDBQuery */ = {
@@ -1778,17 +1790,17 @@
 		};
 		A689079729A03A68006D9EC7 /* ENSKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit.git" */;
+			package = 6AE264E62974E63F0055250A /* XCRemoteSwiftPackageReference "ENSKit" */;
 			productName = ENSKit;
 		};
 		A689079929A03A74006D9EC7 /* IGIdenticon */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon.git" */;
+			package = 6AE264E92974F62B0055250A /* XCRemoteSwiftPackageReference "IGIdenticon" */;
 			productName = IGIdenticon;
 		};
 		A689079B29A03A89006D9EC7 /* web3.swift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3.swift" */;
+			package = 6A1C37DC2971A3C900AF6559 /* XCRemoteSwiftPackageReference "web3" */;
 			productName = web3.swift;
 		};
 		A68907A429A1946E006D9EC7 /* OpenGraph */ = {

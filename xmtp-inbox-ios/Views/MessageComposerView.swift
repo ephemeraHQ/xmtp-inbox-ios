@@ -5,9 +5,20 @@
 //  Created by Pat Nakajima on 12/2/22.
 //
 
+import Combine
 import Introspect
 import SwiftUI
 import XMTP
+
+class ComposerTextFieldDelegate: NSObject, UITextViewDelegate {
+	var onTyping: (() async -> Void)?
+
+	func textViewDidChange(_: UITextView) {
+		Task {
+			await onTyping?()
+		}
+	}
+}
 
 class KeyboardObserver: ObservableObject {
 	@Published var isVisible = false
@@ -39,8 +50,10 @@ struct MessageComposerView: View {
 
 	// Attachment properties
 	@State private var attachment: XMTP.Attachment?
+	@State var publisher = PassthroughSubject<String, Never>()
 
 	var onSend: (String, XMTP.Attachment?) async -> Void
+	var onTyping: () async -> Void
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -98,6 +111,22 @@ struct MessageComposerView: View {
 									}
 								}
 						}).view
+					}
+					.onChange(of: text) { _ in
+						publisher.send("")
+					}
+					.onReceive(
+						publisher.throttle(
+							for: .seconds(1),
+							scheduler: DispatchQueue.main,
+							latest: true
+						)
+					) { _ in
+						if text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+							Task {
+								await onTyping()
+							}
+						}
 					}
 					.lineLimit(4)
 					.padding(12)
@@ -158,9 +187,11 @@ struct MessageComposerView: View {
 struct MessageComposerView_Previews: PreviewProvider {
 	static var previews: some View {
 		VStack {
-			MessageComposerView(offset: .constant(0)) { _, _ in
+			MessageComposerView(offset: .constant(0), onSend: { _, _ in
 				try? await Task.sleep(for: .seconds(2))
-			}
+			}, onTyping: {
+				print("Typing")
+			})
 			.padding(.horizontal)
 		}
 	}

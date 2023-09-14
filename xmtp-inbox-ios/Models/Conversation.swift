@@ -152,7 +152,6 @@ extension DB {
 		}
 
 		mutating func send(text: String, attachment: XMTP.Attachment?, client: Client, topic: ConversationTopic? = nil, db: DB) async throws {
-
 			let topics = topics(db: db)
 
 			guard let topic = topic ?? topics.last else {

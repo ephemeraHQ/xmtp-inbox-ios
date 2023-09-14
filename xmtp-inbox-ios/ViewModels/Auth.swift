@@ -21,12 +21,6 @@ class Auth: ObservableObject {
 					await MainActor.run {
 						self.isShowingQRCode = false
 					}
-
-					do {
-						try await DB.prepare(client: client)
-					} catch {
-						print("Error preparing DB: \(error)")
-					}
 				}
 			}
 		}
